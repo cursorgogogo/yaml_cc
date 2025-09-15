@@ -71,8 +71,9 @@
                 </div>
                 <ul class="nav-menu">
                     <li><a href="#tools">YAML Tools</a></li>
-                    <li><a href="#info-section">About YAML</a></li>
-                    <li><a href="#features-section">Features</a></li>
+                    <li><a href="#info-section">What is YAML?</a></li>
+                    <li><a href="#yaml-syntax">Syntax Guide</a></li>
+                    <li><a href="#best-practices">Best Practices</a></li>
                 </ul>
             </div>
         </nav>
@@ -138,7 +139,7 @@
         </section>
 
         <!-- What is YAML Section -->
-        <section class="info-section">
+        <section class="info-section" id="info-section">
             <div class="container">
                 <h2>What is a YAML File?</h2>
                 <div class="info-content">
@@ -193,6 +194,155 @@
                 </div>
             </div>
         </section>
+
+        <!-- YAML Syntax Guide Section -->
+        <section class="resource-section" id="yaml-syntax">
+            <div class="container">
+                <h2>YAML Syntax Guide</h2>
+                <div class="resource-content">
+                    <div class="syntax-grid">
+                        <div class="syntax-card">
+                            <h3>🔤 Basic Syntax</h3>
+                            <div class="code-example">
+                                <pre><code># Comments start with hash
+key: value
+number: 42
+boolean: true
+null_value: null</code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="syntax-card">
+                            <h3>📝 Strings</h3>
+                            <div class="code-example">
+                                <pre><code># Different string formats
+plain_string: Hello World
+quoted_string: "Hello World"
+single_quoted: 'Hello World'
+multiline: |
+  This is a multiline
+  string with line breaks</code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="syntax-card">
+                            <h3>📋 Lists</h3>
+                            <div class="code-example">
+                                <pre><code># List formats
+fruits:
+  - apple
+  - banana
+  - orange
+
+# Inline format
+colors: [red, green, blue]</code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="syntax-card">
+                            <h3>🗂️ Objects</h3>
+                            <div class="code-example">
+                                <pre><code># Nested objects
+person:
+  name: John Doe
+  age: 30
+  address:
+    street: 123 Main St
+    city: New York</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Best Practices Section -->
+        <section class="resource-section" id="best-practices">
+            <div class="container">
+                <h2>YAML Best Practices</h2>
+                <div class="resource-content">
+                    <div class="practices-grid">
+                        <div class="practice-card">
+                            <div class="practice-icon">✅</div>
+                            <h3>Use Consistent Indentation</h3>
+                            <p>Always use spaces (not tabs) for indentation. Stick to 2 or 4 spaces consistently throughout your file.</p>
+                            <div class="example">
+                                <strong>Good:</strong>
+                                <pre><code>parent:
+  child: value
+  another_child: value</code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="practice-card">
+                            <div class="practice-icon">💬</div>
+                            <h3>Add Meaningful Comments</h3>
+                            <p>Use comments to explain complex configurations and provide context for future maintainers.</p>
+                            <div class="example">
+                                <strong>Good:</strong>
+                                <pre><code># Database configuration
+database:
+  host: localhost  # Development server
+  port: 5432</code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="practice-card">
+                            <div class="practice-icon">🔍</div>
+                            <h3>Quote Special Values</h3>
+                            <p>Quote strings that might be interpreted as other data types to avoid confusion.</p>
+                            <div class="example">
+                                <strong>Good:</strong>
+                                <pre><code>version: "1.0"
+status: "true"
+phone: "123-456-7890"</code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="practice-card">
+                            <div class="practice-icon">📏</div>
+                            <h3>Keep Lines Readable</h3>
+                            <p>Limit line length to 80-120 characters. Use folded or literal scalars for long text.</p>
+                            <div class="example">
+                                <strong>Good:</strong>
+                                <pre><code>description: >
+  This is a long description
+  that spans multiple lines
+  but will be folded into one</code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="practice-card">
+                            <div class="practice-icon">🎯</div>
+                            <h3>Validate Your YAML</h3>
+                            <p>Always validate your YAML files before deployment to catch syntax errors early.</p>
+                            <div class="example">
+                                <strong>Tools:</strong>
+                                <ul>
+                                    <li>Use our online YAML validator</li>
+                                    <li>IDE extensions with YAML support</li>
+                                    <li>CI/CD pipeline validation</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="practice-card">
+                            <div class="practice-icon">🔐</div>
+                            <h3>Handle Sensitive Data</h3>
+                            <p>Never store passwords or secrets directly in YAML files. Use environment variables or secret management tools.</p>
+                            <div class="example">
+                                <strong>Good:</strong>
+                                <pre><code>database:
+  password: ${DB_PASSWORD}
+  # Or use secret references
+  secret_ref: !vault |
+    encrypted_secret_here</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">
@@ -213,7 +363,7 @@
                 <div class="footer-section">
                     <h4>Resources</h4>
                     <ul>
-                        <li><a href="#what-is-yaml">What is YAML?</a></li>
+                        <li><a href="#info-section">What is YAML?</a></li>
                         <li><a href="#yaml-syntax">YAML Syntax Guide</a></li>
                         <li><a href="#best-practices">Best Practices</a></li>
                     </ul>
