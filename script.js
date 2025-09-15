@@ -1,4 +1,4 @@
-// YAML Tools - Enhanced JavaScript File with Better Error Handling
+// YAML Tools - Unified Interface JavaScript
 class YAMLTools {
     constructor() {
         this.init();
@@ -7,21 +7,15 @@ class YAMLTools {
     init() {
         this.bindEvents();
         this.setupExampleData();
+        this.setupNavigation();
     }
 
     bindEvents() {
-        // Validator events
+        // Unified tool events
         document.getElementById('validate-btn').addEventListener('click', () => this.validateYAML());
-        document.getElementById('clear-validator').addEventListener('click', () => this.clearValidator());
-
-        // Linter events
-        document.getElementById('lint-btn').addEventListener('click', () => this.lintYAML());
-        document.getElementById('clear-linter').addEventListener('click', () => this.clearLinter());
-
-
-        // Converter events
-        document.getElementById('convert-btn').addEventListener('click', () => this.convertYAMLToJSON());
-        document.getElementById('clear-converter').addEventListener('click', () => this.clearConverter());
+        document.getElementById('format-btn').addEventListener('click', () => this.formatYAML());
+        document.getElementById('convert-btn').addEventListener('click', () => this.convertYAML());
+        document.getElementById('clear-btn').addEventListener('click', () => this.clearAll());
 
         // Add copy functionality to result boxes
         this.addCopyButtons();
@@ -31,371 +25,341 @@ class YAMLTools {
         const exampleYAML = `name: John Doe
 age: 30
 email: john@example.com
-address:
-  street: 123 Main St
-  city: New York
-  country: USA
 hobbies:
   - reading
   - coding
   - hiking
-skills:
-  programming: advanced
-  languages: [JavaScript, Python, Go]
-  experience: 5 years
-active: true
-metadata:
-  created: 2024-01-15
-  version: 1.0`;
+address:
+  street: 123 Main St
+  city: New York
+  country: USA`;
 
-        document.getElementById('yaml-input').value = exampleYAML;
-        document.getElementById('yaml-lint-input').value = exampleYAML;
-        document.getElementById('yaml-convert-input').value = exampleYAML;
+        // Set example data in textarea placeholder
+        document.getElementById('yaml-input').placeholder = `Enter your YAML content here...
+
+Example:
+${exampleYAML}`;
     }
 
-    addCopyButtons() {
-        const resultBoxes = document.querySelectorAll('.result-box');
-        resultBoxes.forEach(box => {
-            if (!box.querySelector('.copy-btn')) {
-                const copyBtn = document.createElement('button');
-                copyBtn.className = 'copy-btn';
-                copyBtn.textContent = 'Copy';
-                copyBtn.style.position = 'absolute';
-                copyBtn.style.top = '0.5rem';
-                copyBtn.style.right = '0.5rem';
-                copyBtn.addEventListener('click', () => this.copyToClipboard(box.textContent, copyBtn));
-                box.style.position = 'relative';
-                box.appendChild(copyBtn);
+    setupNavigation() {
+        // Setup logo link to scroll to top
+        const logoLink = document.querySelector('.logo-link');
+        if (logoLink) {
+            logoLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+        // Setup tool links in footer
+        const toolLinks = document.querySelectorAll('a[data-tool]');
+        toolLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Scroll to tools section
+                const toolsSection = document.querySelector('#tools');
+                if (toolsSection) {
+                    toolsSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    
+                    // Wait for scroll to complete, then trigger the corresponding tool
+                    setTimeout(() => {
+                        const toolType = link.getAttribute('data-tool');
+                        this.triggerTool(toolType);
+                    }, 1000);
+                }
+            });
+        });
+
+        // Get all navigation links
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        
+        // Set initial active state (first link)
+        if (navLinks.length > 0) {
+            navLinks[0].classList.add('active');
+        }
+        
+        // Add click event listeners
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                navLinks.forEach(navLink => navLink.classList.remove('active'));
+                
+                // Add active class to clicked link
+                link.classList.add('active');
+                
+                // Smooth scroll to target section
+                const targetId = link.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Handle scroll-based active state
+        this.handleScrollActiveState();
+    }
+
+    handleScrollActiveState() {
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        const sections = document.querySelectorAll('section[id]');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 200;
+                const sectionHeight = section.offsetHeight;
+                
+                if (window.pageYOffset >= sectionTop && 
+                    window.pageYOffset < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            // Update active nav link based on scroll position
+            if (current) {
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
             }
         });
     }
 
-    async copyToClipboard(text, button) {
-        try {
-            await navigator.clipboard.writeText(text);
-            const originalText = button.textContent;
-            button.textContent = 'Copied!';
-            button.style.background = '#10b981';
-            setTimeout(() => {
-                button.textContent = originalText;
-                button.style.background = '#2563eb';
-            }, 2000);
-        } catch (err) {
-            console.error('Failed to copy text: ', err);
-        }
-    }
-
-    // YAML Validator
     validateYAML() {
         const input = document.getElementById('yaml-input').value.trim();
-        const resultBox = document.getElementById('validation-result');
+        const resultDiv = document.getElementById('result-output');
         
         if (!input) {
-            this.showResult(resultBox, 'Please enter some YAML content to validate.', 'error');
+            this.showResult(resultDiv, '💡 Please enter some YAML content to validate.', 'info');
             return;
         }
 
         try {
-            const result = this.parseYAML(input);
-            if (result.success) {
-                this.showResult(resultBox, `✅ Valid YAML!\n\nParsed structure:\n${JSON.stringify(result.data, null, 2)}`, 'success');
-            } else {
-                this.showResult(resultBox, `❌ Invalid YAML!\n\nError: ${result.error}`, 'error');
-            }
+            // Parse YAML using js-yaml library
+            const parsed = jsyaml.load(input);
+            
+            // If parsing succeeds, YAML is valid
+            this.showResult(resultDiv, '✅ Valid YAML!\n\nYour YAML syntax is correct and can be parsed successfully.\n\nStructure looks good! 🎉', 'success');
         } catch (error) {
-            this.showResult(resultBox, `❌ Validation failed!\n\nError: ${error.message}`, 'error');
+            // If parsing fails, show error details
+            this.showResult(resultDiv, `❌ Invalid YAML!\n\nError: ${error.message}\n\nPlease check your YAML syntax and try again.\n\nTip: Make sure your indentation is consistent and uses spaces (not tabs).`, 'error');
         }
     }
 
-    clearValidator() {
-        document.getElementById('yaml-input').value = '';
-        document.getElementById('validation-result').innerHTML = '';
-    }
-
-    // YAML Linter/Formatter
-    lintYAML() {
-        const input = document.getElementById('yaml-lint-input').value.trim();
-        const resultBox = document.getElementById('lint-result');
+    formatYAML() {
+        const input = document.getElementById('yaml-input').value.trim();
+        const resultDiv = document.getElementById('result-output');
         
         if (!input) {
-            this.showResult(resultBox, 'Please enter some YAML content to format.', 'error');
+            this.showResult(resultDiv, '💡 Please enter some YAML content to format.', 'info');
             return;
         }
 
         try {
-            const result = this.parseYAML(input);
-            if (result.success) {
-                const formatted = this.formatYAML(result.data);
-                this.showResult(resultBox, `✅ YAML formatted successfully!\n\n${formatted}`, 'success');
-            } else {
-                this.showResult(resultBox, `❌ Cannot format invalid YAML!\n\nError: ${result.error}\n\nPlease fix the syntax errors first, then try formatting again.`, 'error');
-            }
-        } catch (error) {
-            this.showResult(resultBox, `❌ Formatting failed!\n\nError: ${error.message}`, 'error');
-        }
-    }
-
-    clearLinter() {
-        document.getElementById('yaml-lint-input').value = '';
-        document.getElementById('lint-result').innerHTML = '';
-    }
-
-
-    // YAML to JSON Converter
-    convertYAMLToJSON() {
-        const input = document.getElementById('yaml-convert-input').value.trim();
-        const resultBox = document.getElementById('convert-result');
-        
-        if (!input) {
-            this.showResult(resultBox, 'Please enter some YAML content to convert.', 'error');
-            return;
-        }
-
-        try {
-            const result = this.parseYAML(input);
-            if (result.success) {
-                const jsonString = JSON.stringify(result.data, null, 2);
-                this.showResult(resultBox, `✅ YAML converted to JSON successfully!\n\n${jsonString}`, 'success');
-            } else {
-                this.showResult(resultBox, `❌ Cannot convert invalid YAML!\n\nError: ${result.error}\n\nPlease fix the syntax errors first, then try converting again.`, 'error');
-            }
-        } catch (error) {
-            this.showResult(resultBox, `❌ Conversion failed!\n\nError: ${error.message}`, 'error');
-        }
-    }
-
-    clearConverter() {
-        document.getElementById('yaml-convert-input').value = '';
-        document.getElementById('convert-result').innerHTML = '';
-    }
-
-    // Enhanced YAML parsing function with better error handling
-    parseYAML(input) {
-        try {
-            const data = this.yamlToObject(input);
-            return { success: true, data: data };
-        } catch (error) {
-            return { success: false, error: error.message };
-        }
-    }
-
-    // Improved YAML parser implementation
-    yamlToObject(yaml) {
-        const lines = yaml.split('\n');
-        const result = {};
-        const stack = [{ obj: result, indent: -1, lastKey: null }];
-        
-        for (let i = 0; i < lines.length; i++) {
-            const line = lines[i];
-            const trimmed = line.trim();
-            
-            // Skip empty lines and comments
-            if (!trimmed || trimmed.startsWith('#')) {
-                continue;
-            }
-            
-            const indent = line.match(/^(\s*)/)[1].length;
-            
-            // Handle list items
-            if (trimmed.startsWith('- ')) {
-                // Adjust stack based on indentation
-                while (stack.length > 1 && stack[stack.length - 1].indent >= indent) {
-                    stack.pop();
-                }
-                
-                const current = stack[stack.length - 1];
-                const currentObj = current.obj;
-                
-                // Find the appropriate parent key
-                let parentKey = current.lastKey;
-                
-                // If no parent key at current level, look for keys in current object
-                if (!parentKey) {
-                    const keys = Object.keys(currentObj);
-                    if (keys.length > 0) {
-                        parentKey = keys[keys.length - 1];
-                        // Check if the last key is empty (should become an array)
-                        if (typeof currentObj[parentKey] === 'object' && 
-                            !Array.isArray(currentObj[parentKey]) && 
-                            Object.keys(currentObj[parentKey]).length === 0) {
-                            currentObj[parentKey] = [];
-                        }
-                    }
-                }
-                
-                if (!parentKey) {
-                    throw new Error(`Invalid YAML syntax at line ${i + 1}: list item without parent key`);
-                }
-                
-                // Convert to array if not already
-                if (!Array.isArray(currentObj[parentKey])) {
-                    currentObj[parentKey] = [];
-                }
-                
-                const arrayValue = this.parseValue(trimmed.substring(2));
-                currentObj[parentKey].push(arrayValue);
-                continue;
-            }
-            
-            const colonIndex = line.indexOf(':');
-            if (colonIndex === -1) {
-                throw new Error(`Invalid YAML syntax at line ${i + 1}: missing colon in "${trimmed}"`);
-            }
-            
-            const key = line.substring(0, colonIndex).trim();
-            const value = line.substring(colonIndex + 1).trim();
-            
-            // Validate key
-            if (!key) {
-                throw new Error(`Invalid YAML syntax at line ${i + 1}: empty key`);
-            }
-            
-            // Adjust stack based on indentation
-            while (stack.length > 1 && stack[stack.length - 1].indent >= indent) {
-                stack.pop();
-            }
-            
-            const current = stack[stack.length - 1];
-            const currentObj = current.obj;
-            
-            if (value === '') {
-                // This is a parent object that might become an array
-                currentObj[key] = {};
-                stack.push({ obj: currentObj[key], indent: indent, lastKey: key });
-            } else if (value.startsWith('- ')) {
-                // This is an inline array item
-                currentObj[key] = [];
-                const arrayValue = this.parseValue(value.substring(2));
-                currentObj[key].push(arrayValue);
-                current.lastKey = key;
-            } else {
-                // This is a simple key-value pair
-                currentObj[key] = this.parseValue(value);
-                current.lastKey = key;
-            }
-        }
-        
-        return result;
-    }
-
-    parseValue(value) {
-        // Remove quotes if present
-        if ((value.startsWith('"') && value.endsWith('"')) || 
-            (value.startsWith("'") && value.endsWith("'"))) {
-            return value.slice(1, -1);
-        }
-        
-        // Parse boolean values
-        if (value === 'true') return true;
-        if (value === 'false') return false;
-        
-        // Parse null values
-        if (value === 'null' || value === '~') return null;
-        
-        // Parse numbers
-        if (!isNaN(value) && !isNaN(parseFloat(value))) {
-            return parseFloat(value);
-        }
-        
-        // Parse arrays
-        if (value.startsWith('[') && value.endsWith(']')) {
-            const arrayContent = value.slice(1, -1).trim();
-            if (arrayContent === '') return [];
-            return arrayContent.split(',').map(item => this.parseValue(item.trim()));
-        }
-        
-        // Return as string
-        return value;
-    }
-
-    // Format YAML from object
-    formatYAML(obj, indent = 0) {
-        const spaces = '  '.repeat(indent);
-        let result = '';
-        
-        for (const [key, value] of Object.entries(obj)) {
-            if (Array.isArray(value)) {
-                result += `${spaces}${key}:\n`;
-                value.forEach(item => {
-                    result += `${spaces}  - ${this.formatValue(item)}\n`;
-                });
-            } else if (typeof value === 'object' && value !== null) {
-                result += `${spaces}${key}:\n`;
-                result += this.formatYAML(value, indent + 1);
-            } else {
-                result += `${spaces}${key}: ${this.formatValue(value)}\n`;
-            }
-        }
-        
-        return result;
-    }
-
-    formatValue(value) {
-        if (typeof value === 'string') {
-            // Add quotes if the string contains special characters
-            if (value.includes(':') || value.includes('#') || value.includes('|') || value.includes('>')) {
-                return `"${value}"`;
-            }
-            return value;
-        }
-        if (typeof value === 'boolean') {
-            return value ? 'true' : 'false';
-        }
-        if (value === null) {
-            return 'null';
-        }
-        return String(value);
-    }
-
-    // Show result in result box
-    showResult(resultBox, content, type = 'info') {
-        resultBox.textContent = content;
-        resultBox.className = `result-box ${type}`;
-        this.addCopyButtons(); // Re-add copy button
-    }
-}
-
-// Initialize the application when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    new YAMLTools();
-});
-
-// Add smooth scrolling for navigation links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+            // Parse and re-dump YAML to format it
+            const parsed = jsyaml.load(input);
+            const formatted = jsyaml.dump(parsed, {
+                indent: 2,
+                lineWidth: -1,
+                noRefs: true,
+                sortKeys: false
             });
+            
+            this.showResult(resultDiv, `⚡ Formatted YAML:\n\n${formatted}`, 'success');
+        } catch (error) {
+            this.showResult(resultDiv, `❌ Cannot format invalid YAML!\n\nError: ${error.message}\n\nPlease fix the YAML syntax first, then try formatting again.`, 'error');
         }
-    });
-});
+    }
 
-// Add loading states to buttons
-function addLoadingState(button, text = 'Processing...') {
-    const originalText = button.textContent;
-    button.textContent = text;
-    button.disabled = true;
-    button.style.opacity = '0.7';
-    
-    return () => {
-        button.textContent = originalText;
-        button.disabled = false;
-        button.style.opacity = '1';
-    };
+    convertYAML() {
+        const input = document.getElementById('yaml-input').value.trim();
+        const resultDiv = document.getElementById('result-output');
+        
+        if (!input) {
+            this.showResult(resultDiv, '💡 Please enter some YAML content to convert to JSON.', 'info');
+            return;
+        }
+
+        try {
+            // Parse YAML and convert to JSON
+            const parsed = jsyaml.load(input);
+            const jsonString = JSON.stringify(parsed, null, 2);
+            
+            this.showResult(resultDiv, `🔄 Converted to JSON:\n\n${jsonString}`, 'success');
+        } catch (error) {
+            this.showResult(resultDiv, `❌ Cannot convert invalid YAML!\n\nError: ${error.message}\n\nPlease fix the YAML syntax first, then try converting again.`, 'error');
+        }
+    }
+
+    clearAll() {
+        document.getElementById('yaml-input').value = '';
+        document.getElementById('result-output').innerHTML = '';
+        document.getElementById('result-output').className = 'result-box';
+    }
+
+    triggerTool(toolType) {
+        // Add visual feedback to show which tool was triggered
+        const resultDiv = document.getElementById('result-output');
+        
+        switch(toolType) {
+            case 'validate':
+                // Highlight the validate button
+                this.highlightButton('validate-btn');
+                // Show a hint message
+                this.showResult(resultDiv, '💡 Click "Validate YAML" to check your YAML syntax and structure.', 'info');
+                break;
+            case 'format':
+                // Highlight the format button
+                this.highlightButton('format-btn');
+                // Show a hint message
+                this.showResult(resultDiv, '💡 Click "Format YAML" to beautify and format your YAML code.', 'info');
+                break;
+            case 'convert':
+                // Highlight the convert button
+                this.highlightButton('convert-btn');
+                // Show a hint message
+                this.showResult(resultDiv, '💡 Click "Convert to JSON" to transform your YAML into JSON format.', 'info');
+                break;
+        }
+        
+        // Focus on the input area
+        const inputArea = document.getElementById('yaml-input');
+        if (inputArea) {
+            inputArea.focus();
+        }
+    }
+
+    highlightButton(buttonId) {
+        // Remove previous highlights
+        document.querySelectorAll('.btn-primary').forEach(btn => {
+            btn.classList.remove('highlighted');
+        });
+        
+        // Add highlight to the specific button
+        const button = document.getElementById(buttonId);
+        if (button) {
+            button.classList.add('highlighted');
+            
+            // Remove highlight after 3 seconds
+            setTimeout(() => {
+                button.classList.remove('highlighted');
+            }, 3000);
+        }
+    }
+
+    showResult(element, message, type) {
+        element.textContent = message;
+        element.className = `result-box ${type}`;
+        
+        // Add copy button if result is successful
+        if (type === 'success' && !element.querySelector('.copy-btn')) {
+            this.addCopyButtonToElement(element);
+        }
+        
+        // Smooth scroll to result
+        element.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'nearest' 
+        });
+    }
+
+    addCopyButtons() {
+        // This will be called after dynamic content is added
+        setTimeout(() => {
+            const resultBoxes = document.querySelectorAll('.result-box.success');
+            resultBoxes.forEach(box => {
+                if (!box.querySelector('.copy-btn')) {
+                    this.addCopyButtonToElement(box);
+                }
+            });
+        }, 100);
+    }
+
+    addCopyButtonToElement(element) {
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-btn';
+        copyBtn.textContent = 'Copy';
+        copyBtn.onclick = (e) => {
+            e.stopPropagation();
+            this.copyToClipboard(element.textContent);
+            
+            // Visual feedback
+            const originalText = copyBtn.textContent;
+            copyBtn.textContent = 'Copied!';
+            copyBtn.style.background = '#10b981';
+            
+            setTimeout(() => {
+                copyBtn.textContent = originalText;
+                copyBtn.style.background = '#2563eb';
+            }, 2000);
+        };
+        
+        element.appendChild(copyBtn);
+    }
+
+    async copyToClipboard(text) {
+        try {
+            // Remove the success/error prefixes for cleaner copy
+            const cleanText = text.replace(/^[✅❌⚡🔄💡]\s*[^:]*:\s*\n*/, '');
+            await navigator.clipboard.writeText(cleanText);
+        } catch (err) {
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+        }
+    }
 }
 
-// Enhanced error handling
-window.addEventListener('error', (e) => {
-    console.error('YAML Tools Error:', e.error);
-});
-
-// Service Worker registration for offline functionality (optional)
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        // Service worker can be added here for offline functionality
+// Load js-yaml library and initialize tools
+function loadScript(src) {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
     });
 }
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // Load js-yaml library from CDN
+        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js');
+        
+        // Initialize YAML tools
+        window.yamlTools = new YAMLTools();
+        
+        console.log('YAML Tools initialized successfully!');
+    } catch (error) {
+        console.error('Failed to load YAML Tools:', error);
+        
+        // Show error message to user
+        const resultDiv = document.getElementById('result-output');
+        if (resultDiv) {
+            resultDiv.innerHTML = '❌ Failed to load YAML library. Please check your internet connection and refresh the page.';
+            resultDiv.className = 'result-box error';
+        }
+    }
+});

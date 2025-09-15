@@ -65,23 +65,62 @@
         <nav class="nav">
             <div class="nav-container">
                 <div class="nav-logo">
-                    <h1>YAML.cc</h1>
+                    <a href="#" class="logo-link">
+                        <h1>YAML.cc</h1>
+                    </a>
                 </div>
                 <ul class="nav-menu">
-                    <li><a href="#validator">Validator</a></li>
-                    <li><a href="#linter">Linter</a></li>
-                    <li><a href="#converter">Converter</a></li>
+                    <li><a href="#tools">YAML Tools</a></li>
+                    <li><a href="#info-section">About YAML</a></li>
+                    <li><a href="#features-section">Features</a></li>
                 </ul>
             </div>
         </nav>
     </header>
 
     <main class="main">
-        <section class="hero">
+        <!-- Quick Tools Section - First Screen -->
+        <section class="tools-section" id="tools">
             <div class="container">
-                <h1 class="hero-title">Professional YAML Tools for Developers</h1>
-                <p class="hero-subtitle">YAML.cc provides the most comprehensive suite of free online YAML tools. Validate, format, lint, and convert YAML files instantly. Perfect for developers working with configuration files, APIs, and data serialization.</p>
-                <div class="hero-stats">
+                <div class="hero-tools">
+                    <h1 class="hero-title">YAML Tools</h1>
+                    <p class="hero-subtitle">Validate, format, and convert your YAML content instantly</p>
+                </div>
+                
+                <!-- Unified YAML Tool -->
+                <div class="tool-card">
+                    <div class="tool-content">
+                        <div class="input-section">
+                            <label for="yaml-input">Enter your YAML content:</label>
+                            <textarea id="yaml-input" placeholder="Enter your YAML content here...&#10;&#10;Example:&#10;name: John Doe&#10;age: 30&#10;email: john@example.com&#10;hobbies:&#10;  - reading&#10;  - coding&#10;  - hiking&#10;address:&#10;  street: 123 Main St&#10;  city: New York&#10;  country: USA"></textarea>
+                            <div class="input-actions">
+                                <button id="validate-btn" class="btn btn-primary">
+                                    <span>✓</span> Validate YAML
+                                </button>
+                                <button id="format-btn" class="btn btn-primary">
+                                    <span>⚡</span> Format YAML
+                                </button>
+                                <button id="convert-btn" class="btn btn-primary">
+                                    <span>🔄</span> Convert to JSON
+                                </button>
+                                <button id="clear-btn" class="btn btn-secondary">
+                                    <span>🗑️</span> Clear All
+                                </button>
+                            </div>
+                        </div>
+                        <div class="output-section">
+                            <label for="result-output">Result:</label>
+                            <div id="result-output" class="result-box"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Overview Section -->
+        <section class="features-overview">
+            <div class="container">
+                <div class="features-stats">
                     <div class="stat">
                         <span class="stat-number">100%</span>
                         <span class="stat-label">Free</span>
@@ -93,75 +132,6 @@
                     <div class="stat">
                         <span class="stat-number">Secure</span>
                         <span class="stat-label">Client-side</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="tools-section">
-            <div class="container">
-                <h2 class="section-title">Our YAML Tools</h2>
-                
-                <!-- YAML Validator -->
-                <div class="tool-card" id="validator">
-                    <div class="tool-header">
-                        <h3>YAML Validator</h3>
-                        <p>Validate your YAML syntax and structure instantly</p>
-                    </div>
-                    <div class="tool-content">
-                        <div class="input-section">
-                            <label for="yaml-input">Enter your YAML content:</label>
-                            <textarea id="yaml-input" placeholder="Enter your YAML content here...&#10;&#10;Example:&#10;name: John Doe&#10;age: 30&#10;email: john@example.com&#10;hobbies:&#10;  - reading&#10;  - coding&#10;  - hiking"></textarea>
-                            <div class="input-actions">
-                                <button id="validate-btn" class="btn btn-primary">Validate YAML</button>
-                                <button id="clear-validator" class="btn btn-secondary">Clear</button>
-                            </div>
-                        </div>
-                        <div class="output-section">
-                            <div id="validation-result" class="result-box"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- YAML Linter -->
-                <div class="tool-card" id="linter">
-                    <div class="tool-header">
-                        <h3>YAML Linter</h3>
-                        <p>Format and beautify your YAML code with proper indentation</p>
-                    </div>
-                    <div class="tool-content">
-                        <div class="input-section">
-                            <label for="yaml-lint-input">Enter your YAML content:</label>
-                            <textarea id="yaml-lint-input" placeholder="Enter your YAML content here..."></textarea>
-                            <div class="input-actions">
-                                <button id="lint-btn" class="btn btn-primary">Format YAML</button>
-                                <button id="clear-linter" class="btn btn-secondary">Clear</button>
-                            </div>
-                        </div>
-                        <div class="output-section">
-                            <div id="lint-result" class="result-box"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- YAML to JSON Converter -->
-                <div class="tool-card" id="converter">
-                    <div class="tool-header">
-                        <h3>YAML to JSON Converter</h3>
-                        <p>Convert YAML files to JSON format instantly</p>
-                    </div>
-                    <div class="tool-content">
-                        <div class="input-section">
-                            <label for="yaml-convert-input">Enter your YAML content:</label>
-                            <textarea id="yaml-convert-input" placeholder="Enter your YAML content here..."></textarea>
-                            <div class="input-actions">
-                                <button id="convert-btn" class="btn btn-primary">Convert to JSON</button>
-                                <button id="clear-converter" class="btn btn-secondary">Clear</button>
-                            </div>
-                        </div>
-                        <div class="output-section">
-                            <div id="convert-result" class="result-box"></div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -235,9 +205,9 @@
                 <div class="footer-section">
                     <h4>Tools</h4>
                     <ul>
-                        <li><a href="#validator">YAML Validator</a></li>
-                        <li><a href="#linter">YAML Linter</a></li>
-                        <li><a href="#converter">YAML to JSON</a></li>
+                        <li><a href="#tools" data-tool="validate">YAML Validator</a></li>
+                        <li><a href="#tools" data-tool="format">YAML Linter</a></li>
+                        <li><a href="#tools" data-tool="convert">YAML to JSON</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
