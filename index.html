@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAML.cc - Free YAML Validator, Linter & JSON Converter | Online YAML Tools</title>
+    <meta name="description" content="YAML.cc offers free online YAML validator, YAML linter, and YAML to JSON converter tools. Validate, format, and convert YAML files instantly with professional-grade tools.">
+    <meta name="keywords" content="yaml validator, yaml lint, yaml to json converter, what is a yaml file, yaml tools, yaml parser, yaml formatter, yaml.cc, online yaml tools">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yaml.cc/">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yaml.cc/">
+    <meta property="og:title" content="YAML.cc - Free YAML Validator, Linter & JSON Converter">
+    <meta property="og:description" content="Professional YAML tools for developers. Validate, format, and convert YAML files instantly with our free online tools.">
+    <meta property="og:image" content="https://yaml.cc/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yaml.cc/">
+    <meta property="twitter:title" content="YAML.cc - Free YAML Validator, Linter & JSON Converter">
+    <meta property="twitter:description" content="Professional YAML tools for developers. Validate, format, and convert YAML files instantly with our free online tools.">
+    <meta property="twitter:image" content="https://yaml.cc/og-image.jpg">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "YAML.cc",
+        "url": "https://yaml.cc",
+        "description": "Free online YAML validator, linter, and JSON converter tools for developers",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "featureList": [
+            "YAML Validator",
+            "YAML Linter",
+            "YAML to JSON Converter"
+        ],
+        "author": {
+            "@type": "Organization",
+            "name": "YAML.cc"
+        }
+    }
+    </script>
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <h1>YAML.cc</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#validator">Validator</a></li>
+                    <li><a href="#linter">Linter</a></li>
+                    <li><a href="#converter">Converter</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <section class="hero">
+            <div class="container">
+                <h1 class="hero-title">Professional YAML Tools for Developers</h1>
+                <p class="hero-subtitle">YAML.cc provides the most comprehensive suite of free online YAML tools. Validate, format, lint, and convert YAML files instantly. Perfect for developers working with configuration files, APIs, and data serialization.</p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Free</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">Fast</span>
+                        <span class="stat-label">Processing</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">Secure</span>
+                        <span class="stat-label">Client-side</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tools-section">
+            <div class="container">
+                <h2 class="section-title">Our YAML Tools</h2>
+                
+                <!-- YAML Validator -->
+                <div class="tool-card" id="validator">
+                    <div class="tool-header">
+                        <h3>YAML Validator</h3>
+                        <p>Validate your YAML syntax and structure instantly</p>
+                    </div>
+                    <div class="tool-content">
+                        <div class="input-section">
+                            <label for="yaml-input">Enter your YAML content:</label>
+                            <textarea id="yaml-input" placeholder="Enter your YAML content here...&#10;&#10;Example:&#10;name: John Doe&#10;age: 30&#10;email: john@example.com&#10;hobbies:&#10;  - reading&#10;  - coding&#10;  - hiking"></textarea>
+                            <div class="input-actions">
+                                <button id="validate-btn" class="btn btn-primary">Validate YAML</button>
+                                <button id="clear-validator" class="btn btn-secondary">Clear</button>
+                            </div>
+                        </div>
+                        <div class="output-section">
+                            <div id="validation-result" class="result-box"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- YAML Linter -->
+                <div class="tool-card" id="linter">
+                    <div class="tool-header">
+                        <h3>YAML Linter</h3>
+                        <p>Format and beautify your YAML code with proper indentation</p>
+                    </div>
+                    <div class="tool-content">
+                        <div class="input-section">
+                            <label for="yaml-lint-input">Enter your YAML content:</label>
+                            <textarea id="yaml-lint-input" placeholder="Enter your YAML content here..."></textarea>
+                            <div class="input-actions">
+                                <button id="lint-btn" class="btn btn-primary">Format YAML</button>
+                                <button id="clear-linter" class="btn btn-secondary">Clear</button>
+                            </div>
+                        </div>
+                        <div class="output-section">
+                            <div id="lint-result" class="result-box"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- YAML to JSON Converter -->
+                <div class="tool-card" id="converter">
+                    <div class="tool-header">
+                        <h3>YAML to JSON Converter</h3>
+                        <p>Convert YAML files to JSON format instantly</p>
+                    </div>
+                    <div class="tool-content">
+                        <div class="input-section">
+                            <label for="yaml-convert-input">Enter your YAML content:</label>
+                            <textarea id="yaml-convert-input" placeholder="Enter your YAML content here..."></textarea>
+                            <div class="input-actions">
+                                <button id="convert-btn" class="btn btn-primary">Convert to JSON</button>
+                                <button id="clear-converter" class="btn btn-secondary">Clear</button>
+                            </div>
+                        </div>
+                        <div class="output-section">
+                            <div id="convert-result" class="result-box"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- What is YAML Section -->
+        <section class="info-section">
+            <div class="container">
+                <h2>What is a YAML File?</h2>
+                <div class="info-content">
+                    <p>YAML (YAML Ain't Markup Language) is a human-readable data serialization standard that is commonly used for configuration files, data exchange, and application settings. YAML files use indentation to represent structure and are designed to be both human and machine readable.</p>
+                    
+                    <h3>Key Features of YAML:</h3>
+                    <ul>
+                        <li><strong>Human-readable:</strong> Easy to read and write for both humans and machines</li>
+                        <li><strong>Indentation-based:</strong> Uses spaces or tabs to indicate structure</li>
+                        <li><strong>Data types:</strong> Supports strings, numbers, booleans, arrays, and objects</li>
+                        <li><strong>Comments:</strong> Allows comments using the # symbol</li>
+                        <li><strong>Cross-platform:</strong> Works across different programming languages and platforms</li>
+                    </ul>
+
+                    <h3>Common Use Cases:</h3>
+                    <ul>
+                        <li>Configuration files for applications and services</li>
+                        <li>Docker Compose files</li>
+                        <li>CI/CD pipeline configurations (GitHub Actions, GitLab CI)</li>
+                        <li>API documentation (OpenAPI/Swagger)</li>
+                        <li>Data serialization and exchange</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="container">
+                <h2>Why Choose Our YAML Tools?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Lightning Fast</h3>
+                        <p>Process your YAML files instantly with our optimized client-side tools</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3>100% Secure</h3>
+                        <p>All processing happens in your browser - your data never leaves your device</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🆓</div>
+                        <h3>Completely Free</h3>
+                        <p>No registration required, no hidden costs, no limits on usage</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3>Accurate Results</h3>
+                        <p>Get precise validation and formatting results every time</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>YAML.cc</h3>
+                    <p>Professional YAML validation, formatting, and conversion tools for developers. The most trusted YAML tools platform.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Tools</h4>
+                    <ul>
+                        <li><a href="#validator">YAML Validator</a></li>
+                        <li><a href="#linter">YAML Linter</a></li>
+                        <li><a href="#converter">YAML to JSON</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#what-is-yaml">What is YAML?</a></li>
+                        <li><a href="#yaml-syntax">YAML Syntax Guide</a></li>
+                        <li><a href="#best-practices">Best Practices</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 YAML.cc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

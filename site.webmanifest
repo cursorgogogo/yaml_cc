@@ -1,0 +1,27 @@
+{
+    "name": "YAML.cc - YAML Tools",
+    "short_name": "YAML.cc",
+    "description": "Free online YAML validator, linter, checker, and JSON converter tools for developers",
+    "icons": [
+        {
+            "src": "/favicon-16x16.png",
+            "sizes": "16x16",
+            "type": "image/png"
+        },
+        {
+            "src": "/favicon-32x32.png",
+            "sizes": "32x32",
+            "type": "image/png"
+        },
+        {
+            "src": "/apple-touch-icon.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "/",
+    "display": "standalone",
+    "theme_color": "#2563eb",
+    "background_color": "#ffffff",
+    "categories": ["developer", "utilities", "productivity"]
+}
