@@ -1,0 +1,19 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="8" y="12" width="48" height="40" rx="6" fill="url(#examples-gradient)" stroke="#3B82F6" stroke-width="2"/>
+  <rect x="16" y="20" width="32" height="2" rx="1" fill="#FFFFFF" opacity="0.8"/>
+  <rect x="16" y="26" width="24" height="2" rx="1" fill="#FFFFFF" opacity="0.6"/>
+  <rect x="16" y="32" width="28" height="2" rx="1" fill="#FFFFFF" opacity="0.8"/>
+  <rect x="16" y="38" width="20" height="2" rx="1" fill="#FFFFFF" opacity="0.6"/>
+  <circle cx="52" cy="20" r="6" fill="url(#badge-gradient)" stroke="#10B981" stroke-width="2"/>
+  <path d="M49 20L51 22L55 18" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <defs>
+    <linearGradient id="examples-gradient" x1="8" y1="12" x2="56" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#60A5FA"/>
+      <stop offset="1" stop-color="#3B82F6"/>
+    </linearGradient>
+    <linearGradient id="badge-gradient" x1="46" y1="14" x2="58" y2="26" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#34D399"/>
+      <stop offset="1" stop-color="#10B981"/>
+    </linearGradient>
+  </defs>
+</svg>

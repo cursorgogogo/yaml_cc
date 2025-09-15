@@ -8,6 +8,7 @@ class YAMLTools {
         this.bindEvents();
         this.setupExampleData();
         this.setupNavigation();
+        this.setupExampleTabs();
     }
 
     bindEvents() {
@@ -329,9 +330,49 @@ ${exampleYAML}`;
             document.body.removeChild(textArea);
         }
     }
+
+    setupExampleTabs() {
+        // Setup example tabs functionality
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabPanels = document.querySelectorAll('.tab-panel');
+
+        if (tabButtons.length === 0) return; // No tabs found
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.getAttribute('data-tab');
+                const targetPanel = document.getElementById(targetTab);
+                
+                if (!targetPanel || button.classList.contains('active')) return;
+                
+                // Remove active class from all buttons and panels
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabPanels.forEach(panel => panel.classList.remove('active'));
+                
+                // Add active class to clicked button and target panel
+                button.classList.add('active');
+                targetPanel.classList.add('active');
+            });
+        });
+
+        // Add copy functionality to example code blocks
+        this.addExampleCopyButtons();
+    }
+
+    addExampleCopyButtons() {
+        // Add copy buttons to example code blocks
+        const codeBlocks = document.querySelectorAll('.example-card-single .code-example pre code');
+        
+        codeBlocks.forEach(codeBlock => {
+            const wrapper = codeBlock.closest('.code-example');
+            if (wrapper && !wrapper.querySelector('.copy-btn')) {
+                this.addCopyButton(wrapper, codeBlock.textContent);
+            }
+        });
+    }
 }
 
-// Load js-yaml library and initialize tools
+// Load js-yaml library with multiple CDN fallbacks
 function loadScript(src) {
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
@@ -342,24 +383,151 @@ function loadScript(src) {
     });
 }
 
+// Try multiple CDNs in order
+async function loadYAMLLibrary() {
+    const cdnUrls = [
+        'https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js',
+        'https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js',
+        'https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js'
+    ];
+
+    for (const url of cdnUrls) {
+        try {
+            console.log(`Trying to load js-yaml from: ${url}`);
+            await loadScript(url);
+            console.log(`Successfully loaded js-yaml from: ${url}`);
+            return true;
+        } catch (error) {
+            console.warn(`Failed to load from ${url}:`, error);
+            continue;
+        }
+    }
+    
+    throw new Error('All CDN sources failed');
+}
+
+// Basic YAML parser fallback (limited functionality)
+function createBasicYAMLParser() {
+    window.jsyaml = {
+        load: function(yamlString) {
+            try {
+                // Very basic YAML parsing - handles simple key-value pairs
+                const lines = yamlString.split('\n');
+                const result = {};
+                let currentIndent = 0;
+                let currentObject = result;
+                const indentStack = [result];
+                
+                for (const line of lines) {
+                    const trimmedLine = line.trim();
+                    if (!trimmedLine || trimmedLine.startsWith('#')) continue;
+                    
+                    const indent = line.length - line.trimStart().length;
+                    const colonIndex = trimmedLine.indexOf(':');
+                    
+                    if (colonIndex === -1) continue;
+                    
+                    const key = trimmedLine.substring(0, colonIndex).trim();
+                    let value = trimmedLine.substring(colonIndex + 1).trim();
+                    
+                    // Handle different value types
+                    if (value === '') {
+                        value = {};
+                    } else if (value === 'true') {
+                        value = true;
+                    } else if (value === 'false') {
+                        value = false;
+                    } else if (value === 'null') {
+                        value = null;
+                    } else if (!isNaN(value) && value !== '') {
+                        value = Number(value);
+                    } else if (value.startsWith('"') && value.endsWith('"')) {
+                        value = value.slice(1, -1);
+                    } else if (value.startsWith("'") && value.endsWith("'")) {
+                        value = value.slice(1, -1);
+                    }
+                    
+                    currentObject[key] = value;
+                }
+                
+                return result;
+            } catch (error) {
+                throw new Error(`YAML parsing error: ${error.message}`);
+            }
+        },
+        
+        dump: function(obj, options = {}) {
+            const indent = options.indent || 2;
+            
+            function stringify(value, currentIndent = 0) {
+                if (value === null) return 'null';
+                if (typeof value === 'boolean') return value.toString();
+                if (typeof value === 'number') return value.toString();
+                if (typeof value === 'string') {
+                    // Simple string quoting logic
+                    if (value.includes('\n') || value.includes(':') || value.includes('#')) {
+                        return `"${value.replace(/"/g, '\\"')}"`;
+                    }
+                    return value;
+                }
+                if (Array.isArray(value)) {
+                    return value.map(item => 
+                        '\n' + ' '.repeat(currentIndent + indent) + '- ' + stringify(item, currentIndent + indent)
+                    ).join('');
+                }
+                if (typeof value === 'object') {
+                    return Object.entries(value).map(([k, v]) => 
+                        '\n' + ' '.repeat(currentIndent + indent) + k + ': ' + 
+                        (typeof v === 'object' && v !== null ? stringify(v, currentIndent + indent) : stringify(v))
+                    ).join('');
+                }
+                return String(value);
+            }
+            
+            return Object.entries(obj).map(([key, value]) => 
+                key + ':' + (typeof value === 'object' && value !== null ? stringify(value, 0) : ' ' + stringify(value))
+            ).join('\n');
+        }
+    };
+}
+
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        // Load js-yaml library from CDN
-        await loadScript('https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js');
+        // Try to load js-yaml from CDNs
+        await loadYAMLLibrary();
         
         // Initialize YAML tools
         window.yamlTools = new YAMLTools();
         
-        console.log('YAML Tools initialized successfully!');
+        console.log('YAML Tools initialized successfully with full js-yaml library!');
     } catch (error) {
-        console.error('Failed to load YAML Tools:', error);
+        console.warn('Failed to load js-yaml from CDNs, using basic fallback:', error);
         
-        // Show error message to user
-        const resultDiv = document.getElementById('result-output');
-        if (resultDiv) {
-            resultDiv.innerHTML = '❌ Failed to load YAML library. Please check your internet connection and refresh the page.';
-            resultDiv.className = 'result-box error';
+        try {
+            // Use basic fallback parser
+            createBasicYAMLParser();
+            
+            // Initialize YAML tools with limited functionality
+            window.yamlTools = new YAMLTools();
+            
+            // Show warning message to user
+            const resultDiv = document.getElementById('result-output');
+            if (resultDiv) {
+                resultDiv.innerHTML = '⚠️ Using basic YAML parser (limited functionality). Some advanced YAML features may not work correctly.';
+                resultDiv.className = 'result-box warning';
+            }
+            
+            console.log('YAML Tools initialized with basic fallback parser!');
+        } catch (fallbackError) {
+            console.error('Failed to initialize even with fallback:', fallbackError);
+            
+            // Show error message to user
+            const resultDiv = document.getElementById('result-output');
+            if (resultDiv) {
+                resultDiv.innerHTML = '❌ Failed to initialize YAML tools. Please refresh the page to try again.';
+                resultDiv.className = 'result-box error';
+            }
         }
     }
 });

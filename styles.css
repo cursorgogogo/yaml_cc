@@ -374,7 +374,7 @@ body {
     }
     50% { 
         box-shadow: 0 8px 30px rgba(16, 185, 129, 0.6);
-        transform: translateY(-1px);
+    transform: translateY(-1px);
     }
 }
 
@@ -420,6 +420,12 @@ body {
     border-color: #ef4444;
     background: #fef2f2;
     color: #991b1b;
+}
+
+.result-box.warning {
+    border-color: #f59e0b;
+    background: #fffbeb;
+    color: #92400e;
 }
 
 .result-box.info {
@@ -818,6 +824,181 @@ body {
 
 .example ul li {
     margin-bottom: 0.3rem;
+}
+
+/* Examples Section */
+.example-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+    border-bottom: 2px solid rgba(59, 130, 246, 0.1);
+    padding-bottom: 1rem;
+}
+
+.tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 12px;
+    color: #64748b;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.tab-btn img {
+    filter: drop-shadow(0 1px 2px rgba(59, 130, 246, 0.2));
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #3b82f6;
+    transform: translateY(-2px);
+}
+
+.tab-btn:hover img {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    border-color: #3b82f6;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+}
+
+.tab-btn.active img {
+    filter: brightness(0) invert(1);
+    opacity: 1;
+}
+
+.example-content {
+    margin-top: 2rem;
+    position: relative;
+}
+
+.tab-panel {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateY(10px);
+}
+
+.tab-panel.active {
+    display: block;
+    animation: fadeInSmooth 0.3s ease forwards;
+}
+
+@keyframes fadeInSmooth {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.example-card-single {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    border: 1px solid rgba(59, 130, 246, 0.1);
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.1);
+}
+
+.example-card-single::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #3b82f6, #6366f1, #8b5cf6);
+}
+
+.example-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.example-header img {
+    filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.2));
+    align-self: center;
+}
+
+.example-header h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+}
+
+.example-header p {
+    font-size: 1rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.section-subtitle {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #64748b;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+    .example-tabs {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+    }
+    
+    .tab-btn {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    
+    .example-card-single {
+        padding: 2rem;
+    }
+    
+    .example-header h3 {
+        font-size: 1.3rem;
+    }
+    
+    .example-header p {
+        font-size: 0.9rem;
+    }
 }
 
 /* Footer */
