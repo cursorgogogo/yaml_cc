@@ -1,0 +1,11 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M48 16H16C13.7909 16 12 17.7909 12 20V36C12 38.2091 13.7909 40 16 40H20L28 48L36 40H48C50.2091 40 52 38.2091 52 36V20C52 17.7909 50.2091 16 48 16Z" fill="url(#comment-gradient)" stroke="#3B82F6" stroke-width="2" stroke-linejoin="round"/>
+  <line x1="20" y1="26" x2="44" y2="26" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+  <line x1="20" y1="32" x2="36" y2="32" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+  <defs>
+    <linearGradient id="comment-gradient" x1="12" y1="16" x2="52" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#60A5FA"/>
+      <stop offset="1" stop-color="#3B82F6"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,0 +1,11 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="16" y="28" width="32" height="24" rx="4" fill="url(#lock-gradient)" stroke="#3B82F6" stroke-width="2"/>
+  <path d="M24 28V20C24 15.5817 27.5817 12 32 12C36.4183 12 40 15.5817 40 20V28" stroke="#3B82F6" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="32" cy="40" r="3" fill="#FFFFFF"/>
+  <defs>
+    <linearGradient id="lock-gradient" x1="16" y1="28" x2="48" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#60A5FA"/>
+      <stop offset="1" stop-color="#3B82F6"/>
+    </linearGradient>
+  </defs>
+</svg>
