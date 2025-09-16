@@ -1440,6 +1440,111 @@ body {
     opacity: 1;
 }
 
+/* Enhanced Validation Styles */
+.error-list, .warnings-section {
+    margin-top: 1.5rem;
+}
+
+.error-list h4, .warnings-section h4 {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.error-item, .warning-item {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    border-left: 4px solid;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.error-item {
+    border-left-color: #ef4444;
+    background: rgba(254, 242, 242, 0.8);
+}
+
+.warning-item {
+    border-left-color: #f59e0b;
+    background: rgba(255, 251, 235, 0.8);
+}
+
+.error-header, .warning-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.error-type, .warning-type {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.error-type {
+    background: #fecaca;
+    color: #991b1b;
+}
+
+.warning-type {
+    background: #fed7aa;
+    color: #92400e;
+}
+
+.error-location, .warning-location {
+    font-size: 0.875rem;
+    color: #64748b;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.error-message, .warning-message {
+    color: #374151;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+}
+
+.error-suggestion, .warning-suggestion {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 6px;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    color: #1e40af;
+    margin-top: 0.5rem;
+}
+
+.warning-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.warning-list li {
+    background: rgba(255, 251, 235, 0.8);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: 6px;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.warning-list li strong {
+    color: #92400e;
+}
+
+.warning-list li em {
+    color: #1e40af;
+    font-style: italic;
+}
+
 /* Smooth scrolling */
 html {
     scroll-behavior: smooth;

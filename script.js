@@ -152,16 +152,297 @@ ${exampleYAML}`;
             return;
         }
 
-        try {
-            // Parse YAML using js-yaml library
-            const parsed = jsyaml.load(input);
-            
-            // If parsing succeeds, YAML is valid
-            this.showResult(resultDiv, '✅ Valid YAML!\n\nYour YAML syntax is correct and can be parsed successfully.\n\nStructure looks good! 🎉', 'success');
-        } catch (error) {
-            // If parsing fails, show error details
-            this.showResult(resultDiv, `❌ Invalid YAML!\n\nError: ${error.message}\n\nPlease check your YAML syntax and try again.\n\nTip: Make sure your indentation is consistent and uses spaces (not tabs).`, 'error');
+        // Perform comprehensive YAML validation
+        const validationResult = this.comprehensiveYAMLValidation(input);
+        
+        if (validationResult.isValid) {
+            this.showValidationSuccess(resultDiv, validationResult);
+        } else {
+            this.showValidationErrors(resultDiv, validationResult);
         }
+    }
+
+    comprehensiveYAMLValidation(yamlContent) {
+        const errors = [];
+        const warnings = [];
+        const lines = yamlContent.split('\n');
+        
+        // 1. Basic syntax validation
+        try {
+            const parsed = jsyaml.load(yamlContent);
+        } catch (error) {
+            errors.push({
+                type: 'syntax',
+                message: error.message,
+                line: error.mark ? error.mark.line + 1 : null,
+                column: error.mark ? error.mark.column + 1 : null,
+                severity: 'error'
+            });
+        }
+
+        // 2. Line-by-line analysis for common issues
+        lines.forEach((line, index) => {
+            const lineNum = index + 1;
+            const trimmedLine = line.trim();
+            
+            // Skip empty lines and comments
+            if (!trimmedLine || trimmedLine.startsWith('#')) {
+                return;
+            }
+
+            // Check for mixed list items (key: value in list)
+            if (trimmedLine.startsWith('-') && trimmedLine.includes(':')) {
+                const afterDash = trimmedLine.substring(1).trim();
+                if (afterDash.includes(':')) {
+                    errors.push({
+                        type: 'list_structure',
+                        message: 'List items should not contain key-value pairs. Use proper mapping structure instead.',
+                        line: lineNum,
+                        column: 1,
+                        severity: 'error',
+                        suggestion: 'Convert to proper mapping or use separate list items'
+                    });
+                }
+            }
+
+            // Check for inconsistent indentation
+            if (line.length > 0) {
+                const leadingSpaces = line.match(/^(\s*)/)[1].length;
+                const hasTabs = line.includes('\t');
+                
+                if (hasTabs) {
+                    errors.push({
+                        type: 'indentation',
+                        message: 'YAML should use spaces for indentation, not tabs.',
+                        line: lineNum,
+                        column: 1,
+                        severity: 'error',
+                        suggestion: 'Replace tabs with spaces (2 or 4 spaces per level)'
+                    });
+                }
+            }
+
+            // Check for unquoted special values
+            if (trimmedLine.includes(':')) {
+                const [key, ...valueParts] = trimmedLine.split(':');
+                const value = valueParts.join(':').trim();
+                
+                // Check for unquoted special characters
+                if (value && !value.startsWith('"') && !value.startsWith("'") && !value.startsWith('|') && !value.startsWith('>')) {
+                    // Check for values that should be quoted
+                    if (value.includes(' ') || value.includes(':') || value.includes('[') || value.includes(']') || 
+                        value.includes('{') || value.includes('}') || value.includes(',') || 
+                        value.match(/^[0-9]/) || value === 'yes' || value === 'no' || value === 'on' || value === 'off') {
+                        
+                        // Check if it's a valid boolean or number
+                        const lowerValue = value.toLowerCase();
+                        if (!['true', 'false', 'null', '~'].includes(lowerValue) && 
+                            !value.match(/^-?[0-9]+(\.[0-9]+)?$/) && 
+                            !value.match(/^[0-9]+[a-zA-Z]+$/)) {
+                            
+                            warnings.push({
+                                type: 'quoting',
+                                message: `Value "${value}" contains special characters and should be quoted.`,
+                                line: lineNum,
+                                column: key.length + 2,
+                                severity: 'warning',
+                                suggestion: 'Wrap the value in quotes: "' + value + '"'
+                            });
+                        }
+                    }
+                }
+            }
+
+            // Check for empty values without proper null syntax
+            if (trimmedLine.endsWith(':') && !trimmedLine.endsWith('::')) {
+                const nextLine = lines[index + 1];
+                if (!nextLine || nextLine.trim() === '' || nextLine.trim().startsWith('#')) {
+                    warnings.push({
+                        type: 'empty_value',
+                        message: 'Empty value should be explicitly set to null or ~',
+                        line: lineNum,
+                        column: trimmedLine.length,
+                        severity: 'warning',
+                        suggestion: 'Use "key: null" or "key: ~" for empty values'
+                    });
+                }
+            }
+
+            // Check for Chinese characters in keys without quotes
+            if (trimmedLine.includes(':') && !trimmedLine.startsWith('#')) {
+                const key = trimmedLine.split(':')[0].trim();
+                if (/[\u4e00-\u9fff]/.test(key) && !key.startsWith('"') && !key.startsWith("'")) {
+                    errors.push({
+                        type: 'key_quoting',
+                        message: 'Keys with non-ASCII characters should be quoted.',
+                        line: lineNum,
+                        column: 1,
+                        severity: 'error',
+                        suggestion: 'Quote the key: "' + key + '":'
+                    });
+                }
+            }
+
+            // Check for date-like values that might be misinterpreted
+            if (trimmedLine.includes(':') && !trimmedLine.startsWith('#')) {
+                const value = trimmedLine.split(':').slice(1).join(':').trim();
+                if (value.match(/^\d{4}-\d{2}-\d{2}$/) && !value.startsWith('"') && !value.startsWith("'")) {
+                    warnings.push({
+                        type: 'date_quoting',
+                        message: 'Date-like values should be quoted to avoid misinterpretation.',
+                        line: lineNum,
+                        column: trimmedLine.indexOf(':') + 2,
+                        severity: 'warning',
+                        suggestion: 'Quote the date: "' + value + '"'
+                    });
+                }
+            }
+        });
+
+        // 3. Check for structural issues
+        this.checkStructuralIssues(yamlContent, errors, warnings);
+
+        return {
+            isValid: errors.length === 0,
+            errors: errors,
+            warnings: warnings,
+            statistics: {
+                totalLines: lines.length,
+                nonEmptyLines: lines.filter(line => line.trim() && !line.trim().startsWith('#')).length,
+                errorCount: errors.length,
+                warningCount: warnings.length
+            }
+        };
+    }
+
+    checkStructuralIssues(yamlContent, errors, warnings) {
+        const lines = yamlContent.split('\n');
+        const indentStack = [];
+        
+        lines.forEach((line, index) => {
+            const lineNum = index + 1;
+            const trimmedLine = line.trim();
+            
+            if (!trimmedLine || trimmedLine.startsWith('#')) {
+                return;
+            }
+
+            const leadingSpaces = line.match(/^(\s*)/)[1].length;
+            
+            // Check for inconsistent indentation
+            if (leadingSpaces > 0) {
+                const expectedIndent = indentStack.length * 2; // Assuming 2-space indentation
+                
+                if (leadingSpaces !== expectedIndent && leadingSpaces !== expectedIndent + 2) {
+                    // Allow for list items and nested structures
+                    if (!trimmedLine.startsWith('-') && leadingSpaces % 2 !== 0) {
+                        errors.push({
+                            type: 'indentation',
+                            message: 'Inconsistent indentation detected.',
+                            line: lineNum,
+                            column: 1,
+                            severity: 'error',
+                            suggestion: 'Use consistent 2-space indentation'
+                        });
+                    }
+                }
+            }
+
+            // Track indentation levels
+            if (trimmedLine.includes(':')) {
+                if (leadingSpaces === 0) {
+                    indentStack.length = 0;
+                } else {
+                    const level = Math.floor(leadingSpaces / 2);
+                    indentStack.length = level;
+                }
+            }
+        });
+    }
+
+    showValidationSuccess(resultDiv, result) {
+        const html = `
+            <div class="result-success">
+                <div class="result-header">
+                    <span class="result-icon">✅</span>
+                    <h3>Validation Successful</h3>
+                </div>
+                <div class="result-message">
+                    Your YAML syntax is valid and well-structured!
+                </div>
+                <div class="result-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Total Lines:</span>
+                        <span class="stat-value">${result.statistics.totalLines}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Content Lines:</span>
+                        <span class="stat-value">${result.statistics.nonEmptyLines}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Warnings:</span>
+                        <span class="stat-value">${result.statistics.warningCount}</span>
+                    </div>
+                </div>
+                ${result.warnings.length > 0 ? `
+                <div class="warnings-section">
+                    <h4>⚠️ Suggestions for Improvement:</h4>
+                    <ul class="warning-list">
+                        ${result.warnings.map(warning => `
+                            <li>
+                                <strong>Line ${warning.line}:</strong> ${warning.message}
+                                ${warning.suggestion ? `<br><em>Suggestion: ${warning.suggestion}</em>` : ''}
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+                ` : ''}
+            </div>
+        `;
+        resultDiv.innerHTML = html;
+    }
+
+    showValidationErrors(resultDiv, result) {
+        const html = `
+            <div class="result-error">
+                <div class="result-header">
+                    <span class="result-icon">❌</span>
+                    <h3>Validation Failed</h3>
+                </div>
+                <div class="result-message">
+                    Found ${result.errors.length} error(s) and ${result.warnings.length} warning(s) in your YAML.
+                </div>
+                <div class="error-list">
+                    <h4>🚨 Errors:</h4>
+                    ${result.errors.map(error => `
+                        <div class="error-item">
+                            <div class="error-header">
+                                <span class="error-type">${error.type.replace('_', ' ').toUpperCase()}</span>
+                                <span class="error-location">Line ${error.line}${error.column ? `, Column ${error.column}` : ''}</span>
+                            </div>
+                            <div class="error-message">${error.message}</div>
+                            ${error.suggestion ? `<div class="error-suggestion">💡 ${error.suggestion}</div>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+                ${result.warnings.length > 0 ? `
+                <div class="warnings-section">
+                    <h4>⚠️ Warnings:</h4>
+                    ${result.warnings.map(warning => `
+                        <div class="warning-item">
+                            <div class="warning-header">
+                                <span class="warning-type">${warning.type.replace('_', ' ').toUpperCase()}</span>
+                                <span class="warning-location">Line ${warning.line}${warning.column ? `, Column ${warning.column}` : ''}</span>
+                            </div>
+                            <div class="warning-message">${warning.message}</div>
+                            ${warning.suggestion ? `<div class="warning-suggestion">💡 ${warning.suggestion}</div>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+                ` : ''}
+            </div>
+        `;
+        resultDiv.innerHTML = html;
     }
 
     formatYAML() {
