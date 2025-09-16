@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAML Basic Syntax - Learn YAML Fundamentals | YAML.cc</title>
+    <meta name="description" content="Learn YAML basic syntax including indentation rules, comments, structure, and fundamental concepts. Perfect for YAML beginners.">
+    <meta name="keywords" content="yaml syntax, yaml basics, yaml indentation, yaml comments, yaml structure, learn yaml">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yaml.cc/tutorial/basic-syntax.html">
+    <link rel="icon" type="image/x-icon" href="/assets/images/yamllint.svg">
+    <link rel="stylesheet" href="../styles.css">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://yaml.cc/tutorial/basic-syntax.html">
+    <meta property="og:title" content="YAML Basic Syntax - Learn YAML Fundamentals">
+    <meta property="og:description" content="Learn YAML basic syntax including indentation rules, comments, structure, and fundamental concepts. Perfect for YAML beginners.">
+    <meta property="og:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yaml.cc/tutorial/basic-syntax.html">
+    <meta property="twitter:title" content="YAML Basic Syntax - Learn YAML Fundamentals">
+    <meta property="twitter:description" content="Learn YAML basic syntax including indentation rules, comments, structure, and fundamental concepts. Perfect for YAML beginners.">
+    <meta property="twitter:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "YAML Basic Syntax - Learn YAML Fundamentals",
+        "description": "Learn YAML basic syntax including indentation rules, comments, structure, and fundamental concepts",
+        "author": {
+            "@type": "Organization",
+            "name": "YAML.cc"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "YAML.cc",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://yaml.cc/assets/images/yamllint.svg"
+            }
+        },
+        "datePublished": "2024-01-01",
+        "dateModified": "2024-01-01",
+        "mainEntityOfPage": "https://yaml.cc/tutorial/basic-syntax.html"
+    }
+    </script>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <a href="../index.html" class="logo-link">
+                        <h1>YAML.cc</h1>
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Tutorial</a></li>
+                    <li><a href="../index.html#tools">YAML Tools</a></li>
+                    <li><a href="../index.html#info-section">What is YAML?</a></li>
+                    <li><a href="../index.html#yaml-examples">YAML Examples</a></li>
+                    <li><a href="../index.html#yaml-syntax">Syntax Guide</a></li>
+                    <li><a href="../index.html#best-practices">Best Practices</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="tutorial-header">
+                <nav class="breadcrumb">
+                    <a href="../index.html">Home</a> > <a href="index.html">Tutorial</a> > Basic Syntax
+                </nav>
+                <h1>YAML Basic Syntax</h1>
+                <p class="tutorial-intro">Learn the fundamental building blocks of YAML syntax, including indentation rules, comments, and basic structure.</p>
+            </div>
+
+            <div class="tutorial-content">
+                <section class="tutorial-section">
+                    <h2>What is YAML?</h2>
+                    <p>YAML (YAML Ain't Markup Language) is a human-readable data serialization standard that is commonly used for configuration files, data exchange, and application settings. YAML is designed to be easy to read and write, making it an excellent choice for both humans and machines.</p>
+                    
+                    <div class="highlight-box">
+                        <h3>Key Features of YAML:</h3>
+                        <ul>
+                            <li><strong>Human-readable:</strong> Easy to read and understand</li>
+                            <li><strong>Indentation-based:</strong> Uses spaces for structure</li>
+                            <li><strong>No brackets:</strong> Clean, minimal syntax</li>
+                            <li><strong>Cross-language:</strong> Works with many programming languages</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Basic YAML Structure</h2>
+                    <p>YAML uses indentation to represent structure. The basic building blocks are key-value pairs, lists, and nested objects.</p>
+                    
+                    <div class="code-example">
+                        <h3>Simple Key-Value Pairs</h3>
+                        <pre><code>name: John Doe
+age: 30
+email: john@example.com</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Nested Objects</h3>
+                        <pre><code>person:
+  name: John Doe
+  age: 30
+  address:
+    street: 123 Main St
+    city: New York
+    country: USA</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Lists/Arrays</h3>
+                        <pre><code>fruits:
+  - apple
+  - banana
+  - orange
+
+# Or inline
+colors: [red, green, blue]</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Indentation Rules</h2>
+                    <p>Indentation is crucial in YAML. It defines the structure and hierarchy of your data.</p>
+                    
+                    <div class="important-box">
+                        <h3>⚠️ Important Indentation Rules:</h3>
+                        <ul>
+                            <li>Use <strong>spaces</strong> for indentation (not tabs)</li>
+                            <li>Be <strong>consistent</strong> with your indentation level</li>
+                            <li>Common indentation: <strong>2 spaces</strong> per level</li>
+                            <li>Don't mix tabs and spaces</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Correct Indentation</h3>
+                        <pre><code># ✅ Good - 2 spaces per level
+database:
+  host: localhost
+  port: 5432
+  credentials:
+    username: admin
+    password: secret</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Incorrect Indentation</h3>
+                        <pre><code># ❌ Bad - inconsistent indentation
+database:
+    host: localhost
+  port: 5432
+    credentials:
+      username: admin
+        password: secret</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Comments</h2>
+                    <p>Comments in YAML start with the <code>#</code> symbol and can be placed anywhere in the file.</p>
+                    
+                    <div class="code-example">
+                        <h3>Comment Examples</h3>
+                        <pre><code># This is a full-line comment
+name: John Doe  # This is an inline comment
+age: 30
+
+# Multi-line comments
+# are just multiple
+# single-line comments
+
+database:
+  # Database configuration
+  host: localhost
+  port: 5432
+  # Credentials are below
+  username: admin
+  password: secret</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Strings</h2>
+                    <p>YAML supports different ways to write strings, each with its own use case.</p>
+                    
+                    <div class="code-example">
+                        <h3>String Types</h3>
+                        <pre><code># Simple strings (no quotes needed)
+name: John Doe
+age: 30
+
+# Quoted strings (when needed)
+description: "This is a string with special characters: @#$%"
+title: 'Single quotes also work'
+
+# Multiline strings
+description: |
+  This is a multiline string
+  that preserves line breaks
+  and formatting
+
+# Folded strings (single line)
+summary: >
+  This is a folded string
+  that will be converted
+  to a single line</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Numbers and Booleans</h2>
+                    <p>YAML automatically detects numbers and boolean values.</p>
+                    
+                    <div class="code-example">
+                        <h3>Numbers</h3>
+                        <pre><code># Integers
+count: 42
+negative: -10
+
+# Floats
+price: 19.99
+percentage: 85.5
+
+# Scientific notation
+large_number: 1.23e+10</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Booleans</h3>
+                        <pre><code># Boolean values
+is_active: true
+is_deleted: false
+
+# Alternative boolean values
+enabled: yes
+disabled: no
+on: on
+off: off</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Null Values</h2>
+                    <p>YAML represents null/empty values in several ways.</p>
+                    
+                    <div class="code-example">
+                        <h3>Null Value Examples</h3>
+                        <pre><code># Explicit null
+value: null
+
+# Tilde notation
+empty: ~
+
+# Empty value
+missing:
+
+# All represent the same thing</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Common Mistakes to Avoid</h2>
+                    <div class="warning-box">
+                        <h3>⚠️ Common YAML Mistakes:</h3>
+                        <ul>
+                            <li><strong>Inconsistent indentation:</strong> Mixing tabs and spaces</li>
+                            <li><strong>Missing colons:</strong> Forgetting <code>:</code> after keys</li>
+                            <li><strong>Wrong list syntax:</strong> Using <code>[]</code> instead of <code>-</code></li>
+                            <li><strong>Unquoted special values:</strong> Not quoting strings that look like other types</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Common Mistakes</h3>
+                        <pre><code># ❌ Wrong - missing colon
+name John Doe
+
+# ❌ Wrong - inconsistent indentation
+person:
+  name: John
+    age: 30
+
+# ❌ Wrong - using brackets for lists
+fruits: [apple, banana]
+
+# ✅ Correct
+name: John Doe
+person:
+  name: John
+  age: 30
+fruits:
+  - apple
+  - banana</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Practice Examples</h2>
+                    <p>Try these examples to practice your YAML skills:</p>
+                    
+                    <div class="practice-box">
+                        <h3>Exercise 1: Basic Structure</h3>
+                        <p>Create a YAML file for a user profile with name, email, age, and a list of hobbies.</p>
+                        <details>
+                            <summary>Show Solution</summary>
+                            <pre><code>user:
+  name: Jane Smith
+  email: jane@example.com
+  age: 28
+  hobbies:
+    - reading
+    - hiking
+    - photography</code></pre>
+                        </details>
+                    </div>
+
+                    <div class="practice-box">
+                        <h3>Exercise 2: Nested Configuration</h3>
+                        <p>Create a configuration file for a web application with database and server settings.</p>
+                        <details>
+                            <summary>Show Solution</summary>
+                            <pre><code>app:
+  name: "My Web App"
+  version: "1.0.0"
+  debug: true
+
+database:
+  host: localhost
+  port: 5432
+  name: myapp
+  credentials:
+    username: admin
+    password: secret123
+
+server:
+  host: 0.0.0.0
+  port: 8080
+  ssl: false</code></pre>
+                        </details>
+                    </div>
+                </section>
+
+                <div class="tutorial-navigation">
+                    <a href="index.html" class="btn btn-secondary">← Back to Tutorial</a>
+                    <a href="data-types.html" class="btn btn-primary">Next: Data Types →</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>YAML.cc</h3>
+                    <p>Professional YAML validation, formatting, and conversion tools for developers. The most trusted YAML tools platform.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Tools</h4>
+                    <ul>
+                        <li><a href="../index.html#tools" data-tool="validate">YAML Validator</a></li>
+                        <li><a href="../index.html#tools" data-tool="format">YAML Linter</a></li>
+                        <li><a href="../index.html#tools" data-tool="convert">YAML to JSON</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="../index.html#info-section">What is YAML?</a></li>
+                        <li><a href="../index.html#yaml-examples">YAML Examples</a></li>
+                        <li><a href="../index.html#yaml-syntax">YAML Syntax Guide</a></li>
+                        <li><a href="../index.html#best-practices">Best Practices</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 YAML.cc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

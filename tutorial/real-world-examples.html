@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAML Real-World Examples - Docker, Kubernetes & CI/CD | YAML.cc</title>
+    <meta name="description" content="See YAML in action with real-world examples from Docker Compose, Kubernetes, CI/CD pipelines, and configuration files.">
+    <meta name="keywords" content="yaml examples, docker compose yaml, kubernetes yaml, ci cd yaml, yaml configuration">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yaml.cc/tutorial/real-world-examples.html">
+    <link rel="icon" type="image/x-icon" href="/assets/images/yamllint.svg">
+    <link rel="stylesheet" href="../styles.css">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://yaml.cc/tutorial/real-world-examples.html">
+    <meta property="og:title" content="YAML Real-World Examples - Docker, Kubernetes & CI/CD">
+    <meta property="og:description" content="See YAML in action with real-world examples from Docker Compose, Kubernetes, CI/CD pipelines, and configuration files.">
+    <meta property="og:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yaml.cc/tutorial/real-world-examples.html">
+    <meta property="twitter:title" content="YAML Real-World Examples - Docker, Kubernetes & CI/CD">
+    <meta property="twitter:description" content="See YAML in action with real-world examples from Docker Compose, Kubernetes, CI/CD pipelines, and configuration files.">
+    <meta property="twitter:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "YAML Real-World Examples - Docker, Kubernetes & CI/CD",
+        "description": "See YAML in action with real-world examples from Docker Compose, Kubernetes, CI/CD pipelines, and configuration files",
+        "author": {
+            "@type": "Organization",
+            "name": "YAML.cc"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "YAML.cc",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://yaml.cc/assets/images/yamllint.svg"
+            }
+        },
+        "datePublished": "2024-01-01",
+        "dateModified": "2024-01-01",
+        "mainEntityOfPage": "https://yaml.cc/tutorial/real-world-examples.html"
+    }
+    </script>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <a href="../index.html" class="logo-link">
+                        <h1>YAML.cc</h1>
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Tutorial</a></li>
+                    <li><a href="../index.html#tools">YAML Tools</a></li>
+                    <li><a href="../index.html#info-section">What is YAML?</a></li>
+                    <li><a href="../index.html#yaml-examples">YAML Examples</a></li>
+                    <li><a href="../index.html#yaml-syntax">Syntax Guide</a></li>
+                    <li><a href="../index.html#best-practices">Best Practices</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="tutorial-header">
+                <nav class="breadcrumb">
+                    <a href="../index.html">Home</a> > <a href="index.html">Tutorial</a> > Real-World Examples
+                </nav>
+                <h1>YAML Real-World Examples</h1>
+                <p class="tutorial-intro">See YAML in action with practical examples from Docker Compose, Kubernetes, CI/CD pipelines, and configuration files.</p>
+            </div>
+
+            <div class="tutorial-content">
+                <section class="tutorial-section">
+                    <h2>Docker Compose</h2>
+                    <p>Docker Compose uses YAML to define multi-container applications. Here are common patterns and examples.</p>
+                    
+                    <div class="code-example">
+                        <h3>Basic Docker Compose</h3>
+                        <pre><code>version: '3.8'
+
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./html:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+    restart: unless-stopped
+
+  database:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: myapp
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Advanced Docker Compose with Anchors</h3>
+                        <pre><code>version: '3.8'
+
+# Define common configuration
+x-common-variables: &common-variables
+  POSTGRES_DB: myapp
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: password
+  REDIS_URL: redis://redis:6379
+
+# Define common service configuration
+x-common-service: &common-service
+  restart: unless-stopped
+  networks:
+    - app-network
+
+services:
+  web:
+    <<: *common-service
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      <<: *common-variables
+      NODE_ENV: production
+    depends_on:
+      - database
+      - redis
+    volumes:
+      - ./logs:/app/logs
+
+  database:
+    <<: *common-service
+    image: postgres:13
+    environment: *common-variables
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    <<: *common-service
+    image: redis:alpine
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+
+  nginx:
+    <<: *common-service
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  app-network:
+    driver: bridge</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Kubernetes Manifests</h2>
+                    <p>Kubernetes uses YAML extensively for defining resources. Here are common Kubernetes YAML patterns.</p>
+                    
+                    <div class="code-example">
+                        <h3>Deployment and Service</h3>
+                        <pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+  labels:
+    app: my-app
+    version: "1.0.0"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+        version: "1.0.0"
+    spec:
+      containers:
+        - name: my-app
+          image: my-app:1.0.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: my-app-secrets
+                  key: database-url
+            - name: REDIS_URL
+              value: "redis://redis-service:6379"
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app-service
+  labels:
+    app: my-app
+spec:
+  selector:
+    app: my-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>ConfigMap and Secret</h3>
+                        <pre><code>apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-app-config
+  namespace: default
+data:
+  app.properties: |
+    server.port=8080
+    spring.profiles.active=production
+    logging.level.com.myapp=INFO
+    logging.level.org.springframework=WARN
+  
+  nginx.conf: |
+    server {
+        listen 80;
+        server_name localhost;
+        
+        location / {
+            proxy_pass http://my-app-service:80;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+        }
+    }
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-app-secrets
+  namespace: default
+type: Opaque
+data:
+  database-url: cG9zdGdyZXM6Ly91c2VyOnBhc3N3b3JkQGxvY2FsaG9zdC9teWFwcA==
+  api-key: eW91ci1hcGkta2V5LWhlcmU=
+  jwt-secret: eW91ci1qd3Qtc2VjcmV0LWhlcmU=</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>CI/CD Pipelines</h2>
+                    <p>Many CI/CD systems use YAML for pipeline configuration. Here are examples from popular platforms.</p>
+                    
+                    <div class="code-example">
+                        <h3>GitHub Actions</h3>
+                        <pre><code>name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  NODE_VERSION: '18'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run tests
+        run: npm test
+      
+      - name: Run linting
+        run: npm run lint
+      
+      - name: Run security audit
+        run: npm audit --audit-level moderate
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      
+      - name: Login to Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha,prefix={{branch}}-
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    steps:
+      - name: Deploy to production
+        run: |
+          echo "Deploying to production..."
+          # Add your deployment commands here</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>GitLab CI/CD</h3>
+                        <pre><code>stages:
+  - test
+  - build
+  - deploy
+
+variables:
+  NODE_VERSION: "18"
+  DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+
+before_script:
+  - echo "Starting CI/CD pipeline for $CI_COMMIT_REF_NAME"
+
+test:
+  stage: test
+  image: node:$NODE_VERSION
+  script:
+    - npm ci
+    - npm test
+    - npm run lint
+    - npm audit --audit-level moderate
+  coverage: '/Lines\s*:\s*(\d+\.\d+)%/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/cobertura-coverage.xml
+
+build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t $DOCKER_IMAGE .
+    - docker push $DOCKER_IMAGE
+  only:
+    - main
+    - develop
+
+deploy_staging:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - echo "Deploying to staging environment..."
+    - apk add --no-cache curl
+    - curl -X POST "$STAGING_WEBHOOK_URL" -H "Content-Type: application/json" -d '{"image": "'$DOCKER_IMAGE'"}'
+  environment:
+    name: staging
+    url: https://staging.myapp.com
+  only:
+    - develop
+
+deploy_production:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - echo "Deploying to production environment..."
+    - apk add --no-cache curl
+    - curl -X POST "$PRODUCTION_WEBHOOK_URL" -H "Content-Type: application/json" -d '{"image": "'$DOCKER_IMAGE'"}'
+  environment:
+    name: production
+    url: https://myapp.com
+  when: manual
+  only:
+    - main</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Configuration Files</h2>
+                    <p>YAML is commonly used for application configuration files. Here are examples from popular frameworks and tools.</p>
+                    
+                    <div class="code-example">
+                        <h3>Spring Boot Application Configuration</h3>
+                        <pre><code># application.yml
+spring:
+  application:
+    name: my-application
+  profiles:
+    active: production
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/myapp
+    username: ${DB_USERNAME:admin}
+    password: ${DB_PASSWORD:secret}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  
+  redis:
+    host: localhost
+    port: 6379
+    password: ${REDIS_PASSWORD:}
+    timeout: 2000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+
+logging:
+  level:
+    com.myapp: INFO
+    org.springframework: WARN
+    org.hibernate: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/application.log
+    max-size: 10MB
+    max-history: 30
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+  metrics:
+    export:
+      prometheus:
+        enabled: true</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Traefik Configuration</h3>
+                        <pre><code># traefik.yml
+api:
+  dashboard: true
+  insecure: false
+  debug: false
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entrypoint:
+          to: websecure
+          scheme: https
+  websecure:
+    address: ":443"
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+    network: traefik
+  file:
+    filename: /etc/traefik/dynamic.yml
+    watch: true
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: admin@example.com
+      storage: /etc/traefik/acme.json
+      httpChallenge:
+        entryPoint: web
+      tlsChallenge: {}
+
+log:
+  level: INFO
+  filePath: /var/log/traefik.log
+
+accessLog:
+  filePath: /var/log/access.log
+  format: json
+
+metrics:
+  prometheus:
+    addEntryPointsLabels: true
+    addServicesLabels: true
+
+# Dynamic configuration
+# /etc/traefik/dynamic.yml
+http:
+  middlewares:
+    auth:
+      basicAuth:
+        users:
+          - "admin:$2y$10$..."  # bcrypt hash
+    cors:
+      headers:
+        accessControlAllowMethods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+        accessControlAllowOriginList:
+          - "https://example.com"
+        accessControlMaxAge: 100
+        addVaryHeader: true
+
+  routers:
+    api:
+      rule: "Host(`api.example.com`)"
+      service: api-service
+      middlewares:
+        - auth
+        - cors
+      tls:
+        certResolver: letsencrypt
+
+    web:
+      rule: "Host(`example.com`)"
+      service: web-service
+      tls:
+        certResolver: letsencrypt
+
+  services:
+    api-service:
+      loadBalancer:
+        servers:
+          - url: "http://api:8080"
+    
+    web-service:
+      loadBalancer:
+        servers:
+          - url: "http://web:3000"</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Infrastructure as Code</h2>
+                    <p>YAML is used in Infrastructure as Code tools like Ansible, Terraform, and CloudFormation.</p>
+                    
+                    <div class="code-example">
+                        <h3>Ansible Playbook</h3>
+                        <pre><code>---
+- name: Deploy web application
+  hosts: webservers
+  become: yes
+  vars:
+    app_name: myapp
+    app_version: "1.0.0"
+    app_port: 8080
+    db_host: "{{ groups['dbservers'][0] }}"
+    db_name: myapp
+    db_user: myapp
+    db_password: "{{ vault_db_password }}"
+  
+  tasks:
+    - name: Update system packages
+      apt:
+        update_cache: yes
+        upgrade: dist
+      when: ansible_os_family == "Debian"
+    
+    - name: Install required packages
+      package:
+        name:
+          - nginx
+          - python3
+          - python3-pip
+          - python3-venv
+        state: present
+    
+    - name: Create application user
+      user:
+        name: "{{ app_name }}"
+        system: yes
+        shell: /bin/false
+        home: "/opt/{{ app_name }}"
+        create_home: yes
+    
+    - name: Create application directory
+      file:
+        path: "/opt/{{ app_name }}"
+        owner: "{{ app_name }}"
+        group: "{{ app_name }}"
+        mode: '0755'
+        state: directory
+    
+    - name: Download application
+      get_url:
+        url: "https://github.com/myorg/{{ app_name }}/archive/v{{ app_version }}.tar.gz"
+        dest: "/tmp/{{ app_name }}-{{ app_version }}.tar.gz"
+        mode: '0644'
+    
+    - name: Extract application
+      unarchive:
+        src: "/tmp/{{ app_name }}-{{ app_version }}.tar.gz"
+        dest: "/opt/"
+        remote_src: yes
+        owner: "{{ app_name }}"
+        group: "{{ app_name }}"
+    
+    - name: Create virtual environment
+      pip:
+        name: pip
+        virtualenv: "/opt/{{ app_name }}/venv"
+        virtualenv_python: python3
+    
+    - name: Install Python dependencies
+      pip:
+        requirements: "/opt/{{ app_name }}-{{ app_version }}/requirements.txt"
+        virtualenv: "/opt/{{ app_name }}/venv"
+    
+    - name: Create application configuration
+      template:
+        src: app.conf.j2
+        dest: "/opt/{{ app_name }}/config.yml"
+        owner: "{{ app_name }}"
+        group: "{{ app_name }}"
+        mode: '0644'
+    
+    - name: Create systemd service
+      template:
+        src: app.service.j2
+        dest: "/etc/systemd/system/{{ app_name }}.service"
+        mode: '0644'
+      notify: restart app
+    
+    - name: Start and enable application
+      systemd:
+        name: "{{ app_name }}"
+        state: started
+        enabled: yes
+        daemon_reload: yes
+    
+    - name: Configure nginx
+      template:
+        src: nginx.conf.j2
+        dest: "/etc/nginx/sites-available/{{ app_name }}"
+        mode: '0644'
+      notify: restart nginx
+    
+    - name: Enable nginx site
+      file:
+        src: "/etc/nginx/sites-available/{{ app_name }}"
+        dest: "/etc/nginx/sites-enabled/{{ app_name }}"
+        state: link
+      notify: restart nginx
+    
+    - name: Remove default nginx site
+      file:
+        path: "/etc/nginx/sites-enabled/default"
+        state: absent
+      notify: restart nginx
+  
+  handlers:
+    - name: restart app
+      systemd:
+        name: "{{ app_name }}"
+        state: restarted
+    
+    - name: restart nginx
+      systemd:
+        name: nginx
+        state: restarted</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>AWS CloudFormation Template</h3>
+                        <pre><code>AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Web application infrastructure with RDS database'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, staging, prod]
+    Description: Environment name
+  
+  InstanceType:
+    Type: String
+    Default: t3.micro
+    AllowedValues: [t3.micro, t3.small, t3.medium]
+    Description: EC2 instance type
+  
+  DatabasePassword:
+    Type: String
+    NoEcho: true
+    MinLength: 8
+    Description: Database master password
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-vpc'
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-public-subnet'
+
+  PrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: !Select [1, !GetAZs '']
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-private-subnet'
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-igw'
+
+  InternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref InternetGateway
+      VpcId: !Ref VPC
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-public-routes'
+
+  DefaultPublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: InternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet
+
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub '${AWS::StackName}-sg'
+      GroupDescription: Security group for web application
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-sg'
+
+  DatabaseSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Subnet group for RDS database
+      SubnetIds:
+        - !Ref PrivateSubnet
+        - !Ref PublicSubnet
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-db-subnet-group'
+
+  Database:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceIdentifier: !Sub '${AWS::StackName}-db'
+      DBName: myapp
+      DBInstanceClass: db.t3.micro
+      Engine: postgres
+      EngineVersion: '13.7'
+      MasterUsername: admin
+      MasterUserPassword: !Ref DatabasePassword
+      AllocatedStorage: 20
+      StorageType: gp2
+      VPCSecurityGroups:
+        - !Ref DatabaseSecurityGroup
+      DBSubnetGroupName: !Ref DatabaseSubnetGroup
+      BackupRetentionPeriod: 7
+      MultiAZ: false
+      PubliclyAccessible: false
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-db'
+
+  DatabaseSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub '${AWS::StackName}-db-sg'
+      GroupDescription: Security group for database
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          SourceSecurityGroupId: !Ref SecurityGroup
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-db-sg'
+
+Outputs:
+  VPCId:
+    Description: VPC ID
+    Value: !Ref VPC
+    Export:
+      Name: !Sub '${AWS::StackName}-VPC-ID'
+
+  DatabaseEndpoint:
+    Description: Database endpoint
+    Value: !GetAtt Database.Endpoint.Address
+    Export:
+      Name: !Sub '${AWS::StackName}-Database-Endpoint'
+
+  DatabasePort:
+    Description: Database port
+    Value: !GetAtt Database.Endpoint.Port
+    Export:
+      Name: !Sub '${AWS::StackName}-Database-Port'</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Monitoring and Observability</h2>
+                    <p>YAML is used for monitoring and observability configurations in tools like Prometheus, Grafana, and ELK Stack.</p>
+                    
+                    <div class="code-example">
+                        <h3>Prometheus Configuration</h3>
+                        <pre><code># prometheus.yml
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'production'
+    replica: 'prometheus-1'
+
+rule_files:
+  - "rules/*.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    scrape_interval: 5s
+    metrics_path: /metrics
+
+  - job_name: 'myapp'
+    static_configs:
+      - targets: ['myapp:8080']
+    scrape_interval: 10s
+    metrics_path: /actuator/prometheus
+    scrape_timeout: 5s
+
+  - job_name: 'kubernetes-pods'
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
+      - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+        action: replace
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        replacement: $1:$2
+        target_label: __address__
+      - action: labelmap
+        regex: __meta_kubernetes_pod_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        action: replace
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_pod_name]
+        action: replace
+        target_label: kubernetes_pod_name
+
+  - job_name: 'kubernetes-nodes'
+    kubernetes_sd_configs:
+      - role: node
+    relabel_configs:
+      - action: labelmap
+        regex: __meta_kubernetes_node_label_(.+)
+      - target_label: __address__
+        replacement: kubernetes.default.svc:443
+      - source_labels: [__meta_kubernetes_node_name]
+        regex: (.+)
+        target_label: __metrics_path__
+        replacement: /api/v1/nodes/${1}/proxy/metrics</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Grafana Dashboard</h3>
+                        <pre><code># dashboard.json (YAML representation)
+dashboard:
+  id: null
+  title: "My Application Dashboard"
+  tags: ["myapp", "monitoring"]
+  style: "dark"
+  timezone: "browser"
+  refresh: "5s"
+  time:
+    from: "now-1h"
+    to: "now"
+  
+  panels:
+    - id: 1
+      title: "Request Rate"
+      type: "graph"
+      targets:
+        - expr: 'rate(http_requests_total[5m])'
+          legendFormat: "{{method}} {{handler}}"
+      yAxes:
+        - label: "Requests/sec"
+          min: 0
+      gridPos:
+        h: 8
+        w: 12
+        x: 0
+        y: 0
+    
+    - id: 2
+      title: "Response Time"
+      type: "graph"
+      targets:
+        - expr: 'histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))'
+          legendFormat: "95th percentile"
+        - expr: 'histogram_quantile(0.50, rate(http_request_duration_seconds_bucket[5m]))'
+          legendFormat: "50th percentile"
+      yAxes:
+        - label: "Duration (seconds)"
+          min: 0
+      gridPos:
+        h: 8
+        w: 12
+        x: 12
+        y: 0
+    
+    - id: 3
+      title: "Error Rate"
+      type: "singlestat"
+      targets:
+        - expr: 'rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) * 100'
+      valueName: "current"
+      format: "percent"
+      thresholds: "0.1,1"
+      colorBackground: true
+      colorValue: false
+      gridPos:
+        h: 4
+        w: 6
+        x: 0
+        y: 8
+    
+    - id: 4
+      title: "CPU Usage"
+      type: "graph"
+      targets:
+        - expr: '100 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)'
+          legendFormat: "{{instance}}"
+      yAxes:
+        - label: "CPU %"
+          min: 0
+          max: 100
+      gridPos:
+        h: 8
+        w: 12
+        x: 0
+        y: 12
+    
+    - id: 5
+      title: "Memory Usage"
+      type: "graph"
+      targets:
+        - expr: '(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100'
+          legendFormat: "{{instance}}"
+      yAxes:
+        - label: "Memory %"
+          min: 0
+          max: 100
+      gridPos:
+        h: 8
+        w: 12
+        x: 12
+        y: 12
+
+  templating:
+    list:
+      - name: "instance"
+        type: "query"
+        query: "label_values(up, instance)"
+        refresh: 1
+        includeAll: true
+        multi: true</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Practice Exercises</h2>
+                    <p>Try creating your own YAML configurations based on these real-world examples.</p>
+                    
+                    <div class="practice-box">
+                        <h3>Exercise 1: Docker Compose for Microservices</h3>
+                        <p>Create a Docker Compose file for a microservices application with a web app, API, database, and Redis cache.</p>
+                        <details>
+                            <summary>Show Solution</summary>
+                            <pre><code>version: '3.8'
+
+services:
+  web:
+    build: ./web
+    ports:
+      - "3000:3000"
+    environment:
+      - API_URL=http://api:8080
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - api
+      - redis
+
+  api:
+    build: ./api
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/myapp
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: myapp
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:</code></pre>
+                        </details>
+                    </div>
+
+                    <div class="practice-box">
+                        <h3>Exercise 2: Kubernetes Deployment</h3>
+                        <p>Create a Kubernetes deployment for a web application with a service, configmap, and secret.</p>
+                        <details>
+                            <summary>Show Solution</summary>
+                            <pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+    spec:
+      containers:
+        - name: web-app
+          image: web-app:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: web-app-secrets
+                  key: database-url
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: web-app-secrets
+                  key: api-key
+            - name: LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: web-app-config
+                  key: log-level
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-service
+spec:
+  selector:
+    app: web-app
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: LoadBalancer
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-app-config
+data:
+  log-level: "info"
+  max-connections: "100"
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: web-app-secrets
+type: Opaque
+data:
+  database-url: cG9zdGdyZXM6Ly91c2VyOnBhc3N3b3JkQGxvY2FsaG9zdC9teWFwcA==
+  api-key: eW91ci1hcGkta2V5LWhlcmU=</code></pre>
+                        </details>
+                    </div>
+                </section>
+
+                <div class="tutorial-navigation">
+                    <a href="best-practices.html" class="btn btn-secondary">← Back: Best Practices</a>
+                    <a href="tools-and-validation.html" class="btn btn-primary">Next: Tools & Validation →</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>YAML.cc</h3>
+                    <p>Professional YAML validation, formatting, and conversion tools for developers. The most trusted YAML tools platform.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Tools</h4>
+                    <ul>
+                        <li><a href="../index.html#tools" data-tool="validate">YAML Validator</a></li>
+                        <li><a href="../index.html#tools" data-tool="format">YAML Linter</a></li>
+                        <li><a href="../index.html#tools" data-tool="convert">YAML to JSON</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="../index.html#info-section">What is YAML?</a></li>
+                        <li><a href="../index.html#yaml-examples">YAML Examples</a></li>
+                        <li><a href="../index.html#yaml-syntax">YAML Syntax Guide</a></li>
+                        <li><a href="../index.html#best-practices">Best Practices</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 YAML.cc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

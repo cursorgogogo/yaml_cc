@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAML Data Types - Strings, Numbers, Arrays & Objects | YAML.cc</title>
+    <meta name="description" content="Learn YAML data types including strings, numbers, booleans, arrays, objects, and null values. Complete guide with examples.">
+    <meta name="keywords" content="yaml data types, yaml strings, yaml numbers, yaml arrays, yaml objects, yaml booleans">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yaml.cc/tutorial/data-types.html">
+    <link rel="icon" type="image/x-icon" href="/assets/images/yamllint.svg">
+    <link rel="stylesheet" href="../styles.css">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://yaml.cc/tutorial/data-types.html">
+    <meta property="og:title" content="YAML Data Types - Strings, Numbers, Arrays & Objects">
+    <meta property="og:description" content="Learn YAML data types including strings, numbers, booleans, arrays, objects, and null values. Complete guide with examples.">
+    <meta property="og:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yaml.cc/tutorial/data-types.html">
+    <meta property="twitter:title" content="YAML Data Types - Strings, Numbers, Arrays & Objects">
+    <meta property="twitter:description" content="Learn YAML data types including strings, numbers, booleans, arrays, objects, and null values. Complete guide with examples.">
+    <meta property="twitter:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "YAML Data Types - Strings, Numbers, Arrays & Objects",
+        "description": "Learn YAML data types including strings, numbers, booleans, arrays, objects, and null values",
+        "author": {
+            "@type": "Organization",
+            "name": "YAML.cc"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "YAML.cc",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://yaml.cc/assets/images/yamllint.svg"
+            }
+        },
+        "datePublished": "2024-01-01",
+        "dateModified": "2024-01-01",
+        "mainEntityOfPage": "https://yaml.cc/tutorial/data-types.html"
+    }
+    </script>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <a href="../index.html" class="logo-link">
+                        <h1>YAML.cc</h1>
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Tutorial</a></li>
+                    <li><a href="../index.html#tools">YAML Tools</a></li>
+                    <li><a href="../index.html#info-section">What is YAML?</a></li>
+                    <li><a href="../index.html#yaml-examples">YAML Examples</a></li>
+                    <li><a href="../index.html#yaml-syntax">Syntax Guide</a></li>
+                    <li><a href="../index.html#best-practices">Best Practices</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="tutorial-header">
+                <nav class="breadcrumb">
+                    <a href="../index.html">Home</a> > <a href="index.html">Tutorial</a> > Data Types
+                </nav>
+                <h1>YAML Data Types</h1>
+                <p class="tutorial-intro">Master YAML data types including strings, numbers, booleans, arrays, objects, and special values.</p>
+            </div>
+
+            <div class="tutorial-content">
+                <section class="tutorial-section">
+                    <h2>Overview of YAML Data Types</h2>
+                    <p>YAML supports a rich set of data types that can represent various kinds of information. Understanding these types is crucial for writing effective YAML files.</p>
+                    
+                    <div class="data-types-grid">
+                        <div class="data-type-card">
+                            <h3>🔤 Strings</h3>
+                            <p>Text data with various formatting options</p>
+                        </div>
+                        <div class="data-type-card">
+                            <h3>🔢 Numbers</h3>
+                            <p>Integers, floats, and scientific notation</p>
+                        </div>
+                        <div class="data-type-card">
+                            <h3>✅ Booleans</h3>
+                            <p>True/false values and alternatives</p>
+                        </div>
+                        <div class="data-type-card">
+                            <h3>📋 Arrays</h3>
+                            <p>Lists and collections of items</p>
+                        </div>
+                        <div class="data-type-card">
+                            <h3>🗂️ Objects</h3>
+                            <p>Key-value pairs and nested structures</p>
+                        </div>
+                        <div class="data-type-card">
+                            <h3>❌ Null</h3>
+                            <p>Empty or missing values</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Strings</h2>
+                    <p>Strings in YAML can be written in multiple ways, each with specific use cases and behaviors.</p>
+                    
+                    <div class="code-example">
+                        <h3>Basic Strings</h3>
+                        <pre><code># Simple strings (no quotes needed for most cases)
+name: John Doe
+city: New York
+version: 1.0.0
+
+# When quotes are needed
+special: "String with : colon"
+quoted: "String with spaces and special chars: @#$%"</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Quoted Strings</h3>
+                        <pre><code># Double quotes
+message: "Hello, World!"
+path: "C:\\Users\\John\\Documents"
+
+# Single quotes (no escaping needed inside)
+title: 'This is a "quoted" string'
+regex: '^[a-zA-Z0-9]+$'
+
+# Escaping in double quotes
+escaped: "Line 1\nLine 2\tTabbed"</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Multiline Strings</h3>
+                        <pre><code># Literal block scalar (preserves line breaks)
+description: |
+  This is a multiline string
+  that preserves all line breaks
+  and formatting exactly as written.
+
+# Folded block scalar (converts to single line)
+summary: >
+  This is a folded string
+  that will be converted
+  to a single line with spaces
+  between words.</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>String with Indentation Control</h3>
+                        <pre><code># Strip leading/trailing whitespace
+text: |-
+  This text has
+  no trailing newline
+
+# Keep trailing newline
+text: |+
+  This text has
+  a trailing newline
+
+# Strip leading whitespace
+text: |2
+    This text has
+    indentation stripped</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Numbers</h2>
+                    <p>YAML supports various number formats including integers, floating-point numbers, and scientific notation.</p>
+                    
+                    <div class="code-example">
+                        <h3>Integers</h3>
+                        <pre><code># Decimal integers
+count: 42
+negative: -10
+zero: 0
+
+# Octal (base 8)
+octal: 0o755
+
+# Hexadecimal (base 16)
+hex: 0xFF
+color: 0x1A2B3C
+
+# Binary (base 2)
+binary: 0b1010</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Floating-Point Numbers</h3>
+                        <pre><code># Basic floats
+price: 19.99
+percentage: 85.5
+negative_float: -3.14
+
+# Scientific notation
+large: 1.23e+10
+small: 1.23e-10
+scientific: 6.022e23
+
+# Special float values
+infinity: .inf
+negative_infinity: -.inf
+not_a_number: .nan</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Number Examples in Context</h3>
+                        <pre><code>server:
+  port: 8080
+  timeout: 30.5
+  max_connections: 1000
+  memory_limit: 1.5e9  # 1.5 GB
+
+database:
+  version: 13.2
+  max_retries: 3
+  connection_pool: 0x20  # 32 in hex</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Booleans</h2>
+                    <p>YAML supports multiple ways to represent boolean values, making it flexible for different use cases.</p>
+                    
+                    <div class="code-example">
+                        <h3>Standard Boolean Values</h3>
+                        <pre><code># Standard true/false
+is_active: true
+is_deleted: false
+debug_mode: true
+production: false</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Alternative Boolean Values</h3>
+                        <pre><code># Yes/No
+enabled: yes
+disabled: no
+feature_flag: yes
+
+# On/Off
+power: on
+maintenance: off
+service: on
+
+# All of these are equivalent to true/false
+boolean_examples:
+  true_values: [true, yes, on, True, Yes, On, TRUE, YES, ON]
+  false_values: [false, no, off, False, No, Off, FALSE, NO, OFF]</code></pre>
+                    </div>
+
+                    <div class="important-box">
+                        <h3>⚠️ Important Note:</h3>
+                        <p>YAML is case-sensitive for boolean values. <code>True</code> and <code>true</code> are different - only lowercase values are recognized as booleans.</p>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Arrays (Lists)</h2>
+                    <p>Arrays in YAML can be written in block style (with dashes) or flow style (with brackets).</p>
+                    
+                    <div class="code-example">
+                        <h3>Block Style Arrays</h3>
+                        <pre><code># Simple list
+fruits:
+  - apple
+  - banana
+  - orange
+
+# List of objects
+users:
+  - name: John
+    age: 30
+  - name: Jane
+    age: 25
+
+# Nested lists
+matrix:
+  - [1, 2, 3]
+  - [4, 5, 6]
+  - [7, 8, 9]</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Flow Style Arrays</h3>
+                        <pre><code># Inline arrays
+colors: [red, green, blue]
+numbers: [1, 2, 3, 4, 5]
+
+# Mixed types
+mixed: [1, "hello", true, null]
+
+# Nested flow arrays
+coordinates: [[1, 2], [3, 4], [5, 6]]</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Empty Arrays</h3>
+                        <pre><code># Empty block style
+empty_list: []
+
+# Empty flow style
+empty_flow: []
+
+# Both are equivalent</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Objects (Maps)</h2>
+                    <p>Objects in YAML are collections of key-value pairs, similar to dictionaries or hash maps in programming languages.</p>
+                    
+                    <div class="code-example">
+                        <h3>Block Style Objects</h3>
+                        <pre><code># Simple object
+person:
+  name: John Doe
+  age: 30
+  email: john@example.com
+
+# Nested objects
+company:
+  name: "Acme Corp"
+  address:
+    street: "123 Main St"
+    city: "New York"
+    country: "USA"
+  employees:
+    - name: John
+      position: "Developer"
+    - name: Jane
+      position: "Designer"</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Flow Style Objects</h3>
+                        <pre><code># Inline objects
+person: {name: John, age: 30, city: New York}
+
+# Nested flow objects
+config: {database: {host: localhost, port: 5432}, server: {port: 8080}}
+
+# Mixed with arrays
+users: [{name: John, active: true}, {name: Jane, active: false}]</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Complex Nested Structure</h3>
+                        <pre><code>application:
+  name: "My App"
+  version: "2.1.0"
+  settings:
+    database:
+      host: localhost
+      port: 5432
+      credentials:
+        username: admin
+        password: secret
+    features:
+      - authentication
+      - logging
+      - monitoring
+    limits:
+      max_users: 1000
+      timeout: 30</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Null Values</h2>
+                    <p>YAML provides several ways to represent null or empty values.</p>
+                    
+                    <div class="code-example">
+                        <h3>Null Value Representations</h3>
+                        <pre><code># Explicit null
+value: null
+
+# Tilde notation
+empty: ~
+
+# Empty value (no value after colon)
+missing:
+
+# All three are equivalent and represent null/undefined</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Null in Arrays and Objects</h3>
+                        <pre><code># Null in arrays
+items: [apple, null, banana, null]
+
+# Null in objects
+user:
+  name: John
+  middle_name: null
+  last_name: Doe
+  nickname:  # This is also null
+
+# Mixed null values
+data:
+  present: "some value"
+  missing: null
+  empty: ~
+  undefined:</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Type Coercion and Quoting</h2>
+                    <p>YAML automatically detects data types, but sometimes you need to force a specific type using quotes.</p>
+                    
+                    <div class="code-example">
+                        <h3>Automatic Type Detection</h3>
+                        <pre><code># These are detected as numbers
+count: 42
+price: 19.99
+scientific: 1.23e10
+
+# These are detected as booleans
+enabled: true
+disabled: false
+
+# These are detected as strings
+name: John
+version: 1.0.0</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Forcing String Type with Quotes</h3>
+                        <pre><code># Force numbers to be strings
+zip_code: "12345"  # String, not number
+phone: "555-1234"  # String with dashes
+version: "2.0"     # String version
+
+# Force booleans to be strings
+flag: "true"       # String "true", not boolean true
+status: "yes"      # String "yes", not boolean true
+
+# Force null to be string
+empty: "null"      # String "null", not null value</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Special Values That Need Quoting</h3>
+                        <pre><code># Values that look like other types
+date_like: "2023-12-25"     # Looks like date, quote to keep as string
+number_like: "123"          # Looks like number, quote to keep as string
+boolean_like: "yes"         # Looks like boolean, quote to keep as string
+null_like: "null"           # Looks like null, quote to keep as string
+
+# Values with special characters
+path: "C:\\Users\\John"     # Backslashes
+regex: "^[a-zA-Z]+$"        # Special regex characters
+url: "https://example.com"  # Colons and slashes</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Practice Exercises</h2>
+                    <p>Test your understanding with these practical exercises:</p>
+                    
+                    <div class="practice-box">
+                        <h3>Exercise 1: Mixed Data Types</h3>
+                        <p>Create a YAML file representing a product catalog with different data types.</p>
+                        <details>
+                            <summary>Show Solution</summary>
+                            <pre><code>products:
+  - id: 1
+    name: "Laptop"
+    price: 999.99
+    in_stock: true
+    tags: [electronics, computer, portable]
+    specifications:
+      weight: 2.5
+      dimensions: [35.5, 24.0, 2.0]
+      warranty: "2 years"
+    reviews: null</code></pre>
+                        </details>
+                    </div>
+
+                    <div class="practice-box">
+                        <h3>Exercise 2: Configuration File</h3>
+                        <p>Create a server configuration with nested objects, arrays, and various data types.</p>
+                        <details>
+                            <summary>Show Solution</summary>
+                            <pre><code>server:
+  name: "Production Server"
+  environment: "prod"
+  debug: false
+  port: 8080
+  ssl:
+    enabled: true
+    certificate: "/etc/ssl/cert.pem"
+    key: "/etc/ssl/key.pem"
+  databases:
+    - name: "users"
+      host: "db1.example.com"
+      port: 5432
+    - name: "logs"
+      host: "db2.example.com"
+      port: 5432
+  features: [auth, logging, monitoring, caching]</code></pre>
+                        </details>
+                    </div>
+                </section>
+
+                <div class="tutorial-navigation">
+                    <a href="basic-syntax.html" class="btn btn-secondary">← Back: Basic Syntax</a>
+                    <a href="advanced-features.html" class="btn btn-primary">Next: Advanced Features →</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>YAML.cc</h3>
+                    <p>Professional YAML validation, formatting, and conversion tools for developers. The most trusted YAML tools platform.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Tools</h4>
+                    <ul>
+                        <li><a href="../index.html#tools" data-tool="validate">YAML Validator</a></li>
+                        <li><a href="../index.html#tools" data-tool="format">YAML Linter</a></li>
+                        <li><a href="../index.html#tools" data-tool="convert">YAML to JSON</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="../index.html#info-section">What is YAML?</a></li>
+                        <li><a href="../index.html#yaml-examples">YAML Examples</a></li>
+                        <li><a href="../index.html#yaml-syntax">YAML Syntax Guide</a></li>
+                        <li><a href="../index.html#best-practices">Best Practices</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 YAML.cc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

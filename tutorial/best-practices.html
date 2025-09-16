@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAML Best Practices - Writing Clean & Maintainable YAML | YAML.cc</title>
+    <meta name="description" content="Learn YAML best practices for writing clean, maintainable, and efficient YAML files. Professional guidelines and common pitfalls to avoid.">
+    <meta name="keywords" content="yaml best practices, yaml guidelines, yaml formatting, yaml maintenance, yaml tips">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yaml.cc/tutorial/best-practices.html">
+    <link rel="icon" type="image/x-icon" href="/assets/images/yamllint.svg">
+    <link rel="stylesheet" href="../styles.css">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://yaml.cc/tutorial/best-practices.html">
+    <meta property="og:title" content="YAML Best Practices - Writing Clean & Maintainable YAML">
+    <meta property="og:description" content="Learn YAML best practices for writing clean, maintainable, and efficient YAML files. Professional guidelines and common pitfalls to avoid.">
+    <meta property="og:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yaml.cc/tutorial/best-practices.html">
+    <meta property="twitter:title" content="YAML Best Practices - Writing Clean & Maintainable YAML">
+    <meta property="twitter:description" content="Learn YAML best practices for writing clean, maintainable, and efficient YAML files. Professional guidelines and common pitfalls to avoid.">
+    <meta property="twitter:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "YAML Best Practices - Writing Clean & Maintainable YAML",
+        "description": "Learn YAML best practices for writing clean, maintainable, and efficient YAML files",
+        "author": {
+            "@type": "Organization",
+            "name": "YAML.cc"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "YAML.cc",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://yaml.cc/assets/images/yamllint.svg"
+            }
+        },
+        "datePublished": "2024-01-01",
+        "dateModified": "2024-01-01",
+        "mainEntityOfPage": "https://yaml.cc/tutorial/best-practices.html"
+    }
+    </script>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <a href="../index.html" class="logo-link">
+                        <h1>YAML.cc</h1>
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Tutorial</a></li>
+                    <li><a href="../index.html#tools">YAML Tools</a></li>
+                    <li><a href="../index.html#info-section">What is YAML?</a></li>
+                    <li><a href="../index.html#yaml-examples">YAML Examples</a></li>
+                    <li><a href="../index.html#yaml-syntax">Syntax Guide</a></li>
+                    <li><a href="../index.html#best-practices">Best Practices</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="tutorial-header">
+                <nav class="breadcrumb">
+                    <a href="../index.html">Home</a> > <a href="index.html">Tutorial</a> > Best Practices
+                </nav>
+                <h1>YAML Best Practices</h1>
+                <p class="tutorial-intro">Learn professional guidelines for writing clean, maintainable, and efficient YAML files.</p>
+            </div>
+
+            <div class="tutorial-content">
+                <section class="tutorial-section">
+                    <h2>Formatting and Style Guidelines</h2>
+                    <p>Consistent formatting makes YAML files easier to read, maintain, and debug. Follow these guidelines for professional YAML files.</p>
+                    
+                    <div class="best-practices-box">
+                        <h3>✅ Indentation Best Practices</h3>
+                        <ul>
+                            <li><strong>Use 2 spaces per indentation level</strong> - Most common and readable</li>
+                            <li><strong>Never mix tabs and spaces</strong> - Choose one and stick to it</li>
+                            <li><strong>Be consistent throughout the file</strong> - Don't change indentation style</li>
+                            <li><strong>Use a YAML linter</strong> - Automatically check for indentation issues</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Good Indentation</h3>
+                        <pre><code># ✅ Good - consistent 2-space indentation
+database:
+  host: localhost
+  port: 5432
+  credentials:
+    username: admin
+    password: secret
+  options:
+    pool: 5
+    timeout: 30</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Bad Indentation</h3>
+                        <pre><code># ❌ Bad - inconsistent indentation
+database:
+    host: localhost
+  port: 5432
+    credentials:
+      username: admin
+        password: secret</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Naming Conventions</h2>
+                    <p>Use clear, descriptive names that follow consistent conventions throughout your YAML files.</p>
+                    
+                    <div class="best-practices-box">
+                        <h3>✅ Naming Best Practices</h3>
+                        <ul>
+                            <li><strong>Use snake_case for keys</strong> - Most common in YAML</li>
+                            <li><strong>Use descriptive names</strong> - Avoid abbreviations when possible</li>
+                            <li><strong>Be consistent with naming style</strong> - Don't mix camelCase and snake_case</li>
+                            <li><strong>Use meaningful prefixes</strong> - Group related settings</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Good Naming</h3>
+                        <pre><code># ✅ Good - clear, descriptive names
+application:
+  name: "My Application"
+  version: "2.1.0"
+  environment: "production"
+
+database_config:
+  host: "db.example.com"
+  port: 5432
+  connection_timeout: 30
+  max_connections: 100
+
+api_settings:
+  base_url: "https://api.example.com"
+  rate_limit: 1000
+  timeout_seconds: 30</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Bad Naming</h3>
+                        <pre><code># ❌ Bad - unclear, inconsistent names
+app:
+  n: "My Application"  # Too short
+  v: "2.1.0"           # Abbreviation
+  env: "prod"          # Abbreviation
+
+db:                    # Too short
+  h: "db.example.com"  # Abbreviation
+  p: 5432              # Abbreviation
+  ct: 30               # Abbreviation
+
+api:                   # Inconsistent with db_config above
+  url: "https://api.example.com"
+  limit: 1000
+  timeout: 30</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>String Handling</h2>
+                    <p>Proper string handling prevents common YAML parsing issues and improves readability.</p>
+                    
+                    <div class="best-practices-box">
+                        <h3>✅ String Best Practices</h3>
+                        <ul>
+                            <li><strong>Quote strings with special characters</strong> - Colons, quotes, etc.</li>
+                            <li><strong>Use consistent quoting style</strong> - Prefer double quotes</li>
+                            <li><strong>Quote values that look like other types</strong> - Dates, numbers, booleans</li>
+                            <li><strong>Use multiline strings for long text</strong> - Better readability</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Good String Handling</h3>
+                        <pre><code># ✅ Good - proper string quoting
+user:
+  name: "John Doe"
+  email: "john@example.com"
+  description: "Software developer with 5 years experience"
+  birth_date: "1990-05-15"  # Quote dates
+  phone: "555-1234"         # Quote phone numbers
+  status: "active"          # Quote status values
+
+# Multiline strings for long text
+error_message: |
+  An error occurred while processing your request.
+  Please check your input and try again.
+  If the problem persists, contact support.</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Bad String Handling</h3>
+                        <pre><code># ❌ Bad - unquoted special values
+user:
+  name: John Doe
+  email: john@example.com
+  description: Software developer with 5 years experience
+  birth_date: 1990-05-15    # Looks like date, should be quoted
+  phone: 555-1234           # Looks like number, should be quoted
+  status: active            # Looks like boolean, should be quoted
+
+# Long text without proper formatting
+error_message: An error occurred while processing your request. Please check your input and try again. If the problem persists, contact support.</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Comments and Documentation</h2>
+                    <p>Well-documented YAML files are easier to understand and maintain. Use comments strategically.</p>
+                    
+                    <div class="best-practices-box">
+                        <h3>✅ Comment Best Practices</h3>
+                        <ul>
+                            <li><strong>Document complex configurations</strong> - Explain non-obvious settings</li>
+                            <li><strong>Use section headers</strong> - Group related settings</li>
+                            <li><strong>Document default values</strong> - Note when values differ from defaults</li>
+                            <li><strong>Keep comments up to date</strong> - Remove outdated comments</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Good Documentation</h3>
+                        <pre><code># Application Configuration
+# This file contains all application settings
+# Last updated: 2024-01-15
+
+application:
+  name: "My Application"
+  version: "2.1.0"
+  environment: "production"
+
+# Database Configuration
+# PostgreSQL database settings
+database:
+  host: "db.example.com"
+  port: 5432
+  name: "myapp_production"
+  # Connection pool settings
+  pool:
+    min: 5      # Minimum connections
+    max: 20     # Maximum connections
+    timeout: 30 # Connection timeout in seconds
+
+# API Configuration
+api:
+  base_url: "https://api.example.com"
+  # Rate limiting (requests per minute)
+  rate_limit: 1000
+  # Request timeout in seconds
+  timeout: 30
+  # Enable API versioning
+  versioning: true</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Bad Documentation</h3>
+                        <pre><code># Bad - no comments or documentation
+app:
+  name: "My Application"
+  version: "2.1.0"
+  env: "prod"
+
+db:
+  host: "db.example.com"
+  port: 5432
+  name: "myapp_prod"
+  pool: 20
+  timeout: 30
+
+api:
+  url: "https://api.example.com"
+  limit: 1000
+  timeout: 30
+  versioning: true</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Structure and Organization</h2>
+                    <p>Well-organized YAML files are easier to navigate and maintain. Follow logical grouping principles.</p>
+                    
+                    <div class="best-practices-box">
+                        <h3>✅ Structure Best Practices</h3>
+                        <ul>
+                            <li><strong>Group related settings together</strong> - Database, API, logging, etc.</li>
+                            <li><strong>Use consistent hierarchy</strong> - Don't mix different organizational patterns</li>
+                            <li><strong>Keep nesting levels reasonable</strong> - Avoid deep nesting (max 4-5 levels)</li>
+                            <li><strong>Use anchors for repeated values</strong> - DRY principle</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Good Structure</h3>
+                        <pre><code># Application metadata
+application:
+  name: "My Application"
+  version: "2.1.0"
+  environment: "production"
+
+# Database configuration
+database:
+  host: "db.example.com"
+  port: 5432
+  name: "myapp_production"
+  credentials:
+    username: "admin"
+    password: "secret"
+  options:
+    pool: 20
+    timeout: 30
+    ssl: true
+
+# API configuration
+api:
+  base_url: "https://api.example.com"
+  version: "v1"
+  rate_limit: 1000
+  timeout: 30
+  endpoints:
+    users: "/users"
+    posts: "/posts"
+    comments: "/comments"
+
+# Logging configuration
+logging:
+  level: "info"
+  format: "json"
+  outputs:
+    - console
+    - file
+  file:
+    path: "/var/log/app.log"
+    max_size: "100MB"
+    max_files: 5</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Bad Structure</h3>
+                        <pre><code># Bad - mixed organization, deep nesting
+app:
+  name: "My Application"
+  version: "2.1.0"
+  env: "prod"
+  db:
+    host: "db.example.com"
+    port: 5432
+    name: "myapp_prod"
+    creds:
+      user: "admin"
+      pass: "secret"
+      pool: 20
+      timeout: 30
+      ssl: true
+    api:
+      url: "https://api.example.com"
+      ver: "v1"
+      limit: 1000
+      timeout: 30
+      endpoints:
+        users: "/users"
+        posts: "/posts"
+        comments: "/comments"
+      logging:
+        level: "info"
+        format: "json"
+        outputs: ["console", "file"]
+        file:
+          path: "/var/log/app.log"
+          max_size: "100MB"
+          max_files: 5</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Performance Considerations</h2>
+                    <p>Optimize your YAML files for better performance and faster parsing.</p>
+                    
+                    <div class="best-practices-box">
+                        <h3>✅ Performance Best Practices</h3>
+                        <ul>
+                            <li><strong>Use anchors for repeated values</strong> - Reduces file size</li>
+                            <li><strong>Avoid deeply nested structures</strong> - Slower to parse</li>
+                            <li><strong>Use flow style for simple structures</strong> - Faster parsing</li>
+                            <li><strong>Minimize file size</strong> - Remove unnecessary whitespace</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Performance Optimized</h3>
+                        <pre><code># Use anchors for repeated values
+defaults: &defaults
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  timeout: 5000
+
+# Use flow style for simple structures
+environments:
+  development: {<<: *defaults, database: myapp_dev, host: localhost}
+  test: {<<: *defaults, database: myapp_test, host: localhost}
+  production: {<<: *defaults, database: myapp_prod, host: prod-db.example.com}
+
+# Keep nesting shallow
+config:
+  app: {name: "My App", version: "2.1.0"}
+  db: {host: "localhost", port: 5432}
+  api: {url: "https://api.example.com", timeout: 30}</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Common Pitfalls to Avoid</h2>
+                    <p>Learn about common YAML mistakes and how to avoid them.</p>
+                    
+                    <div class="warning-box">
+                        <h3>⚠️ Common Pitfalls</h3>
+                        <ul>
+                            <li><strong>Inconsistent indentation</strong> - Mixing tabs and spaces</li>
+                            <li><strong>Unquoted special values</strong> - Dates, numbers, booleans</li>
+                            <li><strong>Missing colons</strong> - Forgetting <code>:</code> after keys</li>
+                            <li><strong>Wrong list syntax</strong> - Using <code>[]</code> instead of <code>-</code></li>
+                            <li><strong>Circular references</strong> - Anchors referencing each other</li>
+                            <li><strong>Overly complex structures</strong> - Hard to read and maintain</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Common Mistakes</h3>
+                        <pre><code># ❌ Wrong - missing colon
+name John Doe
+
+# ❌ Wrong - inconsistent indentation
+person:
+  name: John
+    age: 30
+
+# ❌ Wrong - unquoted special values
+date: 2023-12-25
+phone: 555-1234
+status: active
+
+# ❌ Wrong - using brackets for lists
+fruits: [apple, banana, orange]
+
+# ❌ Wrong - circular reference
+user1: &user1
+  name: John
+  friend: *user2
+user2: &user2
+  name: Jane
+  friend: *user1</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Corrected Version</h3>
+                        <pre><code># ✅ Correct - proper colon
+name: John Doe
+
+# ✅ Correct - consistent indentation
+person:
+  name: John
+  age: 30
+
+# ✅ Correct - quoted special values
+date: "2023-12-25"
+phone: "555-1234"
+status: "active"
+
+# ✅ Correct - proper list syntax
+fruits:
+  - apple
+  - banana
+  - orange
+
+# ✅ Correct - no circular references
+user1:
+  name: John
+  friend: "Jane"
+user2:
+  name: Jane
+  friend: "John"</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Validation and Testing</h2>
+                    <p>Always validate your YAML files to catch errors early and ensure they work as expected.</p>
+                    
+                    <div class="best-practices-box">
+                        <h3>✅ Validation Best Practices</h3>
+                        <ul>
+                            <li><strong>Use YAML validators</strong> - Check syntax before deployment</li>
+                            <li><strong>Test with your application</strong> - Ensure it parses correctly</li>
+                            <li><strong>Use linters</strong> - Catch style and formatting issues</li>
+                            <li><strong>Validate in CI/CD</strong> - Automate validation in your pipeline</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Validation Tools</h3>
+                        <pre><code># Command line validation
+yaml-lint config.yaml
+
+# Online validation
+# Use tools like yaml.cc to validate your YAML
+
+# Programmatic validation
+import yaml
+try:
+    with open('config.yaml', 'r') as file:
+        config = yaml.safe_load(file)
+    print("YAML is valid!")
+except yaml.YAMLError as e:
+    print(f"YAML error: {e}")</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Security Considerations</h2>
+                    <p>Keep security in mind when writing YAML files, especially for configuration files.</p>
+                    
+                    <div class="warning-box">
+                        <h3>🔒 Security Best Practices</h3>
+                        <ul>
+                            <li><strong>Never commit secrets</strong> - Use environment variables or secret management</li>
+                            <li><strong>Use placeholders for sensitive data</strong> - <code>${SECRET_KEY}</code></li>
+                            <li><strong>Validate input</strong> - Don't trust external YAML files</li>
+                            <li><strong>Use safe parsing</strong> - Avoid <code>yaml.load()</code> with untrusted input</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Secure Configuration</h3>
+                        <pre><code># ✅ Good - use environment variables
+database:
+  host: "${DB_HOST}"
+  port: "${DB_PORT}"
+  username: "${DB_USERNAME}"
+  password: "${DB_PASSWORD}"
+
+api:
+  secret_key: "${API_SECRET_KEY}"
+  jwt_secret: "${JWT_SECRET}"
+
+# ❌ Bad - hardcoded secrets
+database:
+  host: "db.example.com"
+  port: 5432
+  username: "admin"
+  password: "super_secret_password"
+
+api:
+  secret_key: "my_secret_key_123"
+  jwt_secret: "jwt_secret_456"</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Practice Exercises</h2>
+                    <p>Apply these best practices to improve your YAML files.</p>
+                    
+                    <div class="practice-box">
+                        <h3>Exercise 1: Refactor Configuration</h3>
+                        <p>Refactor this poorly structured YAML file using best practices.</p>
+                        <details>
+                            <summary>Show Solution</summary>
+                            <pre><code># Original (bad)
+app:
+  n: "My App"
+  v: "1.0"
+  env: "prod"
+  db:
+    h: "localhost"
+    p: 5432
+    u: "admin"
+    pass: "secret"
+  api:
+    url: "https://api.example.com"
+    timeout: 30
+
+# Refactored (good)
+application:
+  name: "My Application"
+  version: "1.0.0"
+  environment: "production"
+
+database:
+  host: "localhost"
+  port: 5432
+  username: "${DB_USERNAME}"
+  password: "${DB_PASSWORD}"
+
+api:
+  base_url: "https://api.example.com"
+  timeout_seconds: 30</code></pre>
+                        </details>
+                    </div>
+
+                    <div class="practice-box">
+                        <h3>Exercise 2: Add Documentation</h3>
+                        <p>Add proper comments and documentation to this configuration file.</p>
+                        <details>
+                            <summary>Show Solution</summary>
+                            <pre><code># Application Configuration
+# This file contains the main application settings
+# Last updated: 2024-01-15
+
+application:
+  name: "My Application"
+  version: "1.0.0"
+  environment: "production"
+
+# Database Configuration
+# PostgreSQL database connection settings
+database:
+  host: "localhost"
+  port: 5432
+  username: "${DB_USERNAME}"  # Set via environment variable
+  password: "${DB_PASSWORD}"  # Set via environment variable
+  # Connection pool settings
+  pool:
+    min: 5      # Minimum connections
+    max: 20     # Maximum connections
+    timeout: 30 # Connection timeout in seconds
+
+# API Configuration
+# External API integration settings
+api:
+  base_url: "https://api.example.com"
+  timeout_seconds: 30
+  # Rate limiting (requests per minute)
+  rate_limit: 1000</code></pre>
+                        </details>
+                    </div>
+                </section>
+
+                <div class="tutorial-navigation">
+                    <a href="advanced-features.html" class="btn btn-secondary">← Back: Advanced Features</a>
+                    <a href="real-world-examples.html" class="btn btn-primary">Next: Real-World Examples →</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>YAML.cc</h3>
+                    <p>Professional YAML validation, formatting, and conversion tools for developers. The most trusted YAML tools platform.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Tools</h4>
+                    <ul>
+                        <li><a href="../index.html#tools" data-tool="validate">YAML Validator</a></li>
+                        <li><a href="../index.html#tools" data-tool="format">YAML Linter</a></li>
+                        <li><a href="../index.html#tools" data-tool="convert">YAML to JSON</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="../index.html#info-section">What is YAML?</a></li>
+                        <li><a href="../index.html#yaml-examples">YAML Examples</a></li>
+                        <li><a href="../index.html#yaml-syntax">YAML Syntax Guide</a></li>
+                        <li><a href="../index.html#best-practices">Best Practices</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 YAML.cc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

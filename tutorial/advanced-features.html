@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAML Advanced Features - Anchors, Aliases & Multiline | YAML.cc</title>
+    <meta name="description" content="Learn YAML advanced features including anchors, aliases, multiline strings, flow styles, and tags. Master complex YAML structures.">
+    <meta name="keywords" content="yaml advanced features, yaml anchors, yaml aliases, yaml multiline, yaml flow style, yaml tags">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yaml.cc/tutorial/advanced-features.html">
+    <link rel="icon" type="image/x-icon" href="/assets/images/yamllint.svg">
+    <link rel="stylesheet" href="../styles.css">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://yaml.cc/tutorial/advanced-features.html">
+    <meta property="og:title" content="YAML Advanced Features - Anchors, Aliases & Multiline">
+    <meta property="og:description" content="Learn YAML advanced features including anchors, aliases, multiline strings, flow styles, and tags. Master complex YAML structures.">
+    <meta property="og:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yaml.cc/tutorial/advanced-features.html">
+    <meta property="twitter:title" content="YAML Advanced Features - Anchors, Aliases & Multiline">
+    <meta property="twitter:description" content="Learn YAML advanced features including anchors, aliases, multiline strings, flow styles, and tags. Master complex YAML structures.">
+    <meta property="twitter:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "YAML Advanced Features - Anchors, Aliases & Multiline",
+        "description": "Learn YAML advanced features including anchors, aliases, multiline strings, flow styles, and tags",
+        "author": {
+            "@type": "Organization",
+            "name": "YAML.cc"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "YAML.cc",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://yaml.cc/assets/images/yamllint.svg"
+            }
+        },
+        "datePublished": "2024-01-01",
+        "dateModified": "2024-01-01",
+        "mainEntityOfPage": "https://yaml.cc/tutorial/advanced-features.html"
+    }
+    </script>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <a href="../index.html" class="logo-link">
+                        <h1>YAML.cc</h1>
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Tutorial</a></li>
+                    <li><a href="../index.html#tools">YAML Tools</a></li>
+                    <li><a href="../index.html#info-section">What is YAML?</a></li>
+                    <li><a href="../index.html#yaml-examples">YAML Examples</a></li>
+                    <li><a href="../index.html#yaml-syntax">Syntax Guide</a></li>
+                    <li><a href="../index.html#best-practices">Best Practices</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="tutorial-header">
+                <nav class="breadcrumb">
+                    <a href="../index.html">Home</a> > <a href="index.html">Tutorial</a> > Advanced Features
+                </nav>
+                <h1>YAML Advanced Features</h1>
+                <p class="tutorial-intro">Master advanced YAML features including anchors, aliases, multiline strings, flow styles, and custom tags.</p>
+            </div>
+
+            <div class="tutorial-content">
+                <section class="tutorial-section">
+                    <h2>Anchors and Aliases</h2>
+                    <p>Anchors and aliases allow you to define reusable content and avoid repetition in your YAML files. This is particularly useful for large configuration files.</p>
+                    
+                    <div class="code-example">
+                        <h3>Basic Anchors and Aliases</h3>
+                        <pre><code># Define an anchor with &
+defaults: &defaults
+  adapter: postgres
+  host: localhost
+  port: 5432
+
+# Use the anchor with *
+development:
+  <<: *defaults
+  database: myapp_development
+
+test:
+  <<: *defaults
+  database: myapp_test
+
+production:
+  <<: *defaults
+  database: myapp_production
+  host: prod-db.example.com</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Anchors for Values</h3>
+                        <pre><code># Define reusable values
+version: &version "2.1.0"
+author: &author "John Doe"
+
+# Use them throughout the file
+app1:
+  version: *version
+  author: *author
+  name: "My App 1"
+
+app2:
+  version: *version
+  author: *author
+  name: "My App 2"</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Complex Anchors</h3>
+                        <pre><code># Define complex structures
+database_config: &db_config
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  timeout: 5000
+  reconnect: true
+
+# Use in multiple environments
+development:
+  database: myapp_dev
+  <<: *db_config
+
+test:
+  database: myapp_test
+  <<: *db_config
+  pool: 1
+
+production:
+  database: myapp_prod
+  <<: *db_config
+  host: prod-db.example.com
+  pool: 20</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Multiline Strings</h2>
+                    <p>YAML provides several ways to handle multiline strings, each with different behaviors for line breaks and whitespace.</p>
+                    
+                    <div class="code-example">
+                        <h3>Literal Block Scalar (|)</h3>
+                        <pre><code># Preserves all line breaks and formatting
+description: |
+  This is a multiline string
+  that preserves all line breaks
+  and indentation exactly as written.
+  
+  Empty lines are also preserved.
+
+# Common use cases
+sql_query: |
+  SELECT users.id, users.name, users.email
+  FROM users
+  WHERE users.active = true
+  ORDER BY users.created_at DESC
+
+email_template: |
+  Dear {{name}},
+  
+  Thank you for your order #{{order_id}}.
+  
+  Best regards,
+  The Team</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Folded Block Scalar (>)</h3>
+                        <pre><code># Converts line breaks to spaces
+summary: >
+  This is a folded string
+  that will be converted
+  to a single line with spaces
+  between words.
+
+# Useful for long descriptions
+product_description: >
+  This amazing product combines cutting-edge technology
+  with user-friendly design to deliver an exceptional
+  experience that will exceed your expectations.
+
+# Email content
+email_body: >
+  Hello {{customer_name}},
+  
+  Your order has been processed and will be shipped
+  within 2-3 business days.
+  
+  Thank you for choosing us!</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Indentation Control</h3>
+                        <pre><code># Strip leading whitespace
+text: |-
+  This text has
+  no trailing newline
+
+# Keep trailing newline
+text: |+
+  This text has
+  a trailing newline
+
+# Strip specific indentation
+text: |2
+    This text has
+    indentation stripped
+    to 2 spaces
+
+# Example with code
+python_code: |
+  def hello_world():
+      print("Hello, World!")
+      return True</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Flow Styles</h2>
+                    <p>Flow styles provide a more compact way to write YAML using JSON-like syntax with brackets and braces.</p>
+                    
+                    <div class="code-example">
+                        <h3>Flow Sequences (Arrays)</h3>
+                        <pre><code># Block style
+fruits:
+  - apple
+  - banana
+  - orange
+
+# Flow style
+fruits: [apple, banana, orange]
+
+# Mixed types
+mixed: [1, "hello", true, null]
+
+# Nested flow sequences
+matrix: [[1, 2, 3], [4, 5, 6], [7, 8, 9]]</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Flow Mappings (Objects)</h3>
+                        <pre><code># Block style
+person:
+  name: John
+  age: 30
+  city: New York
+
+# Flow style
+person: {name: John, age: 30, city: New York}
+
+# Nested flow mappings
+config: {database: {host: localhost, port: 5432}, server: {port: 8080}}
+
+# Complex nested structure
+api_config: {
+  base_url: "https://api.example.com",
+  version: "v1",
+  endpoints: {
+    users: "/users",
+    posts: "/posts",
+    comments: "/comments"
+  },
+  auth: {
+    type: "bearer",
+    token: "your-token-here"
+  }
+}</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Mixed Flow and Block Styles</h3>
+                        <pre><code># Mix flow and block styles
+application:
+  name: "My App"
+  version: "1.0.0"
+  features: [auth, logging, monitoring]
+  database:
+    host: localhost
+    port: 5432
+    options: {pool: 5, timeout: 30}
+  servers: [
+    {name: "web1", ip: "192.168.1.10"},
+    {name: "web2", ip: "192.168.1.11"},
+    {name: "db1", ip: "192.168.1.20"}
+  ]</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Tags and Type System</h2>
+                    <p>YAML supports a tag system that allows you to specify the type of data explicitly.</p>
+                    
+                    <div class="code-example">
+                        <h3>Built-in Tags</h3>
+                        <pre><code># String tags
+name: !!str John Doe
+description: !!str "A person's name"
+
+# Integer tags
+age: !!int 30
+count: !!int 100
+
+# Float tags
+price: !!float 19.99
+percentage: !!float 85.5
+
+# Boolean tags
+active: !!bool true
+enabled: !!bool false
+
+# Null tags
+value: !!null null
+empty: !!null ~</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Sequence and Mapping Tags</h3>
+                        <pre><code># Sequence (array) tags
+fruits: !!seq [apple, banana, orange]
+numbers: !!seq [1, 2, 3, 4, 5]
+
+# Mapping (object) tags
+person: !!map {name: John, age: 30}
+config: !!map {host: localhost, port: 8080}
+
+# Ordered mapping
+ordered_config: !!omap
+  - first: value1
+  - second: value2
+  - third: value3</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Custom Tags</h3>
+                        <pre><code># Custom tags (application-specific)
+timestamp: !!timestamp 2023-12-25T10:30:00Z
+binary_data: !!binary |
+  R0lGODlhDAAMAIQAAP//9/X17unp5WZmZgAAAOfn515eXvPz7Y6OjuDg4J+fn5
+  OTk6enp56enmlpaWNjY6Ojo4SEhP/++f/++f/++f/++f/++f/++f/++f/++f/+
+  +f/++SH+Dk1hZGUgd2l0aCBHSU1QACwAAAAADAAMAAAFLCAgjoEwnuNAFOhpEMTR
+  ighmSyCbUyJisM4zISWQEEvE8DArEISgBTS4dEQA7
+
+# Date and time
+birth_date: !!timestamp 1990-05-15
+created_at: !!timestamp 2023-12-25T10:30:00Z</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Document Separators</h2>
+                    <p>YAML supports multiple documents in a single file using document separators.</p>
+                    
+                    <div class="code-example">
+                        <h3>Multiple Documents</h3>
+                        <pre><code># First document
+---
+name: "Document 1"
+version: "1.0"
+description: "This is the first document"
+
+# Second document
+---
+name: "Document 2"
+version: "2.0"
+description: "This is the second document"
+
+# Third document
+---
+name: "Document 3"
+version: "3.0"
+description: "This is the third document"</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Document with Directives</h3>
+                        <pre><code># YAML directive
+%YAML 1.2
+---
+name: "YAML 1.2 Document"
+version: "1.0"
+
+# Tag directive
+%TAG !yaml! tag:yaml.org,2002:
+---
+!yaml!str "This is a string with custom tag"
+!yaml!int 42</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Advanced Anchors and Merging</h2>
+                    <p>YAML provides powerful merging capabilities for combining data structures.</p>
+                    
+                    <div class="code-example">
+                        <h3>Merge Keys (<<)</h3>
+                        <pre><code># Define base configuration
+defaults: &defaults
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  timeout: 5000
+
+# Merge with additional settings
+development:
+  <<: *defaults
+  database: myapp_development
+  host: localhost
+
+production:
+  <<: *defaults
+  database: myapp_production
+  host: prod-db.example.com
+  pool: 20
+  ssl: true</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Multiple Merges</h3>
+                        <pre><code># Define multiple anchors
+database_defaults: &db_defaults
+  adapter: postgresql
+  encoding: unicode
+
+connection_defaults: &conn_defaults
+  pool: 5
+  timeout: 5000
+  reconnect: true
+
+# Merge multiple anchors
+production:
+  <<: [*db_defaults, *conn_defaults]
+  database: myapp_production
+  host: prod-db.example.com
+  pool: 20</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Nested Merges</h3>
+                        <pre><code># Complex nested structure
+base_config: &base_config
+  app:
+    name: "My App"
+    version: "1.0.0"
+  database:
+    adapter: postgresql
+    encoding: unicode
+  logging:
+    level: info
+    format: json
+
+# Override specific nested values
+development:
+  <<: *base_config
+  database:
+    <<: *base_config.database
+    host: localhost
+    database: myapp_dev
+  logging:
+    level: debug</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Real-World Examples</h2>
+                    <p>Here are some practical examples of advanced YAML features in real-world scenarios.</p>
+                    
+                    <div class="code-example">
+                        <h3>Docker Compose with Anchors</h3>
+                        <pre><code># Define common service configuration
+x-common-variables: &common-variables
+  POSTGRES_DB: myapp
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: password
+
+# Define common service configuration
+x-common-service: &common-service
+  image: postgres:13
+  environment: *common-variables
+  volumes:
+    - postgres_data:/var/lib/postgresql/data
+
+services:
+  db:
+    <<: *common-service
+    ports:
+      - "5432:5432"
+
+  db-test:
+    <<: *common-service
+    environment:
+      <<: *common-variables
+      POSTGRES_DB: myapp_test
+
+volumes:
+  postgres_data:</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Kubernetes Configuration</h3>
+                        <pre><code># Define common metadata
+common-labels: &common-labels
+  app: my-app
+  version: "1.0.0"
+  environment: production
+
+# Define common container spec
+common-container: &common-container
+  image: my-app:1.0.0
+  ports:
+    - containerPort: 8080
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "128Mi"
+      cpu: "500m"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+  labels:
+    <<: *common-labels
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      <<: *common-labels
+  template:
+    metadata:
+      labels:
+        <<: *common-labels
+    spec:
+      containers:
+        - name: my-app
+          <<: *common-container</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Best Practices for Advanced Features</h2>
+                    <div class="best-practices-box">
+                        <h3>✅ Do's</h3>
+                        <ul>
+                            <li><strong>Use anchors for repeated values:</strong> Define common configurations once</li>
+                            <li><strong>Keep anchors simple:</strong> Don't over-complicate anchor structures</li>
+                            <li><strong>Use meaningful anchor names:</strong> Make them descriptive and clear</li>
+                            <li><strong>Prefer block style for readability:</strong> Use flow style only when appropriate</li>
+                            <li><strong>Document complex structures:</strong> Add comments for complex anchor usage</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h3>⚠️ Don'ts</h3>
+                        <ul>
+                            <li><strong>Don't overuse anchors:</strong> They can make simple files complex</li>
+                            <li><strong>Don't create circular references:</strong> Anchors referencing each other</li>
+                            <li><strong>Don't mix flow and block unnecessarily:</strong> Keep styles consistent</li>
+                            <li><strong>Don't use custom tags without documentation:</strong> Explain their purpose</li>
+                            <li><strong>Don't create deeply nested merges:</strong> Keep structures manageable</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Practice Exercises</h2>
+                    <p>Test your advanced YAML skills with these exercises:</p>
+                    
+                    <div class="practice-box">
+                        <h3>Exercise 1: Configuration Management</h3>
+                        <p>Create a configuration file for a multi-environment application using anchors and aliases.</p>
+                        <details>
+                            <summary>Show Solution</summary>
+                            <pre><code># Base configuration
+base_config: &base_config
+  app:
+    name: "My Application"
+    version: "2.1.0"
+  database:
+    adapter: postgresql
+    encoding: unicode
+    pool: 5
+  logging:
+    level: info
+    format: json
+
+# Environment-specific configurations
+development:
+  <<: *base_config
+  database:
+    <<: *base_config.database
+    host: localhost
+    database: myapp_dev
+  logging:
+    level: debug
+
+production:
+  <<: *base_config
+  database:
+    <<: *base_config.database
+    host: prod-db.example.com
+    database: myapp_prod
+    pool: 20
+    ssl: true</code></pre>
+                        </details>
+                    </div>
+
+                    <div class="practice-box">
+                        <h3>Exercise 2: API Documentation</h3>
+                        <p>Create an API documentation file using multiline strings and complex structures.</p>
+                        <details>
+                            <summary>Show Solution</summary>
+                            <pre><code>api:
+  name: "User Management API"
+  version: "v1.2.0"
+  description: |
+    This API provides comprehensive user management functionality
+    including user registration, authentication, profile management,
+    and role-based access control.
+  
+  base_url: "https://api.example.com/v1"
+  
+  endpoints:
+    users:
+      list: |
+        GET /users
+        Returns a paginated list of all users
+        with optional filtering and sorting.
+      
+      create: |
+        POST /users
+        Creates a new user account with the provided
+        information and returns the user details.
+      
+      get: |
+        GET /users/{id}
+        Retrieves a specific user by ID.
+      
+      update: |
+        PUT /users/{id}
+        Updates an existing user's information.
+      
+      delete: |
+        DELETE /users/{id}
+        Soft deletes a user account.</code></pre>
+                        </details>
+                    </div>
+                </section>
+
+                <div class="tutorial-navigation">
+                    <a href="data-types.html" class="btn btn-secondary">← Back: Data Types</a>
+                    <a href="best-practices.html" class="btn btn-primary">Next: Best Practices →</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>YAML.cc</h3>
+                    <p>Professional YAML validation, formatting, and conversion tools for developers. The most trusted YAML tools platform.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Tools</h4>
+                    <ul>
+                        <li><a href="../index.html#tools" data-tool="validate">YAML Validator</a></li>
+                        <li><a href="../index.html#tools" data-tool="format">YAML Linter</a></li>
+                        <li><a href="../index.html#tools" data-tool="convert">YAML to JSON</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="../index.html#info-section">What is YAML?</a></li>
+                        <li><a href="../index.html#yaml-examples">YAML Examples</a></li>
+                        <li><a href="../index.html#yaml-syntax">YAML Syntax Guide</a></li>
+                        <li><a href="../index.html#best-practices">Best Practices</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 YAML.cc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

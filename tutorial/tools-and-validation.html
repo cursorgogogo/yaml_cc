@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAML Tools & Validation - Linters, Formatters & Online Tools | YAML.cc</title>
+    <meta name="description" content="Discover tools for validating, formatting, and working with YAML files effectively. Learn about linters, formatters, IDE support, and online tools.">
+    <meta name="keywords" content="yaml tools, yaml validation, yaml linter, yaml formatter, yaml validator, yaml online tools">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yaml.cc/tutorial/tools-and-validation.html">
+    <link rel="icon" type="image/x-icon" href="/assets/images/yamllint.svg">
+    <link rel="stylesheet" href="../styles.css">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://yaml.cc/tutorial/tools-and-validation.html">
+    <meta property="og:title" content="YAML Tools & Validation - Linters, Formatters & Online Tools">
+    <meta property="og:description" content="Discover tools for validating, formatting, and working with YAML files effectively. Learn about linters, formatters, IDE support, and online tools.">
+    <meta property="og:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yaml.cc/tutorial/tools-and-validation.html">
+    <meta property="twitter:title" content="YAML Tools & Validation - Linters, Formatters & Online Tools">
+    <meta property="twitter:description" content="Discover tools for validating, formatting, and working with YAML files effectively. Learn about linters, formatters, IDE support, and online tools.">
+    <meta property="twitter:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "YAML Tools & Validation - Linters, Formatters & Online Tools",
+        "description": "Discover tools for validating, formatting, and working with YAML files effectively",
+        "author": {
+            "@type": "Organization",
+            "name": "YAML.cc"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "YAML.cc",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://yaml.cc/assets/images/yamllint.svg"
+            }
+        },
+        "datePublished": "2024-01-01",
+        "dateModified": "2024-01-01",
+        "mainEntityOfPage": "https://yaml.cc/tutorial/tools-and-validation.html"
+    }
+    </script>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <a href="../index.html" class="logo-link">
+                        <h1>YAML.cc</h1>
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Tutorial</a></li>
+                    <li><a href="../index.html#tools">YAML Tools</a></li>
+                    <li><a href="../index.html#info-section">What is YAML?</a></li>
+                    <li><a href="../index.html#yaml-examples">YAML Examples</a></li>
+                    <li><a href="../index.html#yaml-syntax">Syntax Guide</a></li>
+                    <li><a href="../index.html#best-practices">Best Practices</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="tutorial-header">
+                <nav class="breadcrumb">
+                    <a href="../index.html">Home</a> > <a href="index.html">Tutorial</a> > Tools & Validation
+                </nav>
+                <h1>YAML Tools & Validation</h1>
+                <p class="tutorial-intro">Discover essential tools for validating, formatting, and working with YAML files effectively.</p>
+            </div>
+
+            <div class="tutorial-content">
+                <section class="tutorial-section">
+                    <h2>Online YAML Tools</h2>
+                    <p>Online tools provide quick and easy ways to validate, format, and convert YAML files without installing anything.</p>
+                    
+                    <div class="tools-grid">
+                        <div class="tool-card">
+                            <h3>🔍 YAML Validator</h3>
+                            <p>Validate YAML syntax and catch errors before they cause problems in production.</p>
+                            <ul>
+                                <li>Syntax validation</li>
+                                <li>Error highlighting</li>
+                                <li>Line-by-line analysis</li>
+                                <li>Best practice suggestions</li>
+                            </ul>
+                            <a href="../index.html#validate" class="btn btn-primary">Try Validator</a>
+                        </div>
+
+                        <div class="tool-card">
+                            <h3>✨ YAML Formatter</h3>
+                            <p>Format and beautify YAML files with consistent indentation and structure.</p>
+                            <ul>
+                                <li>Auto-formatting</li>
+                                <li>Indentation correction</li>
+                                <li>Consistent spacing</li>
+                                <li>Readable output</li>
+                            </ul>
+                            <a href="../index.html#format" class="btn btn-primary">Try Formatter</a>
+                        </div>
+
+                        <div class="tool-card">
+                            <h3>🔄 YAML to JSON</h3>
+                            <p>Convert YAML files to JSON format for use with other tools and systems.</p>
+                            <ul>
+                                <li>Bidirectional conversion</li>
+                                <li>Preserve data structure</li>
+                                <li>Copy to clipboard</li>
+                                <li>Download results</li>
+                            </ul>
+                            <a href="../index.html#convert" class="btn btn-primary">Try Converter</a>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Command Line Tools</h2>
+                    <p>Command line tools provide powerful YAML processing capabilities for automation and scripting.</p>
+                    
+                    <div class="code-example">
+                        <h3>yamllint - YAML Linter</h3>
+                        <pre><code># Install yamllint
+pip install yamllint
+
+# Basic linting
+yamllint config.yml
+
+# Lint with specific rules
+yamllint -d relaxed config.yml
+
+# Lint multiple files
+yamllint *.yml
+
+# Lint with custom configuration
+yamllint -c .yamllint config.yml
+
+# Example .yamllint configuration
+rules:
+  line-length:
+    max: 120
+    level: warning
+  indentation:
+    spaces: 2
+    level: error
+  truthy:
+    allowed-values: ['true', 'false']
+    level: error
+  comments:
+    min-spaces-from-content: 1
+    level: warning</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>yq - YAML Processor</h3>
+                        <pre><code># Install yq
+# macOS
+brew install yq
+
+# Linux
+wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
+chmod +x /usr/local/bin/yq
+
+# Basic operations
+yq eval '.database.host' config.yml
+yq eval '.services[0].name' docker-compose.yml
+
+# Modify values
+yq eval '.database.host = "newhost"' config.yml -i
+
+# Add new keys
+yq eval '.database.port = 5432' config.yml -i
+
+# Delete keys
+yq eval 'del(.database.password)' config.yml -i
+
+# Convert to JSON
+yq eval -o=json config.yml
+
+# Merge files
+yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' file1.yml file2.yml
+
+# Filter arrays
+yq eval '.services[] | select(.image | contains("nginx"))' docker-compose.yml</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>js-yaml - Node.js YAML Library</h3>
+                        <pre><code># Install js-yaml
+npm install js-yaml
+
+# Basic usage
+const yaml = require('js-yaml');
+const fs = require('fs');
+
+// Load YAML file
+try {
+  const doc = yaml.load(fs.readFileSync('config.yml', 'utf8'));
+  console.log(doc);
+} catch (e) {
+  console.error(e);
+}
+
+// Dump object to YAML
+const obj = {
+  name: 'My App',
+  version: '1.0.0',
+  database: {
+    host: 'localhost',
+    port: 5432
+  }
+};
+
+const yamlStr = yaml.dump(obj, {
+  indent: 2,
+  lineWidth: 120,
+  noRefs: true,
+  sortKeys: false
+});
+
+console.log(yamlStr);
+
+// Validate YAML
+function validateYAML(yamlString) {
+  try {
+    yaml.load(yamlString);
+    return { valid: true, error: null };
+  } catch (e) {
+    return { valid: false, error: e.message };
+  }
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>IDE and Editor Support</h2>
+                    <p>Modern IDEs and editors provide excellent YAML support with syntax highlighting, validation, and formatting.</p>
+                    
+                    <div class="ide-support">
+                        <div class="ide-card">
+                            <h3>Visual Studio Code</h3>
+                            <p>Excellent YAML support with extensions and built-in features.</p>
+                            <ul>
+                                <li><strong>Red Hat YAML Extension:</strong> Syntax highlighting, validation, formatting</li>
+                                <li><strong>YAML Support by Red Hat:</strong> IntelliSense, hover information</li>
+                                <li><strong>YAML Sort:</strong> Sort YAML keys alphabetically</li>
+                                <li><strong>YAML Lint:</strong> Real-time linting and error detection</li>
+                            </ul>
+                            <div class="code-example">
+                                <h4>VS Code Settings</h4>
+                                <pre><code>{
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml",
+    "https://json.schemastore.org/docker-compose.json": "docker-compose*.yml"
+  },
+  "yaml.format.enable": true,
+  "yaml.format.singleQuote": false,
+  "yaml.format.bracketSpacing": true,
+  "yaml.validate": true,
+  "yaml.hover": true,
+  "yaml.completion": true
+}</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="ide-card">
+                            <h3>IntelliJ IDEA / PyCharm</h3>
+                            <p>Comprehensive YAML support with advanced features.</p>
+                            <ul>
+                                <li><strong>Built-in YAML support:</strong> Syntax highlighting, validation</li>
+                                <li><strong>Schema validation:</strong> JSON Schema support for YAML</li>
+                                <li><strong>Refactoring:</strong> Rename, move, and extract operations</li>
+                                <li><strong>Code completion:</strong> Smart suggestions and auto-completion</li>
+                            </ul>
+                        </div>
+
+                        <div class="ide-card">
+                            <h3>Vim / Neovim</h3>
+                            <p>Powerful YAML editing with plugins and configurations.</p>
+                            <ul>
+                                <li><strong>vim-yaml:</strong> Syntax highlighting and indentation</li>
+                                <li><strong>coc-yaml:</strong> Language server support</li>
+                                <li><strong>vim-yaml-folds:</strong> Code folding for YAML</li>
+                                <li><strong>ale:</strong> Linting and formatting integration</li>
+                            </ul>
+                            <div class="code-example">
+                                <h4>Vim Configuration</h4>
+                                <pre><code>" YAML settings
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType yaml setlocal foldmethod=indent
+autocmd FileType yaml setlocal foldlevelstart=20
+
+" YAML folding
+let g:yaml_fold_level_start = 1
+let g:yaml_fold_level_end = 10</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="ide-card">
+                            <h3>Sublime Text</h3>
+                            <p>Lightweight editor with good YAML support through packages.</p>
+                            <ul>
+                                <li><strong>YAML:</strong> Syntax highlighting and snippets</li>
+                                <li><strong>YAML Lint:</strong> Real-time validation</li>
+                                <li><strong>Pretty YAML:</strong> Format and beautify YAML</li>
+                                <li><strong>YAML Sort:</strong> Sort YAML keys</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>CI/CD Integration</h2>
+                    <p>Integrate YAML validation and formatting into your CI/CD pipelines to catch issues early.</p>
+                    
+                    <div class="code-example">
+                        <h3>GitHub Actions YAML Validation</h3>
+                        <pre><code>name: YAML Validation
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-yaml:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Install yamllint
+        run: pip install yamllint
+      
+      - name: Validate YAML files
+        run: |
+          find . -name "*.yml" -o -name "*.yaml" | xargs yamllint
+      
+      - name: Validate Docker Compose
+        run: |
+          docker-compose config
+      
+      - name: Validate Kubernetes manifests
+        run: |
+          kubectl apply --dry-run=client -f k8s/
+      
+      - name: Check YAML formatting
+        run: |
+          for file in $(find . -name "*.yml" -o -name "*.yaml"); do
+            echo "Checking $file"
+            yamllint -d relaxed "$file"
+          done</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>GitLab CI YAML Validation</h3>
+                        <pre><code>stages:
+  - validate
+  - test
+
+variables:
+  YAMLLINT_CONFIG: .yamllint
+
+validate_yaml:
+  stage: validate
+  image: python:3.9
+  before_script:
+    - pip install yamllint
+  script:
+    - yamllint -c $YAMLLINT_CONFIG .
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+
+validate_docker_compose:
+  stage: validate
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker-compose config
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+
+validate_kubernetes:
+  stage: validate
+  image: bitnami/kubectl:latest
+  script:
+    - kubectl apply --dry-run=client -f k8s/
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Pre-commit Hooks</h3>
+                        <pre><code># .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: ['--unsafe']
+      - id: check-added-large-files
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.32.0
+    hooks:
+      - id: yamllint
+        args: [-c=.yamllint]
+
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.0.0-alpha.9-for-vscode
+    hooks:
+      - id: prettier
+        types: [yaml]
+        args: [--tab-width=2]
+
+  - repo: local
+    hooks:
+      - id: yaml-sort
+        name: Sort YAML keys
+        entry: yq
+        args: [eval, '.', -i]
+        language: system
+        files: \.(yml|yaml)$</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Schema Validation</h2>
+                    <p>Use JSON Schema to validate YAML files against predefined schemas for better data integrity.</p>
+                    
+                    <div class="code-example">
+                        <h3>JSON Schema for YAML</h3>
+                        <pre><code># config-schema.json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["application", "database", "api"],
+  "properties": {
+    "application": {
+      "type": "object",
+      "required": ["name", "version", "environment"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "environment": {
+          "type": "string",
+          "enum": ["development", "staging", "production"]
+        }
+      }
+    },
+    "database": {
+      "type": "object",
+      "required": ["host", "port", "name"],
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "name": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "api": {
+      "type": "object",
+      "required": ["base_url", "timeout"],
+      "properties": {
+        "base_url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "timeout": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "rate_limit": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}</code></pre>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Schema Validation Script</h3>
+                        <pre><code>#!/usr/bin/env python3
+import json
+import yaml
+import jsonschema
+from jsonschema import validate
+
+def validate_yaml_with_schema(yaml_file, schema_file):
+    """Validate YAML file against JSON Schema"""
+    try:
+        # Load YAML file
+        with open(yaml_file, 'r') as f:
+            yaml_data = yaml.safe_load(f)
+        
+        # Load JSON Schema
+        with open(schema_file, 'r') as f:
+            schema = json.load(f)
+        
+        # Validate
+        validate(instance=yaml_data, schema=schema)
+        print(f"✅ {yaml_file} is valid according to schema")
+        return True
+        
+    except yaml.YAMLError as e:
+        print(f"❌ YAML syntax error in {yaml_file}: {e}")
+        return False
+    except jsonschema.exceptions.ValidationError as e:
+        print(f"❌ Schema validation error in {yaml_file}: {e.message}")
+        return False
+    except Exception as e:
+        print(f"❌ Error validating {yaml_file}: {e}")
+        return False
+
+# Usage
+if __name__ == "__main__":
+    validate_yaml_with_schema("config.yml", "config-schema.json")</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Performance Optimization</h2>
+                    <p>Optimize YAML files for better performance and faster parsing.</p>
+                    
+                    <div class="best-practices-box">
+                        <h3>✅ Performance Tips</h3>
+                        <ul>
+                            <li><strong>Use anchors for repeated values</strong> - Reduces file size</li>
+                            <li><strong>Avoid deeply nested structures</strong> - Slower to parse</li>
+                            <li><strong>Use flow style for simple data</strong> - Faster parsing</li>
+                            <li><strong>Minimize file size</strong> - Remove unnecessary whitespace</li>
+                            <li><strong>Use appropriate data types</strong> - Avoid unnecessary type conversion</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-example">
+                        <h3>Performance Comparison</h3>
+                        <pre><code># ❌ Slow - deeply nested, repeated values
+application:
+  database:
+    production:
+      host: "prod-db.example.com"
+      port: 5432
+      username: "admin"
+      password: "secret"
+      pool: 20
+      timeout: 30
+      ssl: true
+    staging:
+      host: "staging-db.example.com"
+      port: 5432
+      username: "admin"
+      password: "secret"
+      pool: 10
+      timeout: 30
+      ssl: true
+    development:
+      host: "dev-db.example.com"
+      port: 5432
+      username: "admin"
+      password: "secret"
+      pool: 5
+      timeout: 30
+      ssl: false
+
+# ✅ Fast - using anchors, flat structure
+defaults: &db_defaults
+  port: 5432
+  username: "admin"
+  password: "secret"
+  timeout: 30
+
+database:
+  production:
+    <<: *db_defaults
+    host: "prod-db.example.com"
+    pool: 20
+    ssl: true
+  staging:
+    <<: *db_defaults
+    host: "staging-db.example.com"
+    pool: 10
+    ssl: true
+  development:
+    <<: *db_defaults
+    host: "dev-db.example.com"
+    pool: 5
+    ssl: false</code></pre>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Debugging YAML Issues</h2>
+                    <p>Common YAML issues and how to debug them effectively.</p>
+                    
+                    <div class="troubleshooting-box">
+                        <h3>🔧 Common Issues and Solutions</h3>
+                        
+                        <div class="issue">
+                            <h4>Indentation Errors</h4>
+                            <p><strong>Problem:</strong> "mapping values are not allowed here"</p>
+                            <p><strong>Solution:</strong> Check for consistent indentation (use 2 spaces)</p>
+                            <pre><code># ❌ Wrong
+database:
+  host: localhost
+    port: 5432  # Wrong indentation
+
+# ✅ Correct
+database:
+  host: localhost
+  port: 5432</code></pre>
+                        </div>
+
+                        <div class="issue">
+                            <h4>Missing Colons</h4>
+                            <p><strong>Problem:</strong> "did not find expected key"</p>
+                            <p><strong>Solution:</strong> Add colons after keys</p>
+                            <pre><code># ❌ Wrong
+name John Doe
+age 30
+
+# ✅ Correct
+name: John Doe
+age: 30</code></pre>
+                        </div>
+
+                        <div class="issue">
+                            <h4>Unquoted Special Values</h4>
+                            <p><strong>Problem:</strong> Values interpreted as wrong type</p>
+                            <p><strong>Solution:</strong> Quote values that look like other types</p>
+                            <pre><code># ❌ Wrong
+date: 2023-12-25
+phone: 555-1234
+status: active
+
+# ✅ Correct
+date: "2023-12-25"
+phone: "555-1234"
+status: "active"</code></pre>
+                        </div>
+
+                        <div class="issue">
+                            <h4>Circular References</h4>
+                            <p><strong>Problem:</strong> Anchors referencing each other</p>
+                            <p><strong>Solution:</strong> Avoid circular references in anchors</p>
+                            <pre><code># ❌ Wrong
+user1: &user1
+  name: John
+  friend: *user2
+user2: &user2
+  name: Jane
+  friend: *user1
+
+# ✅ Correct
+user1:
+  name: John
+  friend: "Jane"
+user2:
+  name: Jane
+  friend: "John"</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="tutorial-section">
+                    <h2>Best Practices Summary</h2>
+                    <div class="best-practices-box">
+                        <h3>✅ Tool Usage Best Practices</h3>
+                        <ul>
+                            <li><strong>Always validate YAML files</strong> - Use linters and validators</li>
+                            <li><strong>Use consistent formatting</strong> - Apply formatters automatically</li>
+                            <li><strong>Integrate into CI/CD</strong> - Catch issues early</li>
+                            <li><strong>Use schema validation</strong> - Ensure data integrity</li>
+                            <li><strong>Monitor performance</strong> - Optimize large YAML files</li>
+                            <li><strong>Document your tools</strong> - Help team members understand setup</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h3>⚠️ Common Tool Mistakes</h3>
+                        <ul>
+                            <li><strong>Not using validation tools</strong> - Relying on manual checking</li>
+                            <li><strong>Ignoring linter warnings</strong> - Not fixing style issues</li>
+                            <li><strong>Not versioning tool configs</strong> - Inconsistent tool settings</li>
+                            <li><strong>Over-complicating schemas</strong> - Making validation too strict</li>
+                            <li><strong>Not testing tool integration</strong> - Assuming tools work correctly</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <div class="tutorial-navigation">
+                    <a href="real-world-examples.html" class="btn btn-secondary">← Back: Real-World Examples</a>
+                    <a href="index.html" class="btn btn-primary">Back to Tutorial Index →</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>YAML.cc</h3>
+                    <p>Professional YAML validation, formatting, and conversion tools for developers. The most trusted YAML tools platform.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Tools</h4>
+                    <ul>
+                        <li><a href="../index.html#tools" data-tool="validate">YAML Validator</a></li>
+                        <li><a href="../index.html#tools" data-tool="format">YAML Linter</a></li>
+                        <li><a href="../index.html#tools" data-tool="convert">YAML to JSON</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="../index.html#info-section">What is YAML?</a></li>
+                        <li><a href="../index.html#yaml-examples">YAML Examples</a></li>
+                        <li><a href="../index.html#yaml-syntax">YAML Syntax Guide</a></li>
+                        <li><a href="../index.html#best-practices">Best Practices</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 YAML.cc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
