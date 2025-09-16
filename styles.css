@@ -396,6 +396,12 @@ body {
     transform: translateY(-2px);
 }
 
+.btn-large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    min-width: 200px;
+}
+
 .output-section {
     margin-top: 1.5rem;
 }
@@ -1658,9 +1664,9 @@ body {
     background: linear-gradient(135deg, #3b82f6, #6366f1);
     color: white;
     border-radius: 12px;
-    padding: 3rem;
+    padding: 0.5rem;
     text-align: center;
-    margin: 2rem 0;
+    margin: 1rem 0;
 }
 
 .tutorial-cta h2 {
@@ -1679,6 +1685,7 @@ body {
 }
 
 .breadcrumb {
+    margin-top: 1.5rem;
     margin-bottom: 1rem;
     font-size: 0.9rem;
     color: #64748b;
@@ -1700,7 +1707,7 @@ body {
 }
 
 .tutorial-content {
-    max-width: 800px;
+    max-width: 1080px;
     margin: 0 auto;
 }
 
