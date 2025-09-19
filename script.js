@@ -89,7 +89,7 @@ ${exampleYAML}`;
         // Add click event listeners
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
-                e.preventDefault();
+                // e.preventDefault();
                 
                 // Remove active class from all links
                 navLinks.forEach(navLink => navLink.classList.remove('active'));
