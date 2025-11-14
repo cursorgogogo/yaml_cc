@@ -453,210 +453,56 @@ ${exampleYAML}`;
 
 
     showValidationSuccess(resultDiv, result) {
-        const html = `
-            <div class="result-success">
-                <div class="result-header">
-                    <span class="result-icon">✅</span>
-                    <h3>Validation Successful</h3>
-                </div>
-                <div class="result-message">
-                    Your YAML syntax is valid and well-structured!
-                </div>
-                <div class="result-stats">
-                    <div class="stat-item">
-                        <span class="stat-label">Total Lines:</span>
-                        <span class="stat-value">${result.statistics.totalLines}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Content Lines:</span>
-                        <span class="stat-value">${result.statistics.nonEmptyLines}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Comments:</span>
-                        <span class="stat-value">${result.statistics.commentLines}</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Warnings:</span>
-                        <span class="stat-value">${result.statistics.warningCount}</span>
-                    </div>
-                </div>
-                ${result.warnings.length > 0 ? `
-                <div class="warnings-section">
-                    <h4>⚠️ Suggestions for Improvement:</h4>
-                    <ul class="warning-list">
-                        ${result.warnings.map(warning => `
-                            <li>
-                                <strong>${warning.line ? `Line ${warning.line}:` : 'General:'}</strong> ${warning.message}
-                                ${warning.suggestion ? `<br><em class="suggestion-text">💡 ${warning.suggestion}</em>` : ''}
-                            </li>
-                        `).join('')}
-                    </ul>
-                </div>
-                ` : ''}
-            </div>
-        `;
-        resultDiv.innerHTML = html;
+        let html = '✅ YAML 验证成功\n\n';
+        
+        if (result.warnings.length > 0) {
+            html += '警告：\n';
+            result.warnings.forEach((warning, index) => {
+                html += `${index + 1}. ${warning.line ? `第 ${warning.line} 行: ` : ''}${warning.message}`;
+                if (warning.suggestion) {
+                    html += ` (建议: ${warning.suggestion})`;
+                }
+                html += '\n';
+            });
+        } else {
+            html += '没有发现任何问题。';
+        }
+        
+        resultDiv.innerHTML = `<pre style="white-space: pre-wrap; font-family: monospace; margin: 0; padding: 1rem;">${this.escapeHtml(html)}</pre>`;
     }
 
     showValidationErrors(resultDiv, result) {
-        const html = `
-            <div class="result-error">
-                <div class="result-header">
-                    <div class="result-icon-wrapper error-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="15" y1="9" x2="9" y2="15"></line>
-                            <line x1="9" y1="9" x2="15" y2="15"></line>
-                        </svg>
-                    </div>
-                    <div class="result-header-text">
-                        <h3>Validation Failed</h3>
-                        <p>Found ${result.errors.length} error${result.errors.length !== 1 ? 's' : ''} ${result.warnings.length > 0 ? `and ${result.warnings.length} warning${result.warnings.length !== 1 ? 's' : ''}` : ''}</p>
-                    </div>
-                </div>
-                
-                <div class="result-stats error-stats">
-                    <div class="stat-item-inline error-stat">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="8" x2="12" y2="12"></line>
-                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                        </svg>
-                        <span>${result.errors.length} Error${result.errors.length !== 1 ? 's' : ''}</span>
-                    </div>
-                    ${result.warnings.length > 0 ? `
-                    <div class="stat-item-inline warning-stat">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                            <line x1="12" y1="9" x2="12" y2="13"></line>
-                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                        </svg>
-                        <span>${result.warnings.length} Warning${result.warnings.length !== 1 ? 's' : ''}</span>
-                    </div>
-                    ` : ''}
-                    <div class="stat-item-inline">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                        </svg>
-                        <span>${result.statistics.totalLines} Lines</span>
-                    </div>
-                </div>
-                
-                <div class="validation-issues">
-                    <div class="error-list">
-                        <div class="issues-header">
-                            <h4>
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <line x1="15" y1="9" x2="9" y2="15"></line>
-                                    <line x1="9" y1="9" x2="15" y2="15"></line>
-                                </svg>
-                                Errors Found
-                            </h4>
-                            <span class="issues-count">${result.errors.length}</span>
-                        </div>
-                        ${result.errors.map((error, index) => `
-                            <div class="error-item" style="animation-delay: ${index * 0.05}s">
-                                <div class="error-item-header">
-                                    <div class="error-badge">
-                                        <span class="error-number">#${index + 1}</span>
-                                        <span class="error-type">${this.formatErrorType(error.type)}</span>
-                                    </div>
-                                    <div class="error-location">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                            <polyline points="14 2 14 8 20 8"></polyline>
-                                            <line x1="12" y1="18" x2="12" y2="12"></line>
-                                            <line x1="9" y1="15" x2="15" y2="15"></line>
-                                        </svg>
-                                        Line ${error.line || '?'}${error.column ? `:${error.column}` : ''}
-                                    </div>
-                                </div>
-                                <div class="error-content">
-                                    <div class="error-message">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <line x1="12" y1="8" x2="12" y2="12"></line>
-                                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                                        </svg>
-                                        <p>${this.escapeHtml(error.message)}</p>
-                                    </div>
-                                    ${error.suggestion ? `
-                                    <div class="error-suggestion">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                                        </svg>
-                                        <p><strong>How to fix:</strong> ${this.escapeHtml(error.suggestion)}</p>
-                                    </div>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                    
-                    ${result.warnings.length > 0 ? `
-                    <div class="warnings-section">
-                        <div class="issues-header">
-                            <h4>
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                                    <line x1="12" y1="9" x2="12" y2="13"></line>
-                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                                </svg>
-                                Warnings
-                            </h4>
-                            <span class="issues-count">${result.warnings.length}</span>
-                        </div>
-                        ${result.warnings.map((warning, index) => `
-                            <div class="warning-item" style="animation-delay: ${(result.errors.length + index) * 0.05}s">
-                                <div class="warning-item-header">
-                                    <div class="warning-badge">
-                                        <span class="warning-number">#${index + 1}</span>
-                                        <span class="warning-type">${this.formatErrorType(warning.type)}</span>
-                                    </div>
-                                    ${warning.line ? `
-                                    <div class="warning-location">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                            <polyline points="14 2 14 8 20 8"></polyline>
-                                            <line x1="12" y1="18" x2="12" y2="12"></line>
-                                            <line x1="9" y1="15" x2="15" y2="15"></line>
-                                        </svg>
-                                        Line ${warning.line}${warning.column ? `:${warning.column}` : ''}
-                                    </div>
-                                    ` : ''}
-                                </div>
-                                <div class="warning-content">
-                                    <div class="warning-message">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                                            <line x1="12" y1="9" x2="12" y2="13"></line>
-                                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                                        </svg>
-                                        <p>${this.escapeHtml(warning.message)}</p>
-                                    </div>
-                                    ${warning.suggestion ? `
-                                    <div class="warning-suggestion">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                                        </svg>
-                                        <p><strong>Suggestion:</strong> ${this.escapeHtml(warning.suggestion)}</p>
-                                    </div>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                    ` : ''}
-                </div>
-            </div>
-        `;
-        resultDiv.innerHTML = html;
+        let html = `❌ YAML 验证失败\n`;
+        html += `发现 ${result.errors.length} 个错误`;
+        if (result.warnings.length > 0) {
+            html += `，${result.warnings.length} 个警告`;
+        }
+        html += '\n\n';
+        
+        if (result.errors.length > 0) {
+            html += '错误：\n';
+            result.errors.forEach((error, index) => {
+                html += `${index + 1}. 第 ${error.line || '?'} 行${error.column ? ` 第 ${error.column} 列` : ''}: ${error.message}`;
+                if (error.suggestion) {
+                    html += ` (修复建议: ${error.suggestion})`;
+                }
+                html += '\n';
+            });
+            html += '\n';
+        }
+        
+        if (result.warnings.length > 0) {
+            html += '警告：\n';
+            result.warnings.forEach((warning, index) => {
+                html += `${index + 1}. ${warning.line ? `第 ${warning.line} 行${warning.column ? ` 第 ${warning.column} 列` : ''}: ` : ''}${warning.message}`;
+                if (warning.suggestion) {
+                    html += ` (建议: ${warning.suggestion})`;
+                }
+                html += '\n';
+            });
+        }
+        
+        resultDiv.innerHTML = `<pre style="white-space: pre-wrap; font-family: monospace; margin: 0; padding: 1rem;">${this.escapeHtml(html)}</pre>`;
     }
 
     formatErrorType(type) {

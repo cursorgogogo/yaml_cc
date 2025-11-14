@@ -87,29 +87,82 @@
                     <p class="hero-subtitle">Validate, format, and convert your YAML content instantly</p>
                 </div>
                 
-                <!-- Unified YAML Tool -->
+                <!-- Unified YAML Tool - Two Column Layout -->
                 <div class="tool-card">
-                    <div class="tool-content">
-                        <div class="input-section">
-                            <textarea id="yaml-input" placeholder="Enter your YAML content here...&#10;&#10;Example:&#10;name: John Doe&#10;age: 30&#10;email: john@example.com&#10;hobbies:&#10;  - reading&#10;  - coding&#10;  - hiking&#10;address:&#10;  street: 123 Main St&#10;  city: New York&#10;  country: USA"></textarea>
+                    <div class="tool-grid">
+                        <!-- Left Column: Input -->
+                        <div class="tool-column input-column">
+                            <div class="column-header">
+                                <h3>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                    Input YAML
+                                </h3>
+                                <span class="column-badge">Editor</span>
+                            </div>
+                            <div class="input-section">
+                                <textarea id="yaml-input" placeholder="# Enter your YAML content here...
+
+# Example:
+name: John Doe
+age: 30
+email: john@example.com
+hobbies:
+  - reading
+  - coding
+  - hiking
+address:
+  street: 123 Main St
+  city: New York
+  country: USA"></textarea>
+                            </div>
                             <div class="input-actions">
-                                <button id="validate-btn" class="btn btn-primary">
-                                    <span>✓</span> Validate YAML
+                                <button id="validate-btn" class="btn btn-primary btn-validate">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    Validate YAML
                                 </button>
-                                <button id="format-btn" class="btn btn-primary">
-                                    <img src="assets/images/lightning.svg" alt="Lightning" width="16" height="16"> Format YAML
+                                <button id="format-btn" class="btn btn-primary btn-format">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                    </svg>
+                                    Format YAML
                                 </button>
-                                <button id="convert-btn" class="btn btn-primary">
-                                    <span>🔄</span> Convert to JSON
+                                <button id="convert-btn" class="btn btn-primary btn-convert">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="23 4 23 10 17 10"></polyline>
+                                        <polyline points="1 20 1 14 7 14"></polyline>
+                                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                                    </svg>
+                                    Convert to JSON
                                 </button>
-                                <button id="clear-btn" class="btn btn-secondary">
-                                    <span>🗑️</span> Clear All
+                                <button id="clear-btn" class="btn btn-secondary btn-clear">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                    Clear All
                                 </button>
                             </div>
                         </div>
-                        <div class="output-section">
-                            <label for="result-output">Result:</label>
-                            <div id="result-output" class="result-box"></div>
+                        
+                        <!-- Right Column: Output -->
+                        <div class="tool-column output-column">
+                            <div class="column-header">
+                                <h3>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                    </svg>
+                                    Result
+                                </h3>
+                                <span class="column-badge">Output</span>
+                            </div>
+                            <div class="output-section">
+                                <div id="result-output" class="result-box"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
