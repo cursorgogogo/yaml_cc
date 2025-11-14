@@ -1,14 +1,52 @@
 // YAML Tools - Unified Interface JavaScript
 class YAMLTools {
     constructor() {
+        this.editor = null;
         this.init();
     }
 
     init() {
+        this.initAceEditor();
         this.bindEvents();
         this.setupExampleData();
         this.setupNavigation();
         this.setupExampleTabs();
+    }
+
+    initAceEditor() {
+        const editorElement = document.getElementById('yaml-input');
+        if (!editorElement) return;
+        
+        // Wait for Ace to be available
+        const initEditor = () => {
+            if (typeof ace !== 'undefined' && ace && ace.edit) {
+                try {
+                    this.editor = ace.edit('yaml-input');
+                    this.editor.setTheme('ace/theme/monokai');
+                    this.editor.session.setMode('ace/mode/yaml');
+                    this.editor.setOptions({
+                        fontSize: 14,
+                        showPrintMargin: false,
+                        showLineNumbers: true,
+                        showGutter: true,
+                        wrap: true,
+                        tabSize: 2,
+                        useSoftTabs: true,
+                        highlightActiveLine: true,
+                        enableBasicAutocompletion: true,
+                        enableLiveAutocompletion: false
+                    });
+                    console.log('Ace editor initialized successfully');
+                } catch (error) {
+                    console.warn('Failed to initialize Ace editor:', error);
+                }
+            } else {
+                // Retry after a short delay
+                setTimeout(initEditor, 100);
+            }
+        };
+        
+        initEditor();
     }
 
     bindEvents() {
@@ -23,7 +61,10 @@ class YAMLTools {
     }
 
     setupExampleData() {
-        const exampleYAML = `name: John Doe
+        const exampleYAML = `# Enter your YAML content here...
+
+# Example:
+name: John Doe
 age: 30
 email: john@example.com
 hobbies:
@@ -35,11 +76,19 @@ address:
   city: New York
   country: USA`;
 
-        // Set example data in textarea placeholder
-        document.getElementById('yaml-input').placeholder = `Enter your YAML content here...
+        // Set example data in editor
+        if (this.editor) {
+            this.editor.setValue(exampleYAML, -1);
+        }
+    }
 
-Example:
-${exampleYAML}`;
+    getYAMLInput() {
+        if (this.editor) {
+            return this.editor.getValue();
+        }
+        // Fallback to textarea if editor not available
+        const element = document.getElementById('yaml-input');
+        return element ? (element.value || element.textContent || '') : '';
     }
 
     setupNavigation() {
@@ -144,7 +193,7 @@ ${exampleYAML}`;
     }
 
     validateYAML() {
-        const input = document.getElementById('yaml-input').value.trim();
+        const input = this.getYAMLInput().trim();
         const resultDiv = document.getElementById('result-output');
         
         if (!input) {
@@ -453,38 +502,38 @@ ${exampleYAML}`;
 
 
     showValidationSuccess(resultDiv, result) {
-        let html = '✅ YAML 验证成功\n\n';
+        let html = '✅ YAML Validation Successful\n\n';
         
         if (result.warnings.length > 0) {
-            html += '警告：\n';
+            html += 'Warnings:\n';
             result.warnings.forEach((warning, index) => {
-                html += `${index + 1}. ${warning.line ? `第 ${warning.line} 行: ` : ''}${warning.message}`;
+                html += `${index + 1}. ${warning.line ? `Line ${warning.line}: ` : ''}${warning.message}`;
                 if (warning.suggestion) {
-                    html += ` (建议: ${warning.suggestion})`;
+                    html += ` (Suggestion: ${warning.suggestion})`;
                 }
                 html += '\n';
             });
         } else {
-            html += '没有发现任何问题。';
+            html += 'No issues found.';
         }
         
         resultDiv.innerHTML = `<pre style="white-space: pre-wrap; font-family: monospace; margin: 0; padding: 1rem;">${this.escapeHtml(html)}</pre>`;
     }
 
     showValidationErrors(resultDiv, result) {
-        let html = `❌ YAML 验证失败\n`;
-        html += `发现 ${result.errors.length} 个错误`;
+        let html = `❌ YAML Validation Failed\n`;
+        html += `Found ${result.errors.length} error${result.errors.length !== 1 ? 's' : ''}`;
         if (result.warnings.length > 0) {
-            html += `，${result.warnings.length} 个警告`;
+            html += ` and ${result.warnings.length} warning${result.warnings.length !== 1 ? 's' : ''}`;
         }
         html += '\n\n';
         
         if (result.errors.length > 0) {
-            html += '错误：\n';
+            html += 'Errors:\n';
             result.errors.forEach((error, index) => {
-                html += `${index + 1}. 第 ${error.line || '?'} 行${error.column ? ` 第 ${error.column} 列` : ''}: ${error.message}`;
+                html += `${index + 1}. Line ${error.line || '?'}${error.column ? `, Column ${error.column}` : ''}: ${error.message}`;
                 if (error.suggestion) {
-                    html += ` (修复建议: ${error.suggestion})`;
+                    html += ` (Fix: ${error.suggestion})`;
                 }
                 html += '\n';
             });
@@ -492,11 +541,11 @@ ${exampleYAML}`;
         }
         
         if (result.warnings.length > 0) {
-            html += '警告：\n';
+            html += 'Warnings:\n';
             result.warnings.forEach((warning, index) => {
-                html += `${index + 1}. ${warning.line ? `第 ${warning.line} 行${warning.column ? ` 第 ${warning.column} 列` : ''}: ` : ''}${warning.message}`;
+                html += `${index + 1}. ${warning.line ? `Line ${warning.line}${warning.column ? `, Column ${warning.column}` : ''}: ` : ''}${warning.message}`;
                 if (warning.suggestion) {
-                    html += ` (建议: ${warning.suggestion})`;
+                    html += ` (Suggestion: ${warning.suggestion})`;
                 }
                 html += '\n';
             });
@@ -522,7 +571,7 @@ ${exampleYAML}`;
     }
 
     formatYAML() {
-        const input = document.getElementById('yaml-input').value.trim();
+        const input = this.getYAMLInput().trim();
         const resultDiv = document.getElementById('result-output');
         
         if (!input) {
@@ -579,6 +628,11 @@ ${exampleYAML}`;
                 </div>
             `;
             resultDiv.innerHTML = html;
+            
+            // Update editor with formatted YAML
+            if (this.editor) {
+                this.editor.setValue(formatted, -1);
+            }
             
             // Add copy button
             this.addCopyButtonToResult(resultDiv, formatted);
@@ -715,7 +769,7 @@ ${exampleYAML}`;
     }
 
     convertYAML() {
-        const input = document.getElementById('yaml-input').value.trim();
+        const input = this.getYAMLInput().trim();
         const resultDiv = document.getElementById('result-output');
         
         if (!input) {
@@ -792,7 +846,14 @@ ${exampleYAML}`;
     }
 
     clearAll() {
-        document.getElementById('yaml-input').value = '';
+        if (this.editor) {
+            this.editor.setValue('');
+        } else {
+            const element = document.getElementById('yaml-input');
+            if (element) {
+                element.value = '';
+            }
+        }
         document.getElementById('result-output').innerHTML = '';
         document.getElementById('result-output').className = 'result-box';
     }
@@ -823,9 +884,13 @@ ${exampleYAML}`;
         }
         
         // Focus on the input area
+        if (this.editor) {
+            this.editor.focus();
+        } else {
         const inputArea = document.getElementById('yaml-input');
         if (inputArea) {
             inputArea.focus();
+            }
         }
     }
 
