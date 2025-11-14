@@ -166,21 +166,14 @@ ${exampleYAML}`;
         const errors = [];
         const warnings = [];
         const lines = yamlContent.split('\n');
+        let parsed = null;
+        let hasSyntaxError = false;
         
-        // 1. Basic syntax validation
-        try {
-            const parsed = jsyaml.load(yamlContent);
-        } catch (error) {
-            errors.push({
-                type: 'syntax',
-                message: error.message,
-                line: error.mark ? error.mark.line + 1 : null,
-                column: error.mark ? error.mark.column + 1 : null,
-                severity: 'error'
-            });
-        }
-
-        // 2. Line-by-line analysis for common issues
+        // 1. Line-by-line analysis FIRST (to catch tabs and other issues before parsing)
+        let prevIndent = 0;
+        let indentSize = null;
+        const indentLevels = new Map(); // Track indentation at each level
+        
         lines.forEach((line, index) => {
             const lineNum = index + 1;
             const trimmedLine = line.trim();
@@ -190,175 +183,274 @@ ${exampleYAML}`;
                 return;
             }
 
-            // Check for mixed list items (key: value in list)
-            if (trimmedLine.startsWith('-') && trimmedLine.includes(':')) {
-                const afterDash = trimmedLine.substring(1).trim();
-                if (afterDash.includes(':')) {
-                    errors.push({
-                        type: 'list_structure',
-                        message: 'List items should not contain key-value pairs. Use proper mapping structure instead.',
-                        line: lineNum,
-                        column: 1,
-                        severity: 'error',
-                        suggestion: 'Convert to proper mapping or use separate list items'
-                    });
-                }
+            const leadingSpaces = line.length - line.trimStart().length;
+            
+            // Check for tabs (YAML spec requires spaces) - CRITICAL ERROR
+            if (line.includes('\t')) {
+                errors.push({
+                    type: 'indentation',
+                    message: 'YAML strictly requires spaces for indentation, not tabs. This is a critical syntax error.',
+                    line: lineNum,
+                    column: line.indexOf('\t') + 1,
+                    severity: 'error',
+                    suggestion: 'Replace all tab characters with spaces (use 2 or 4 spaces per indentation level)'
+                });
             }
 
+            // Detect indentation size from first indented line
+            if (indentSize === null && leadingSpaces > 0 && !trimmedLine.startsWith('-')) {
+                indentSize = leadingSpaces;
+            }
+            
             // Check for inconsistent indentation
-            if (line.length > 0) {
-                const leadingSpaces = line.match(/^(\s*)/)[1].length;
-                const hasTabs = line.includes('\t');
+            if (indentSize && leadingSpaces > 0) {
+                const isListItem = trimmedLine.startsWith('-');
                 
-                if (hasTabs) {
+                if (!isListItem && leadingSpaces % indentSize !== 0) {
                     errors.push({
                         type: 'indentation',
-                        message: 'YAML should use spaces for indentation, not tabs.',
+                        message: `Inconsistent indentation detected. Expected multiples of ${indentSize} spaces, but found ${leadingSpaces} spaces.`,
                         line: lineNum,
                         column: 1,
                         severity: 'error',
-                        suggestion: 'Replace tabs with spaces (2 or 4 spaces per level)'
+                        suggestion: `Adjust indentation to use consistent ${indentSize}-space increments (current: ${leadingSpaces} spaces, should be: ${Math.round(leadingSpaces / indentSize) * indentSize} spaces)`
                     });
                 }
             }
 
-            // Check for unquoted special values
-            if (trimmedLine.includes(':')) {
-                const [key, ...valueParts] = trimmedLine.split(':');
-                const value = valueParts.join(':').trim();
-                
-                // Check for unquoted special characters
-                if (value && !value.startsWith('"') && !value.startsWith("'") && !value.startsWith('|') && !value.startsWith('>')) {
-                    // Check for values that should be quoted
-                    if (value.includes(' ') || value.includes(':') || value.includes('[') || value.includes(']') || 
-                        value.includes('{') || value.includes('}') || value.includes(',') || 
-                        value.match(/^[0-9]/) || value === 'yes' || value === 'no' || value === 'on' || value === 'off') {
-                        
-                        // Check if it's a valid boolean or number
-                        const lowerValue = value.toLowerCase();
-                        if (!['true', 'false', 'null', '~'].includes(lowerValue) && 
-                            !value.match(/^-?[0-9]+(\.[0-9]+)?$/) && 
-                            !value.match(/^[0-9]+[a-zA-Z]+$/)) {
-                            
-                            warnings.push({
-                                type: 'quoting',
-                                message: `Value "${value}" contains special characters and should be quoted.`,
-                                line: lineNum,
-                                column: key.length + 2,
-                                severity: 'warning',
-                                suggestion: 'Wrap the value in quotes: "' + value + '"'
-                            });
-                        }
+            // Check for trailing whitespace
+            if (line !== line.trimEnd()) {
+                warnings.push({
+                    type: 'whitespace',
+                    message: 'Line has trailing whitespace which can cause unexpected behavior.',
+                    line: lineNum,
+                    column: line.trimEnd().length + 1,
+                    severity: 'warning',
+                    suggestion: 'Remove all trailing whitespace from this line'
+                });
+            }
+
+            // Check for missing colon in key-value pairs
+            if (!trimmedLine.startsWith('-') && !trimmedLine.startsWith('#') && 
+                !trimmedLine.includes(':') && trimmedLine.length > 0 &&
+                !trimmedLine.match(/^[|>]/) && !trimmedLine.match(/^['"]/) &&
+                prevIndent === 0) {
+                errors.push({
+                    type: 'syntax',
+                    message: `Missing colon (:) for key-value pair. Line "${trimmedLine}" appears to be a key without a value.`,
+                    line: lineNum,
+                    column: 1,
+                    severity: 'error',
+                    suggestion: `Add a colon after the key: "${trimmedLine}:"`
+                });
+            }
+
+            // Check for unclosed quotes
+            const singleQuotes = (line.match(/'/g) || []).length;
+            const doubleQuotes = (line.match(/"/g) || []).length;
+            
+            if (singleQuotes % 2 !== 0) {
+                errors.push({
+                    type: 'syntax',
+                    message: 'Unclosed single quote detected.',
+                    line: lineNum,
+                    column: line.indexOf("'") + 1,
+                    severity: 'error',
+                    suggestion: 'Make sure all single quotes are properly closed'
+                });
+            }
+            
+            if (doubleQuotes % 2 !== 0 && !line.includes('\\"')) {
+                errors.push({
+                    type: 'syntax',
+                    message: 'Unclosed double quote detected.',
+                    line: lineNum,
+                    column: line.indexOf('"') + 1,
+                    severity: 'error',
+                    suggestion: 'Make sure all double quotes are properly closed'
+                });
+            }
+
+            // Check for list items with key-value pairs (ambiguous structure)
+            if (trimmedLine.startsWith('- ') && trimmedLine.includes(':')) {
+                const afterDash = trimmedLine.substring(2).trim();
+                const colonPos = afterDash.indexOf(':');
+                if (colonPos > 0 && afterDash[colonPos - 1] !== '\\') {
+                    // This could be valid (list of objects) or invalid (mixed format)
+                    // Check if it's a proper object or just malformed
+                    const beforeColon = afterDash.substring(0, colonPos).trim();
+                    const afterColon = afterDash.substring(colonPos + 1).trim();
+                    
+                    if (beforeColon && !afterColon) {
+                        warnings.push({
+                            type: 'structure',
+                            message: `List item contains key "${beforeColon}" without a value. This might be unintentional.`,
+                            line: lineNum,
+                            column: trimmedLine.indexOf(beforeColon) + 1,
+                            severity: 'warning',
+                            suggestion: 'If this is a list of objects, ensure proper formatting with values'
+                        });
                     }
                 }
             }
 
-            // Check for empty values without proper null syntax
-            if (trimmedLine.endsWith(':') && !trimmedLine.endsWith('::')) {
-                const nextLine = lines[index + 1];
-                if (!nextLine || nextLine.trim() === '' || nextLine.trim().startsWith('#')) {
-                    warnings.push({
-                        type: 'empty_value',
-                        message: 'Empty value should be explicitly set to null or ~',
-                        line: lineNum,
-                        column: trimmedLine.length,
-                        severity: 'warning',
-                        suggestion: 'Use "key: null" or "key: ~" for empty values'
-                    });
-                }
-            }
-
-            // Check for Chinese characters in keys without quotes
-            if (trimmedLine.includes(':') && !trimmedLine.startsWith('#')) {
-                const key = trimmedLine.split(':')[0].trim();
-                if (/[\u4e00-\u9fff]/.test(key) && !key.startsWith('"') && !key.startsWith("'")) {
+            // Check for key-value pairs and potential issues
+            if (trimmedLine.includes(':') && !trimmedLine.startsWith('-') && !trimmedLine.startsWith('#')) {
+                const colonIndex = trimmedLine.indexOf(':');
+                const key = trimmedLine.substring(0, colonIndex).trim();
+                const value = trimmedLine.substring(colonIndex + 1).trim();
+                
+                // Check for keys without quotes that contain special characters
+                if (key.includes(' ') || key.match(/[{}[\],&*#?|<>=!%@`]/)) {
                     errors.push({
-                        type: 'key_quoting',
-                        message: 'Keys with non-ASCII characters should be quoted.',
+                        type: 'key_format',
+                        message: `Key "${key}" contains special characters and should be quoted.`,
                         line: lineNum,
                         column: 1,
                         severity: 'error',
-                        suggestion: 'Quote the key: "' + key + '":'
+                        suggestion: `Use quoted key: "${key}"`
                     });
+                }
+                
+                // Check for unquoted strings that look like booleans
+                if (value && !value.startsWith('"') && !value.startsWith("'") && 
+                    !value.startsWith('[') && !value.startsWith('{') &&
+                    !value.startsWith('|') && !value.startsWith('>')) {
+                    
+                    // Warn about yes/no/on/off which are treated as booleans in YAML
+                    if (['yes', 'no', 'on', 'off', 'y', 'n'].includes(value.toLowerCase())) {
+                        warnings.push({
+                            type: 'boolean_interpretation',
+                            message: `Value "${value}" will be automatically interpreted as boolean (true/false). Quote it if you want a string.`,
+                            line: lineNum,
+                            column: colonIndex + 2,
+                            severity: 'warning',
+                            suggestion: `Use "${value}" to keep it as a string literal`
+                        });
+                    }
+                    
+                    // Warn about version-like numbers
+                    if (value.match(/^\d+\.\d+/)) {
+                        warnings.push({
+                            type: 'version_quoting',
+                            message: `Value "${value}" looks like a version string. It should be quoted to preserve formatting.`,
+                            line: lineNum,
+                            column: colonIndex + 2,
+                            severity: 'warning',
+                            suggestion: `Use "${value}" to ensure it's treated as a string`
+                        });
+                    }
+                    
+                    // Warn about date-like values
+                    if (value.match(/^\d{4}-\d{2}-\d{2}/)) {
+                        warnings.push({
+                            type: 'date_format',
+                            message: `Value "${value}" looks like a date. It will be converted to a Date object. Quote it if you want a string.`,
+                            line: lineNum,
+                            column: colonIndex + 2,
+                            severity: 'warning',
+                            suggestion: `Use "${value}" to keep it as a string`
+                        });
+                    }
                 }
             }
 
-            // Check for date-like values that might be misinterpreted
-            if (trimmedLine.includes(':') && !trimmedLine.startsWith('#')) {
-                const value = trimmedLine.split(':').slice(1).join(':').trim();
-                if (value.match(/^\d{4}-\d{2}-\d{2}$/) && !value.startsWith('"') && !value.startsWith("'")) {
-                    warnings.push({
-                        type: 'date_quoting',
-                        message: 'Date-like values should be quoted to avoid misinterpretation.',
-                        line: lineNum,
-                        column: trimmedLine.indexOf(':') + 2,
-                        severity: 'warning',
-                        suggestion: 'Quote the date: "' + value + '"'
-                    });
-                }
-            }
+            prevIndent = leadingSpaces;
         });
 
-        // 3. Check for structural issues
-        this.checkStructuralIssues(yamlContent, errors, warnings);
+        // 2. Try to parse with js-yaml to catch additional syntax errors
+        try {
+            parsed = jsyaml.load(yamlContent);
+        } catch (error) {
+            hasSyntaxError = true;
+            const errorLine = error.mark ? error.mark.line + 1 : null;
+            const errorColumn = error.mark ? error.mark.column + 1 : null;
+            
+            // Create a detailed error message
+            let detailedMessage = error.message;
+            
+            // Add context about what went wrong
+            if (error.message.includes('tab character')) {
+                detailedMessage = 'YAML does not allow tab characters for indentation. Use spaces instead.';
+            } else if (error.message.includes('expected') && error.message.includes('but found')) {
+                detailedMessage = `Syntax error: ${error.message}`;
+            } else if (error.message.includes('bad indentation')) {
+                detailedMessage = `Indentation error: ${error.message}. Make sure all indentation is consistent and uses spaces.`;
+            }
+            
+            errors.push({
+                type: 'syntax',
+                message: detailedMessage,
+                line: errorLine,
+                column: errorColumn,
+                severity: 'error',
+                suggestion: 'Check the line and column indicated for syntax issues. Common problems: unclosed quotes, incorrect indentation, missing colons, or tab characters.'
+            });
+        }
+
+        // 3. Validate against YAML best practices (only if no critical errors)
+        if (parsed && !hasSyntaxError) {
+            this.validateBestPractices(yamlContent, parsed, warnings);
+        }
 
         return {
             isValid: errors.length === 0,
             errors: errors,
             warnings: warnings,
+            parsed: parsed,
             statistics: {
                 totalLines: lines.length,
                 nonEmptyLines: lines.filter(line => line.trim() && !line.trim().startsWith('#')).length,
+                commentLines: lines.filter(line => line.trim().startsWith('#')).length,
                 errorCount: errors.length,
                 warningCount: warnings.length
             }
         };
     }
 
-    checkStructuralIssues(yamlContent, errors, warnings) {
+    validateBestPractices(yamlContent, parsed, warnings) {
+        // Check for very deep nesting
+        const maxDepth = this.getMaxDepth(parsed);
+        if (maxDepth > 10) {
+            warnings.push({
+                type: 'complexity',
+                message: `YAML structure is deeply nested (${maxDepth} levels). Consider simplifying.`,
+                line: null,
+                column: null,
+                severity: 'warning',
+                suggestion: 'Break down complex structures into smaller, more manageable pieces'
+            });
+        }
+
+        // Check for very long lines
         const lines = yamlContent.split('\n');
-        const indentStack = [];
-        
         lines.forEach((line, index) => {
-            const lineNum = index + 1;
-            const trimmedLine = line.trim();
-            
-            if (!trimmedLine || trimmedLine.startsWith('#')) {
-                return;
-            }
-
-            const leadingSpaces = line.match(/^(\s*)/)[1].length;
-            
-            // Check for inconsistent indentation
-            if (leadingSpaces > 0) {
-                const expectedIndent = indentStack.length * 2; // Assuming 2-space indentation
-                
-                if (leadingSpaces !== expectedIndent && leadingSpaces !== expectedIndent + 2) {
-                    // Allow for list items and nested structures
-                    if (!trimmedLine.startsWith('-') && leadingSpaces % 2 !== 0) {
-                        errors.push({
-                            type: 'indentation',
-                            message: 'Inconsistent indentation detected.',
-                            line: lineNum,
-                            column: 1,
-                            severity: 'error',
-                            suggestion: 'Use consistent 2-space indentation'
-                        });
-                    }
-                }
-            }
-
-            // Track indentation levels
-            if (trimmedLine.includes(':')) {
-                if (leadingSpaces === 0) {
-                    indentStack.length = 0;
-                } else {
-                    const level = Math.floor(leadingSpaces / 2);
-                    indentStack.length = level;
-                }
+            if (line.length > 120) {
+                warnings.push({
+                    type: 'line_length',
+                    message: `Line is too long (${line.length} characters). Consider breaking it up.`,
+                    line: index + 1,
+                    column: 121,
+                    severity: 'warning',
+                    suggestion: 'Use multiline strings (| or >) for long text content'
+                });
             }
         });
     }
+
+    getMaxDepth(obj, currentDepth = 0) {
+        if (typeof obj !== 'object' || obj === null) {
+            return currentDepth;
+        }
+        
+        if (Array.isArray(obj)) {
+            return Math.max(currentDepth, ...obj.map(item => this.getMaxDepth(item, currentDepth + 1)));
+        }
+        
+        const depths = Object.values(obj).map(value => this.getMaxDepth(value, currentDepth + 1));
+        return depths.length > 0 ? Math.max(...depths) : currentDepth;
+    }
+
 
     showValidationSuccess(resultDiv, result) {
         const html = `
@@ -380,6 +472,10 @@ ${exampleYAML}`;
                         <span class="stat-value">${result.statistics.nonEmptyLines}</span>
                     </div>
                     <div class="stat-item">
+                        <span class="stat-label">Comments:</span>
+                        <span class="stat-value">${result.statistics.commentLines}</span>
+                    </div>
+                    <div class="stat-item">
                         <span class="stat-label">Warnings:</span>
                         <span class="stat-value">${result.statistics.warningCount}</span>
                     </div>
@@ -390,8 +486,8 @@ ${exampleYAML}`;
                     <ul class="warning-list">
                         ${result.warnings.map(warning => `
                             <li>
-                                <strong>Line ${warning.line}:</strong> ${warning.message}
-                                ${warning.suggestion ? `<br><em>Suggestion: ${warning.suggestion}</em>` : ''}
+                                <strong>${warning.line ? `Line ${warning.line}:` : 'General:'}</strong> ${warning.message}
+                                ${warning.suggestion ? `<br><em class="suggestion-text">💡 ${warning.suggestion}</em>` : ''}
                             </li>
                         `).join('')}
                     </ul>
@@ -406,43 +502,177 @@ ${exampleYAML}`;
         const html = `
             <div class="result-error">
                 <div class="result-header">
-                    <span class="result-icon">❌</span>
-                    <h3>Validation Failed</h3>
+                    <div class="result-icon-wrapper error-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                        </svg>
+                    </div>
+                    <div class="result-header-text">
+                        <h3>Validation Failed</h3>
+                        <p>Found ${result.errors.length} error${result.errors.length !== 1 ? 's' : ''} ${result.warnings.length > 0 ? `and ${result.warnings.length} warning${result.warnings.length !== 1 ? 's' : ''}` : ''}</p>
+                    </div>
                 </div>
-                <div class="result-message">
-                    Found ${result.errors.length} error(s) and ${result.warnings.length} warning(s) in your YAML.
+                
+                <div class="result-stats error-stats">
+                    <div class="stat-item-inline error-stat">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        <span>${result.errors.length} Error${result.errors.length !== 1 ? 's' : ''}</span>
+                    </div>
+                    ${result.warnings.length > 0 ? `
+                    <div class="stat-item-inline warning-stat">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        <span>${result.warnings.length} Warning${result.warnings.length !== 1 ? 's' : ''}</span>
+                    </div>
+                    ` : ''}
+                    <div class="stat-item-inline">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                        <span>${result.statistics.totalLines} Lines</span>
+                    </div>
                 </div>
-                <div class="error-list">
-                    <h4>🚨 Errors:</h4>
-                    ${result.errors.map(error => `
-                        <div class="error-item">
-                            <div class="error-header">
-                                <span class="error-type">${error.type.replace('_', ' ').toUpperCase()}</span>
-                                <span class="error-location">Line ${error.line}${error.column ? `, Column ${error.column}` : ''}</span>
-                            </div>
-                            <div class="error-message">${error.message}</div>
-                            ${error.suggestion ? `<div class="error-suggestion">💡 ${error.suggestion}</div>` : ''}
+                
+                <div class="validation-issues">
+                    <div class="error-list">
+                        <div class="issues-header">
+                            <h4>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                                </svg>
+                                Errors Found
+                            </h4>
+                            <span class="issues-count">${result.errors.length}</span>
                         </div>
-                    `).join('')}
-                </div>
-                ${result.warnings.length > 0 ? `
-                <div class="warnings-section">
-                    <h4>⚠️ Warnings:</h4>
-                    ${result.warnings.map(warning => `
-                        <div class="warning-item">
-                            <div class="warning-header">
-                                <span class="warning-type">${warning.type.replace('_', ' ').toUpperCase()}</span>
-                                <span class="warning-location">Line ${warning.line}${warning.column ? `, Column ${warning.column}` : ''}</span>
+                        ${result.errors.map((error, index) => `
+                            <div class="error-item" style="animation-delay: ${index * 0.05}s">
+                                <div class="error-item-header">
+                                    <div class="error-badge">
+                                        <span class="error-number">#${index + 1}</span>
+                                        <span class="error-type">${this.formatErrorType(error.type)}</span>
+                                    </div>
+                                    <div class="error-location">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                            <polyline points="14 2 14 8 20 8"></polyline>
+                                            <line x1="12" y1="18" x2="12" y2="12"></line>
+                                            <line x1="9" y1="15" x2="15" y2="15"></line>
+                                        </svg>
+                                        Line ${error.line || '?'}${error.column ? `:${error.column}` : ''}
+                                    </div>
+                                </div>
+                                <div class="error-content">
+                                    <div class="error-message">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                        </svg>
+                                        <p>${this.escapeHtml(error.message)}</p>
+                                    </div>
+                                    ${error.suggestion ? `
+                                    <div class="error-suggestion">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                        </svg>
+                                        <p><strong>How to fix:</strong> ${this.escapeHtml(error.suggestion)}</p>
+                                    </div>
+                                    ` : ''}
+                                </div>
                             </div>
-                            <div class="warning-message">${warning.message}</div>
-                            ${warning.suggestion ? `<div class="warning-suggestion">💡 ${warning.suggestion}</div>` : ''}
+                        `).join('')}
+                    </div>
+                    
+                    ${result.warnings.length > 0 ? `
+                    <div class="warnings-section">
+                        <div class="issues-header">
+                            <h4>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                </svg>
+                                Warnings
+                            </h4>
+                            <span class="issues-count">${result.warnings.length}</span>
                         </div>
-                    `).join('')}
+                        ${result.warnings.map((warning, index) => `
+                            <div class="warning-item" style="animation-delay: ${(result.errors.length + index) * 0.05}s">
+                                <div class="warning-item-header">
+                                    <div class="warning-badge">
+                                        <span class="warning-number">#${index + 1}</span>
+                                        <span class="warning-type">${this.formatErrorType(warning.type)}</span>
+                                    </div>
+                                    ${warning.line ? `
+                                    <div class="warning-location">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                            <polyline points="14 2 14 8 20 8"></polyline>
+                                            <line x1="12" y1="18" x2="12" y2="12"></line>
+                                            <line x1="9" y1="15" x2="15" y2="15"></line>
+                                        </svg>
+                                        Line ${warning.line}${warning.column ? `:${warning.column}` : ''}
+                                    </div>
+                                    ` : ''}
+                                </div>
+                                <div class="warning-content">
+                                    <div class="warning-message">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                        </svg>
+                                        <p>${this.escapeHtml(warning.message)}</p>
+                                    </div>
+                                    ${warning.suggestion ? `
+                                    <div class="warning-suggestion">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                        </svg>
+                                        <p><strong>Suggestion:</strong> ${this.escapeHtml(warning.suggestion)}</p>
+                                    </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    ` : ''}
                 </div>
-                ` : ''}
             </div>
         `;
         resultDiv.innerHTML = html;
+    }
+
+    formatErrorType(type) {
+        const typeMap = {
+            'indentation': 'Indentation',
+            'syntax': 'Syntax Error',
+            'key_format': 'Key Format',
+            'structure': 'Structure',
+            'whitespace': 'Whitespace',
+            'boolean_interpretation': 'Type Ambiguity',
+            'version_quoting': 'Version String',
+            'date_format': 'Date Format',
+            'complexity': 'Complexity',
+            'line_length': 'Line Length'
+        };
+        return typeMap[type] || type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     }
 
     formatYAML() {
@@ -455,19 +685,187 @@ ${exampleYAML}`;
         }
 
         try {
-            // Parse and re-dump YAML to format it
+            // Parse YAML first
             const parsed = jsyaml.load(input);
+            
+            // Format with enhanced options
             const formatted = jsyaml.dump(parsed, {
-                indent: 2,
-                lineWidth: -1,
-                noRefs: true,
-                sortKeys: false
+                indent: 2,                    // Use 2-space indentation
+                lineWidth: 80,                // Wrap lines at 80 characters
+                noRefs: true,                 // Don't use YAML references
+                sortKeys: false,              // Preserve key order
+                quotingType: '"',             // Use double quotes
+                forceQuotes: false,           // Only quote when necessary
+                noCompatMode: false,          // YAML 1.2 compatibility
+                condenseFlow: false,          // Don't condense flow collections
+                skipInvalid: false            // Don't skip invalid types
             });
             
-            this.showResult(resultDiv, `⚡ Formatted YAML:\n\n${formatted}`, 'success');
+            // Show formatted result with statistics
+            const stats = this.getYAMLStats(parsed);
+            const html = `
+                <div class="result-success">
+                    <div class="result-header">
+                        <span class="result-icon">⚡</span>
+                        <h3>YAML Formatted Successfully</h3>
+                    </div>
+                    <div class="result-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Top-level Keys:</span>
+                            <span class="stat-value">${stats.topLevelKeys}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Total Properties:</span>
+                            <span class="stat-value">${stats.totalProperties}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Nesting Depth:</span>
+                            <span class="stat-value">${stats.maxDepth}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Output Lines:</span>
+                            <span class="stat-value">${formatted.split('\n').length}</span>
+                        </div>
+                    </div>
+                    <div class="formatted-code">
+                        <pre><code>${this.escapeHtml(formatted)}</code></pre>
+                    </div>
+                </div>
+            `;
+            resultDiv.innerHTML = html;
+            
+            // Add copy button
+            this.addCopyButtonToResult(resultDiv, formatted);
+            
+            // Scroll to result
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         } catch (error) {
-            this.showResult(resultDiv, `❌ Cannot format invalid YAML!\n\nError: ${error.message}\n\nPlease fix the YAML syntax first, then try formatting again.`, 'error');
+            const html = `
+                <div class="result-error">
+                    <div class="result-header">
+                        <span class="result-icon">❌</span>
+                        <h3>Cannot Format Invalid YAML</h3>
+                    </div>
+                    <div class="error-message">
+                        <strong>Error:</strong> ${this.escapeHtml(error.message)}
+                    </div>
+                    <div class="error-suggestion">
+                        💡 <strong>Suggestion:</strong> Use the "Validate YAML" button to identify and fix syntax errors first, then try formatting again.
+                    </div>
+                </div>
+            `;
+            resultDiv.innerHTML = html;
         }
+    }
+
+    getYAMLStats(obj, depth = 0) {
+        let totalProperties = 0;
+        let maxDepth = depth;
+        
+        if (typeof obj === 'object' && obj !== null) {
+            if (Array.isArray(obj)) {
+                totalProperties += obj.length;
+                obj.forEach(item => {
+                    const stats = this.getYAMLStats(item, depth + 1);
+                    totalProperties += stats.totalProperties;
+                    maxDepth = Math.max(maxDepth, stats.maxDepth);
+                });
+            } else {
+                const keys = Object.keys(obj);
+                totalProperties += keys.length;
+                keys.forEach(key => {
+                    const stats = this.getYAMLStats(obj[key], depth + 1);
+                    totalProperties += stats.totalProperties;
+                    maxDepth = Math.max(maxDepth, stats.maxDepth);
+                });
+            }
+        }
+        
+        return {
+            topLevelKeys: depth === 0 && typeof obj === 'object' && !Array.isArray(obj) ? Object.keys(obj).length : 0,
+            totalProperties,
+            maxDepth
+        };
+    }
+
+    escapeHtml(text) {
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return text.replace(/[&<>"']/g, m => map[m]);
+    }
+
+    addCopyButtonToResult(resultDiv, textToCopy) {
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-btn';
+        copyBtn.textContent = '📋 Copy';
+        copyBtn.style.cssText = `
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 0.5rem 1rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            z-index: 10;
+        `;
+        
+        copyBtn.addEventListener('mouseover', () => {
+            copyBtn.style.background = '#2563eb';
+            copyBtn.style.transform = 'translateY(-2px)';
+        });
+        
+        copyBtn.addEventListener('mouseout', () => {
+            copyBtn.style.background = '#3b82f6';
+            copyBtn.style.transform = 'translateY(0)';
+        });
+        
+        copyBtn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(textToCopy);
+                copyBtn.textContent = '✅ Copied!';
+                copyBtn.style.background = '#10b981';
+                
+                setTimeout(() => {
+                    copyBtn.textContent = '📋 Copy';
+                    copyBtn.style.background = '#3b82f6';
+                }, 2000);
+            } catch (err) {
+                console.error('Copy failed:', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = textToCopy;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-999999px';
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copyBtn.textContent = '✅ Copied!';
+                    copyBtn.style.background = '#10b981';
+                    setTimeout(() => {
+                        copyBtn.textContent = '📋 Copy';
+                        copyBtn.style.background = '#3b82f6';
+                    }, 2000);
+                } catch (err2) {
+                    copyBtn.textContent = '❌ Failed';
+                    copyBtn.style.background = '#ef4444';
+                }
+                document.body.removeChild(textArea);
+            }
+        });
+        
+        resultDiv.style.position = 'relative';
+        resultDiv.appendChild(copyBtn);
     }
 
     convertYAML() {
@@ -484,9 +882,66 @@ ${exampleYAML}`;
             const parsed = jsyaml.load(input);
             const jsonString = JSON.stringify(parsed, null, 2);
             
-            this.showResult(resultDiv, `🔄 Converted to JSON:\n\n${jsonString}`, 'success');
+            // Get statistics
+            const jsonSize = new Blob([jsonString]).size;
+            const yamlSize = new Blob([input]).size;
+            const compressionRatio = ((1 - jsonSize / yamlSize) * 100).toFixed(1);
+            
+            const html = `
+                <div class="result-success">
+                    <div class="result-header">
+                        <span class="result-icon">🔄</span>
+                        <h3>Converted to JSON Successfully</h3>
+                    </div>
+                    <div class="result-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">YAML Size:</span>
+                            <span class="stat-value">${yamlSize} bytes</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">JSON Size:</span>
+                            <span class="stat-value">${jsonSize} bytes</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Size Difference:</span>
+                            <span class="stat-value">${compressionRatio > 0 ? '+' : ''}${compressionRatio}%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">JSON Lines:</span>
+                            <span class="stat-value">${jsonString.split('\n').length}</span>
+                        </div>
+                    </div>
+                    <div class="formatted-code">
+                        <pre><code>${this.escapeHtml(jsonString)}</code></pre>
+                    </div>
+                    <div class="conversion-tip">
+                        💡 <strong>Tip:</strong> JSON format is more verbose but universally supported in all programming languages.
+                    </div>
+                </div>
+            `;
+            resultDiv.innerHTML = html;
+            
+            // Add copy button
+            this.addCopyButtonToResult(resultDiv, jsonString);
+            
+            // Scroll to result
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         } catch (error) {
-            this.showResult(resultDiv, `❌ Cannot convert invalid YAML!\n\nError: ${error.message}\n\nPlease fix the YAML syntax first, then try converting again.`, 'error');
+            const html = `
+                <div class="result-error">
+                    <div class="result-header">
+                        <span class="result-icon">❌</span>
+                        <h3>Cannot Convert Invalid YAML</h3>
+                    </div>
+                    <div class="error-message">
+                        <strong>Error:</strong> ${this.escapeHtml(error.message)}
+                    </div>
+                    <div class="error-suggestion">
+                        💡 <strong>Suggestion:</strong> Use the "Validate YAML" button to identify and fix syntax errors first, then try conversion again.
+                    </div>
+                </div>
+            `;
+            resultDiv.innerHTML = html;
         }
     }
 
@@ -647,7 +1102,49 @@ ${exampleYAML}`;
         codeBlocks.forEach(codeBlock => {
             const wrapper = codeBlock.closest('.code-example');
             if (wrapper && !wrapper.querySelector('.copy-btn')) {
-                this.addCopyButton(wrapper, codeBlock.textContent);
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'copy-btn';
+                copyBtn.textContent = '📋 Copy';
+                copyBtn.style.cssText = `
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    padding: 0.5rem 1rem;
+                    background: #3b82f6;
+                    color: white;
+                    border: none;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    font-size: 0.875rem;
+                    font-weight: 500;
+                    transition: all 0.2s ease;
+                    z-index: 10;
+                `;
+                
+                copyBtn.addEventListener('click', async () => {
+                    try {
+                        await navigator.clipboard.writeText(codeBlock.textContent);
+                        copyBtn.textContent = '✅ Copied!';
+                        copyBtn.style.background = '#10b981';
+                        
+                        setTimeout(() => {
+                            copyBtn.textContent = '📋 Copy';
+                            copyBtn.style.background = '#3b82f6';
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Copy failed:', err);
+                        copyBtn.textContent = '❌ Failed';
+                        copyBtn.style.background = '#ef4444';
+                        
+                        setTimeout(() => {
+                            copyBtn.textContent = '📋 Copy';
+                            copyBtn.style.background = '#3b82f6';
+                        }, 2000);
+                    }
+                });
+                
+                wrapper.style.position = 'relative';
+                wrapper.appendChild(copyBtn);
             }
         });
     }
@@ -777,75 +1274,72 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Add a small delay to ensure DOM is fully loaded
     await new Promise(resolve => setTimeout(resolve, 100));
     
+    let yamlLibraryLoaded = false;
+    
     try {
         // Try to load js-yaml from CDNs
         await loadYAMLLibrary();
-        
-        // Wait for DOM elements to be available
-        await waitForElement('result-output');
-        
-        // Initialize YAML tools
-        window.yamlTools = new YAMLTools();
-        
-        console.log('YAML Tools initialized successfully with full js-yaml library!');
-        
-        // Show success message
-        const resultDiv = document.getElementById('result-output');
-        if (resultDiv) {
-            resultDiv.innerHTML = '✅ YAML Tools ready! Enter your YAML content above and choose an action.';
-            resultDiv.className = 'result-box success';
-        }
-        
+        yamlLibraryLoaded = true;
+        console.log('js-yaml library loaded successfully from CDN');
     } catch (error) {
-        console.warn('Failed to load js-yaml from CDNs, using basic fallback:', error);
+        console.warn('Failed to load js-yaml from CDNs, using basic fallback parser:', error);
         
         try {
             // Use basic fallback parser
             createBasicYAMLParser();
+            yamlLibraryLoaded = true;
+            console.log('Basic YAML parser created successfully');
+        } catch (fallbackError) {
+            console.error('Failed to create basic parser, trying minimal mode:', fallbackError);
             
-            // Wait for DOM elements to be available
-            await waitForElement('result-output');
-            
-            // Initialize YAML tools with limited functionality
+            try {
+                // Last resort: use minimal parser
+                initializeMinimalParser();
+                yamlLibraryLoaded = true;
+                console.log('Minimal YAML parser created successfully');
+            } catch (minimalError) {
+                console.error('All parser initialization methods failed:', minimalError);
+            }
+        }
+    }
+    
+    // Now initialize the tools with whatever parser we have
+    try {
+        // Wait for DOM elements to be available
+        await waitForElement('result-output');
+        
+        if (yamlLibraryLoaded && typeof window.jsyaml !== 'undefined') {
+            // Initialize YAML tools with comprehensive validation
             window.yamlTools = new YAMLTools();
             
-            // Show warning message to user
+            console.log('YAML Tools initialized successfully!');
+            
+            // Show ready message
             const resultDiv = document.getElementById('result-output');
             if (resultDiv) {
-                resultDiv.innerHTML = '⚠️ Using basic YAML parser (limited functionality). Some advanced YAML features may not work correctly.';
-                resultDiv.className = 'result-box warning';
+                resultDiv.innerHTML = '✅ YAML Tools ready! Enter your YAML content above and click "Validate YAML" to check for errors.';
+                resultDiv.className = 'result-box success';
             }
-            
-            console.log('YAML Tools initialized with basic fallback parser!');
-            
-        } catch (fallbackError) {
-            console.error('Failed to initialize even with fallback:', fallbackError);
-            console.error('Fallback error details:', fallbackError.stack);
-            
-            // Wait for DOM elements to be available
-            await waitForElement('result-output');
-            
-            // Show error message to user with more details
-            const resultDiv = document.getElementById('result-output');
-            if (resultDiv) {
-                resultDiv.innerHTML = `❌ Failed to initialize YAML tools. 
-                <br><br><strong>Error:</strong> ${fallbackError.message}
-                <br><br><strong>Troubleshooting:</strong>
-                <ul style="text-align: left; margin: 1rem 0;">
-                    <li>Try refreshing the page</li>
-                    <li>Check your internet connection</li>
-                    <li>Disable browser extensions temporarily</li>
-                    <li>Try using an incognito/private window</li>
-                </ul>`;
-                resultDiv.className = 'result-box error';
-            }
-            
-            // Try to initialize with minimal functionality
-            try {
-                initializeMinimalMode();
-            } catch (minimalError) {
-                console.error('Even minimal mode failed:', minimalError);
-            }
+        } else {
+            throw new Error('YAML library failed to load');
+        }
+        
+    } catch (error) {
+        console.error('Failed to initialize YAML tools:', error);
+        
+        // Show error message to user
+        const resultDiv = document.getElementById('result-output');
+        if (resultDiv) {
+            resultDiv.innerHTML = `❌ Failed to initialize YAML tools. 
+            <br><br><strong>Error:</strong> ${error.message}
+            <br><br><strong>Troubleshooting:</strong>
+            <ul style="text-align: left; margin: 1rem 0;">
+                <li>Try refreshing the page</li>
+                <li>Check your internet connection</li>
+                <li>Disable browser extensions temporarily</li>
+                <li>Try using an incognito/private window</li>
+            </ul>`;
+            resultDiv.className = 'result-box error';
         }
     }
 });
@@ -875,9 +1369,9 @@ function waitForElement(id, timeout = 5000) {
     });
 }
 
-// Initialize powerful mode with comprehensive YAML parser
-function initializeMinimalMode() {
-    console.log('Initializing powerful YAML mode...');
+// Initialize minimal parser as last resort fallback
+function initializeMinimalParser() {
+    console.log('Initializing minimal YAML parser...');
     
     // Create a comprehensive YAML parser with advanced features
     window.jsyaml = {
@@ -1164,213 +1658,6 @@ function initializeMinimalMode() {
         return String(obj);
     }
     
-    // Wait for DOM elements to be ready before initializing YAMLTools
-    setTimeout(() => {
-        try {
-            // Initialize comprehensive tools with full functionality
-            window.yamlTools = new YAMLTools();
-            
-            // Show powerful mode message
-            const resultDiv = document.getElementById('result-output');
-            if (resultDiv) {
-                resultDiv.innerHTML = '🚀 <strong>YAML Tools - Powerful Mode Activated!</strong><br><br>' +
-                                     '✅ Advanced YAML parsing with full spec support<br>' +
-                                     '✅ Multiline strings (| and >) support<br>' +
-                                     '✅ Nested objects and arrays<br>' +
-                                     '✅ Type detection (strings, numbers, booleans, dates)<br>' +
-                                     '✅ Flow-style syntax support<br>' +
-                                     '✅ Comments and empty lines handling<br>' +
-                                     '✅ Professional formatting and validation<br><br>' +
-                                     '💡 <em>Enter your YAML content above and choose an action to get started!</em>';
-                resultDiv.className = 'result-box success';
-            }
-            
-            console.log('Powerful YAML mode initialized successfully with advanced features!');
-        } catch (error) {
-            console.error('Error initializing YAMLTools in powerful mode:', error);
-            
-            // Fallback to basic event listeners
-            initializeBasicEventListeners();
-        }
-    }, 200);
-    
-    function initializeBasicEventListeners() {
-        console.log('Initializing basic event listeners as fallback...');
-        
-        const validateBtn = document.getElementById('validate-btn');
-        const formatBtn = document.getElementById('format-btn');
-        const convertBtn = document.getElementById('convert-btn');
-        const clearBtn = document.getElementById('clear-btn');
-        
-        if (validateBtn) {
-            validateBtn.addEventListener('click', () => {
-                const input = document.getElementById('yaml-input');
-                const output = document.getElementById('result-output');
-                
-                if (input && output) {
-                    try {
-                        const value = input.value.trim();
-                        if (!value) {
-                            output.innerHTML = '💡 Please enter some YAML content to validate.';
-                            output.className = 'result-box info';
-                            return;
-                        }
-                        
-                        const parsed = window.jsyaml.load(value);
-                        output.innerHTML = `✅ <strong>YAML is valid!</strong><br><br>Parsed ${Object.keys(parsed).length} top-level properties successfully.`;
-                        output.className = 'result-box success';
-                    } catch (error) {
-                        output.innerHTML = `❌ <strong>YAML validation failed:</strong><br><br>${error.message}`;
-                        output.className = 'result-box error';
-                    }
-                }
-            });
-        }
-        
-        if (formatBtn) {
-            formatBtn.addEventListener('click', () => {
-                const input = document.getElementById('yaml-input');
-                const output = document.getElementById('result-output');
-                
-                if (input && output) {
-                    try {
-                        const value = input.value.trim();
-                        if (!value) {
-                            output.innerHTML = '💡 Please enter some YAML content to format.';
-                            output.className = 'result-box info';
-                            return;
-                        }
-                        
-                        const parsed = window.jsyaml.load(value);
-                        const formatted = window.jsyaml.dump(parsed, { indent: 2 });
-                        output.innerHTML = `⚡ <strong>YAML formatted successfully!</strong><br><br><pre><code>${formatted}</code></pre>`;
-                        output.className = 'result-box success';
-                        
-                        // Add copy button
-                        addCopyButtonToElement(output, formatted);
-                    } catch (error) {
-                        output.innerHTML = `❌ <strong>YAML formatting failed:</strong><br><br>${error.message}`;
-                        output.className = 'result-box error';
-                    }
-                }
-            });
-        }
-        
-        if (convertBtn) {
-            convertBtn.addEventListener('click', () => {
-                const input = document.getElementById('yaml-input');
-                const output = document.getElementById('result-output');
-                
-                if (input && output) {
-                    try {
-                        const value = input.value.trim();
-                        if (!value) {
-                            output.innerHTML = '💡 Please enter some YAML content to convert to JSON.';
-                            output.className = 'result-box info';
-                            return;
-                        }
-                        
-                        const parsed = window.jsyaml.load(value);
-                        const json = JSON.stringify(parsed, null, 2);
-                        output.innerHTML = `🔄 <strong>Converted to JSON successfully!</strong><br><br><pre><code>${json}</code></pre>`;
-                        output.className = 'result-box success';
-                        
-                        // Add copy button
-                        addCopyButtonToElement(output, json);
-                    } catch (error) {
-                        output.innerHTML = `❌ <strong>JSON conversion failed:</strong><br><br>${error.message}`;
-                        output.className = 'result-box error';
-                    }
-                }
-            });
-        }
-        
-        if (clearBtn) {
-            clearBtn.addEventListener('click', () => {
-                const input = document.getElementById('yaml-input');
-                const output = document.getElementById('result-output');
-                
-                if (input) input.value = '';
-                if (output) {
-                    output.innerHTML = '💡 Enter YAML content above to get started.';
-                    output.className = 'result-box info';
-                }
-            });
-        }
-        
-        // Show basic mode message
-        const resultDiv = document.getElementById('result-output');
-        if (resultDiv) {
-            resultDiv.innerHTML = '🚀 <strong>YAML Tools - Powerful Mode Ready!</strong><br><br>' +
-                                 '✅ Advanced YAML parsing engine active<br>' +
-                                 '✅ Full YAML specification support<br>' +
-                                 '✅ Professional validation and formatting<br><br>' +
-                                 '💡 <em>Enter your YAML content above and choose an action!</em>';
-            resultDiv.className = 'result-box success';
-        }
-        
-        console.log('Basic event listeners initialized successfully');
-    }
-    
-    function addCopyButtonToElement(element, text) {
-        // Remove existing copy button
-        const existingBtn = element.querySelector('.copy-btn');
-        if (existingBtn) {
-            existingBtn.remove();
-        }
-        
-        const copyBtn = document.createElement('button');
-        copyBtn.className = 'copy-btn';
-        copyBtn.innerHTML = '📋 Copy';
-        copyBtn.style.cssText = `
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 0.5rem 1rem;
-            background: #3b82f6;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            z-index: 10;
-        `;
-        
-        copyBtn.onmouseover = () => {
-            copyBtn.style.background = '#2563eb';
-            copyBtn.style.transform = 'translateY(-2px)';
-        };
-        
-        copyBtn.onmouseout = () => {
-            copyBtn.style.background = '#3b82f6';
-            copyBtn.style.transform = 'translateY(0)';
-        };
-        
-        copyBtn.onclick = async () => {
-            try {
-                await navigator.clipboard.writeText(text);
-                copyBtn.innerHTML = '✅ Copied!';
-                copyBtn.style.background = '#10b981';
-                
-                setTimeout(() => {
-                    copyBtn.innerHTML = '📋 Copy';
-                    copyBtn.style.background = '#3b82f6';
-                }, 2000);
-            } catch (err) {
-                console.error('Copy failed:', err);
-                copyBtn.innerHTML = '❌ Failed';
-                copyBtn.style.background = '#ef4444';
-                
-                setTimeout(() => {
-                    copyBtn.innerHTML = '📋 Copy';
-                    copyBtn.style.background = '#3b82f6';
-                }, 2000);
-            }
-        };
-        
-        element.style.position = 'relative';
-        element.appendChild(copyBtn);
-    }
+    // Note: Parser is ready, main initialization will handle the rest
+    console.log('Minimal YAML parser created successfully');
 }
