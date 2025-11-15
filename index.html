@@ -12,7 +12,6 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/yamllint.svg">
     <link rel="icon" type="image/svg" sizes="32x32" href="/assets/images/yamllint.svg">
     <link rel="icon" type="image/svg" sizes="16x16" href="/assets/images/yamllint.svg">
-    <link rel="manifest" href="/site.webmanifest">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
@@ -26,7 +25,7 @@
     <meta property="twitter:url" content="https://yaml.cc/">
     <meta property="twitter:title" content="YAML.cc - Free YAML Validator, Linter & JSON Converter">
     <meta property="twitter:description" content="Professional YAML tools for developers. Validate, format, and convert YAML files instantly with our free online tools.">
-      <meta property="twitter:image" content="https://yaml.cc/assets/images/yamllint.svg">
+    <meta property="twitter:image" content="https://yaml.cc/assets/images/yamllint.svg">
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
@@ -54,104 +53,74 @@
         }
     }
     </script>
-    <link rel="stylesheet" href="styles.css">
-    <script async src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/ace.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/mode-yaml.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/theme-monokai.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <header class="header">
-        <nav class="nav">
-            <div class="nav-container">
-                <div class="nav-logo">
-                    <a href="#" class="logo-link">
+<body class="bg-gray-50 text-gray-900">
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <a href="#" class="text-xl font-bold text-gray-900 hover:text-gray-700">
                         YAML.cc
                     </a>
                 </div>
-                <ul class="nav-menu">
-                    <li><a href="#tools">YAML Tools</a></li>
-                    <li><a href="#info-section">What is YAML?</a></li>
-                    <li><a href="#yaml-examples">YAML Examples</a></li>
-                    <li><a href="https://yaml.cc/tutorial/">Tutorial</a></li>
-                    <li><a href="#yaml-syntax">Syntax Guide</a></li>
-                    <li><a href="#best-practices">Best Practices</a></li>
+                <ul class="hidden md:flex space-x-8">
+                    <li><a href="#tools" class="text-gray-600 hover:text-gray-900 transition">YAML Tools</a></li>
+                    <li><a href="#info-section" class="text-gray-600 hover:text-gray-900 transition">What is YAML?</a></li>
+                    <li><a href="#yaml-examples" class="text-gray-600 hover:text-gray-900 transition">YAML Examples</a></li>
+                    <li><a href="https://yaml.cc/tutorial/" class="text-gray-600 hover:text-gray-900 transition">Tutorial</a></li>
+                    <li><a href="#yaml-syntax" class="text-gray-600 hover:text-gray-900 transition">Syntax Guide</a></li>
+                    <li><a href="#best-practices" class="text-gray-600 hover:text-gray-900 transition">Best Practices</a></li>
                 </ul>
             </div>
         </nav>
     </header>
 
-    <main class="main">
+    <main>
         <!-- Quick Tools Section - First Screen -->
-        <section class="tools-section" id="tools">
-            <div class="container">
-                <div class="hero-tools">
-                    <h1 class="hero-title">YAML Tools</h1>
-                    <p class="hero-subtitle">Validate, format, and convert your YAML content instantly</p>
+        <section id="tools" class="py-12 lg:py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-10">
+                    <h1 class="text-4xl font-bold text-gray-900 mb-4">YAML Tools</h1>
+                    <p class="text-lg text-gray-600">Validate, format, and convert your YAML content instantly</p>
                 </div>
                 
                 <!-- Unified YAML Tool - Two Column Layout -->
-                <div class="tool-card">
-                    <div class="tool-grid">
+                <div class="bg-white rounded-lg shadow-lg border border-gray-200">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
                         <!-- Left Column: Input -->
-                        <div class="tool-column input-column">
-                            <div class="column-header">
-                                <h3>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                    </svg>
-                                    Input YAML
-                                </h3>
-                                <span class="column-badge">Editor</span>
+                        <div class="flex flex-col">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Input YAML</h3>
+                                <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded">Editor</span>
                             </div>
-                            <div class="input-section">
+                            <div class="flex-1 border border-gray-300 rounded-md overflow-hidden">
                                 <div id="yaml-input" style="width: 100%; height: 100%; min-height: 400px;"></div>
                             </div>
-                            <div class="input-actions">
-                                <button id="validate-btn" class="btn btn-primary btn-validate">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                        <polyline points="20 6 9 17 4 12"></polyline>
-                                    </svg>
+                            <div class="flex flex-wrap gap-2 mt-4">
+                                <button id="validate-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-medium text-sm">
                                     Validate YAML
                                 </button>
-                                <button id="format-btn" class="btn btn-primary btn-format">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                                    </svg>
+                                <button id="format-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-medium text-sm">
                                     Format YAML
                                 </button>
-                                <button id="convert-btn" class="btn btn-primary btn-convert">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="23 4 23 10 17 10"></polyline>
-                                        <polyline points="1 20 1 14 7 14"></polyline>
-                                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-                                    </svg>
+                                <button id="convert-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition font-medium text-sm">
                                     Convert to JSON
                                 </button>
-                                <button id="clear-btn" class="btn btn-secondary btn-clear">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="3 6 5 6 21 6"></polyline>
-                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                    </svg>
+                                <button id="clear-btn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition font-medium text-sm">
                                     Clear All
                                 </button>
                             </div>
                         </div>
                         
                         <!-- Right Column: Output -->
-                        <div class="tool-column output-column">
-                            <div class="column-header">
-                                <h3>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                                    </svg>
-                                    Result
-                                </h3>
-                                <span class="column-badge">Output</span>
+                        <div class="flex flex-col">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Result</h3>
+                                <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded">Output</span>
                             </div>
-                            <div class="output-section">
-                                <div id="result-output" class="result-box"></div>
+                            <div class="flex-1 border border-gray-300 rounded-md bg-gray-50 p-4 min-h-[400px]">
+                                <div id="result-output" class="font-mono text-sm text-gray-800 whitespace-pre-wrap"></div>
                             </div>
                         </div>
                     </div>
@@ -160,82 +129,70 @@
         </section>
 
         <!-- Features Section -->
-        <section class="features-section" id="features-section">
-            <div class="container">
+        <section id="features-section" class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <!-- Hero Stats -->
-                <div class="features-hero">
-                    <h2>Professional YAML Tools - Free, Fast & Secure</h2>
-                    <p class="features-subtitle">The ultimate online YAML validator, formatter, and converter trusted by developers worldwide. Process your YAML files instantly with enterprise-grade accuracy.</p>
-                    <div class="features-stats">
-                        <div class="stat">
-                            <span class="stat-number">100%</span>
-                            <span class="stat-label">Free Forever</span>
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Professional YAML Tools - Free, Fast & Secure</h2>
+                    <p class="text-lg text-gray-600 max-w-3xl mx-auto mb-8">The ultimate online YAML validator, formatter, and converter trusted by developers worldwide. Process your YAML files instantly with enterprise-grade accuracy.</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-gray-900 mb-1">100%</div>
+                            <div class="text-sm text-gray-600">Free Forever</div>
                         </div>
-                        <div class="stat">
-                            <span class="stat-number">⚡</span>
-                            <span class="stat-label">Lightning Fast</span>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-gray-900 mb-1">Fast</div>
+                            <div class="text-sm text-gray-600">Lightning Fast</div>
                         </div>
-                        <div class="stat">
-                            <span class="stat-number">🔒</span>
-                            <span class="stat-label">100% Secure</span>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-gray-900 mb-1">Secure</div>
+                            <div class="text-sm text-gray-600">100% Secure</div>
                         </div>
-                        <div class="stat">
-                            <span class="stat-number">1M+</span>
-                            <span class="stat-label">Files Processed</span>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-gray-900 mb-1">1M+</div>
+                            <div class="text-sm text-gray-600">Files Processed</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Feature Cards -->
-                <div class="features-content">
-                    <h3>Why Choose YAML.cc for Your Development Workflow?</h3>
-                    <div class="features-grid">
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <img src="assets/images/lightning.svg" alt="Lightning Fast YAML Processing" width="64" height="64">
-                            </div>
-                            <h4>⚡ Instant YAML Processing</h4>
-                            <p>Process and validate YAML files in milliseconds with our optimized client-side engine. No server delays, no waiting time - just instant results for maximum productivity.</p>
-                            <ul class="feature-benefits">
-                                <li>Real-time syntax validation</li>
-                                <li>Instant error detection</li>
-                                <li>Zero latency processing</li>
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-900 text-center mb-10">Why Choose YAML.cc for Your Development Workflow?</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                            <h4 class="text-xl font-semibold text-gray-900 mb-3">Instant YAML Processing</h4>
+                            <p class="text-gray-600 mb-4">Process and validate YAML files in milliseconds with our optimized client-side engine. No server delays, no waiting time - just instant results for maximum productivity.</p>
+                            <ul class="space-y-2 text-gray-600">
+                                <li>• Real-time syntax validation</li>
+                                <li>• Instant error detection</li>
+                                <li>• Zero latency processing</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <img src="assets/images/lock.svg" alt="Secure YAML Validation" width="64" height="64">
-                            </div>
-                            <h4>🔒 Enterprise-Grade Security</h4>
-                            <p>Your sensitive configuration files never leave your browser. All YAML processing happens locally on your device, ensuring complete privacy and data security.</p>
-                            <ul class="feature-benefits">
-                                <li>100% client-side processing</li>
-                                <li>No data transmission</li>
-                                <li>GDPR compliant</li>
+                        <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                            <h4 class="text-xl font-semibold text-gray-900 mb-3">Enterprise-Grade Security</h4>
+                            <p class="text-gray-600 mb-4">Your sensitive configuration files never leave your browser. All YAML processing happens locally on your device, ensuring complete privacy and data security.</p>
+                            <ul class="space-y-2 text-gray-600">
+                                <li>• 100% client-side processing</li>
+                                <li>• No data transmission</li>
+                                <li>• GDPR compliant</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <img src="assets/images/free.svg" alt="Free YAML Tools" width="64" height="64">
-                            </div>
-                            <h4>🆓 Completely Free YAML Tools</h4>
-                            <p>Access professional-grade YAML tools without any cost. No registration, no hidden fees, no usage limits - just powerful tools available 24/7.</p>
-                            <ul class="feature-benefits">
-                                <li>No account required</li>
-                                <li>Unlimited usage</li>
-                                <li>Always free</li>
+                        <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                            <h4 class="text-xl font-semibold text-gray-900 mb-3">Completely Free YAML Tools</h4>
+                            <p class="text-gray-600 mb-4">Access professional-grade YAML tools without any cost. No registration, no hidden fees, no usage limits - just powerful tools available 24/7.</p>
+                            <ul class="space-y-2 text-gray-600">
+                                <li>• No account required</li>
+                                <li>• Unlimited usage</li>
+                                <li>• Always free</li>
                             </ul>
                         </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <img src="assets/images/target.svg" alt="Accurate YAML Results" width="64" height="64">
-                            </div>
-                            <h4>🎯 Precision & Accuracy</h4>
-                            <p>Built on the industry-standard js-yaml library, our tools deliver precise validation and formatting results that you can trust for production environments.</p>
-                            <ul class="feature-benefits">
-                                <li>Industry-standard parsing</li>
-                                <li>Detailed error reporting</li>
-                                <li>Production-ready output</li>
+                        <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                            <h4 class="text-xl font-semibold text-gray-900 mb-3">Precision & Accuracy</h4>
+                            <p class="text-gray-600 mb-4">Built on the industry-standard js-yaml library, our tools deliver precise validation and formatting results that you can trust for production environments.</p>
+                            <ul class="space-y-2 text-gray-600">
+                                <li>• Industry-standard parsing</li>
+                                <li>• Detailed error reporting</li>
+                                <li>• Production-ready output</li>
                             </ul>
                         </div>
                     </div>
@@ -244,14 +201,14 @@
         </section>
 
         <!-- What is YAML Section -->
-        <section class="info-section" id="info-section">
-            <div class="container">
-                <h2>What is a YAML File?</h2>
-                <div class="info-content">
-                    <p>YAML (YAML Ain't Markup Language) is a human-readable data serialization standard that is commonly used for configuration files, data exchange, and application settings. YAML files use indentation to represent structure and are designed to be both human and machine readable.</p>
+        <section id="info-section" class="py-16 bg-gray-50">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6">What is a YAML File?</h2>
+                <div class="prose prose-lg max-w-none">
+                    <p class="text-gray-700 mb-6">YAML (YAML Ain't Markup Language) is a human-readable data serialization standard that is commonly used for configuration files, data exchange, and application settings. YAML files use indentation to represent structure and are designed to be both human and machine readable.</p>
                     
-                    <h3>Key Features of YAML:</h3>
-                    <ul>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-4">Key Features of YAML:</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 mb-6">
                         <li><strong>Human-readable:</strong> Easy to read and write for both humans and machines</li>
                         <li><strong>Indentation-based:</strong> Uses spaces or tabs to indicate structure</li>
                         <li><strong>Data types:</strong> Supports strings, numbers, booleans, arrays, and objects</li>
@@ -259,8 +216,8 @@
                         <li><strong>Cross-platform:</strong> Works across different programming languages and platforms</li>
                     </ul>
 
-                    <h3>Common Use Cases:</h3>
-                    <ul>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-4">Common Use Cases:</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
                         <li>Configuration files for applications and services</li>
                         <li>Docker Compose files</li>
                         <li>CI/CD pipeline configurations (GitHub Actions, GitLab CI)</li>
@@ -272,51 +229,44 @@
         </section>
 
         <!-- YAML Examples Section -->
-        <section class="resource-section" id="yaml-examples">
-            <div class="container">
-                <h2>YAML Examples</h2>
-                <p class="section-subtitle">Real-world YAML examples for common use cases</p>
-                <div class="resource-content">
+        <section id="yaml-examples" class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2 text-center">YAML Examples</h2>
+                <p class="text-lg text-gray-600 text-center mb-8">Real-world YAML examples for common use cases</p>
+                <div>
                     <!-- Tab Navigation -->
-                    <div class="example-tabs">
-                        <button class="tab-btn active" data-tab="config">
-                            <img src="assets/images/examples.svg" alt="Config" width="20" height="20">
+                    <div class="flex flex-wrap justify-center gap-2 mb-8 border-b border-gray-200">
+                        <button class="tab-btn px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border-b-2 border-blue-600 transition" data-tab="config">
                             Configuration
                         </button>
-                        <button class="tab-btn" data-tab="docker">
-                            <img src="assets/images/examples.svg" alt="Docker" width="20" height="20">
+                        <button class="tab-btn px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border-b-2 border-transparent hover:border-gray-300 transition" data-tab="docker">
                             Docker Compose
                         </button>
-                        <button class="tab-btn" data-tab="cicd">
-                            <img src="assets/images/examples.svg" alt="CI/CD" width="20" height="20">
+                        <button class="tab-btn px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border-b-2 border-transparent hover:border-gray-300 transition" data-tab="cicd">
                             CI/CD Pipeline
                         </button>
-                        <button class="tab-btn" data-tab="k8s">
-                            <img src="assets/images/examples.svg" alt="K8s" width="20" height="20">
+                        <button class="tab-btn px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border-b-2 border-transparent hover:border-gray-300 transition" data-tab="k8s">
                             Kubernetes
                         </button>
-                        <button class="tab-btn" data-tab="api">
-                            <img src="assets/images/examples.svg" alt="API" width="20" height="20">
+                        <button class="tab-btn px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border-b-2 border-transparent hover:border-gray-300 transition" data-tab="api">
                             OpenAPI
                         </button>
-                        <button class="tab-btn" data-tab="data">
-                            <img src="assets/images/examples.svg" alt="Data" width="20" height="20">
+                        <button class="tab-btn px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 border-b-2 border-transparent hover:border-gray-300 transition" data-tab="data">
                             Data Structure
                         </button>
                     </div>
 
                     <!-- Tab Content -->
-                    <div class="example-content">
+                    <div>
                         <!-- Configuration Tab -->
-                        <div class="tab-panel active" id="config">
-                            <div class="example-card-single">
-                                <div class="example-header">
-                                    <img src="assets/images/examples.svg" alt="Configuration" width="32" height="32">
-                                    <h3>Application Configuration</h3>
-                                    <p>Common application settings and environment configuration</p>
+                        <div class="tab-panel" id="config" style="display: block;">
+                            <div class="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                                <div class="mb-4">
+                                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Application Configuration</h3>
+                                    <p class="text-gray-600">Common application settings and environment configuration</p>
                                 </div>
-                                <div class="code-example">
-                                    <pre><code># Application Configuration
+                                <div class="bg-gray-900 rounded-md p-4 overflow-x-auto">
+                                    <pre class="text-sm text-gray-100 font-mono"><code># Application Configuration
 app:
   name: "My Web App"
   version: "1.2.0"
@@ -343,15 +293,14 @@ logging:
                         </div>
 
                         <!-- Docker Tab -->
-                        <div class="tab-panel" id="docker">
-                            <div class="example-card-single">
-                                <div class="example-header">
-                                    <img src="assets/images/examples.svg" alt="Docker" width="32" height="32">
-                                    <h3>Docker Compose Configuration</h3>
-                                    <p>Multi-container application orchestration with Docker Compose</p>
+                        <div class="tab-panel hidden" id="docker">
+                            <div class="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                                <div class="mb-4">
+                                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Docker Compose Configuration</h3>
+                                    <p class="text-gray-600">Multi-container application orchestration with Docker Compose</p>
                                 </div>
-                                <div class="code-example">
-                                    <pre><code># Docker Compose Configuration
+                                <div class="bg-gray-900 rounded-md p-4 overflow-x-auto">
+                                    <pre class="text-sm text-gray-100 font-mono"><code># Docker Compose Configuration
 version: '3.8'
 
 services:
@@ -389,15 +338,14 @@ volumes:
                         </div>
 
                         <!-- CI/CD Tab -->
-                        <div class="tab-panel" id="cicd">
-                            <div class="example-card-single">
-                                <div class="example-header">
-                                    <img src="assets/images/examples.svg" alt="CI/CD" width="32" height="32">
-                                    <h3>GitHub Actions Workflow</h3>
-                                    <p>Automated testing and deployment pipeline configuration</p>
+                        <div class="tab-panel hidden" id="cicd">
+                            <div class="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                                <div class="mb-4">
+                                    <h3 class="text-xl font-semibold text-gray-900 mb-2">GitHub Actions Workflow</h3>
+                                    <p class="text-gray-600">Automated testing and deployment pipeline configuration</p>
                                 </div>
-                                <div class="code-example">
-                                    <pre><code># GitHub Actions Workflow
+                                <div class="bg-gray-900 rounded-md p-4 overflow-x-auto">
+                                    <pre class="text-sm text-gray-100 font-mono"><code># GitHub Actions Workflow
 name: CI/CD Pipeline
 
 on:
@@ -445,15 +393,14 @@ jobs:
                         </div>
 
                         <!-- Kubernetes Tab -->
-                        <div class="tab-panel" id="k8s">
-                            <div class="example-card-single">
-                                <div class="example-header">
-                                    <img src="assets/images/examples.svg" alt="Kubernetes" width="32" height="32">
-                                    <h3>Kubernetes Deployment</h3>
-                                    <p>Container orchestration with Kubernetes deployment and service</p>
+                        <div class="tab-panel hidden" id="k8s">
+                            <div class="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                                <div class="mb-4">
+                                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Kubernetes Deployment</h3>
+                                    <p class="text-gray-600">Container orchestration with Kubernetes deployment and service</p>
                                 </div>
-                                <div class="code-example">
-                                    <pre><code># Kubernetes Deployment
+                                <div class="bg-gray-900 rounded-md p-4 overflow-x-auto">
+                                    <pre class="text-sm text-gray-100 font-mono"><code># Kubernetes Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -525,15 +472,14 @@ spec:
                         </div>
 
                         <!-- OpenAPI Tab -->
-                        <div class="tab-panel" id="api">
-                            <div class="example-card-single">
-                                <div class="example-header">
-                                    <img src="assets/images/examples.svg" alt="OpenAPI" width="32" height="32">
-                                    <h3>OpenAPI 3.0 Specification</h3>
-                                    <p>REST API documentation and specification using OpenAPI standard</p>
+                        <div class="tab-panel hidden" id="api">
+                            <div class="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                                <div class="mb-4">
+                                    <h3 class="text-xl font-semibold text-gray-900 mb-2">OpenAPI 3.0 Specification</h3>
+                                    <p class="text-gray-600">REST API documentation and specification using OpenAPI standard</p>
                                 </div>
-                                <div class="code-example">
-                                    <pre><code># OpenAPI 3.0 Specification
+                                <div class="bg-gray-900 rounded-md p-4 overflow-x-auto">
+                                    <pre class="text-sm text-gray-100 font-mono"><code># OpenAPI 3.0 Specification
 openapi: 3.0.0
 info:
   title: User API
@@ -630,15 +576,14 @@ components:
                         </div>
 
                         <!-- Data Structure Tab -->
-                        <div class="tab-panel" id="data">
-                            <div class="example-card-single">
-                                <div class="example-header">
-                                    <img src="assets/images/examples.svg" alt="Data Structure" width="32" height="32">
-                                    <h3>Complex Data Structure</h3>
-                                    <p>Advanced YAML structures with nested objects, arrays, and complex data types</p>
+                        <div class="tab-panel hidden" id="data">
+                            <div class="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                                <div class="mb-4">
+                                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Complex Data Structure</h3>
+                                    <p class="text-gray-600">Advanced YAML structures with nested objects, arrays, and complex data types</p>
                                 </div>
-                                <div class="code-example">
-                                    <pre><code># Complex Data Structure
+                                <div class="bg-gray-900 rounded-md p-4 overflow-x-auto">
+                                    <pre class="text-sm text-gray-100 font-mono"><code># Complex Data Structure
 company:
   name: "Tech Solutions Inc."
   founded: 2015
@@ -708,15 +653,14 @@ products:
         </section>
 
         <!-- YAML Syntax Guide Section -->
-        <section class="resource-section" id="yaml-syntax">
-            <div class="container">
-                <h2>YAML Syntax Guide</h2>
-                <div class="resource-content">
-                    <div class="syntax-grid">
-                        <div class="syntax-card">
-                            <h3><img src="assets/images/code.svg" alt="Code" width="20" height="20"> Basic Syntax</h3>
-                            <div class="code-example">
-                                <pre><code># Comments start with hash
+        <section id="yaml-syntax" class="py-16 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">YAML Syntax Guide</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Basic Syntax</h3>
+                        <div class="bg-gray-900 rounded-md p-4 overflow-x-auto">
+                            <pre class="text-sm text-gray-100 font-mono"><code># Comments start with hash
 key: value
 number: 42
 boolean: true
@@ -724,10 +668,10 @@ null_value: null</code></pre>
                             </div>
                         </div>
                         
-                        <div class="syntax-card">
-                            <h3><img src="assets/images/text.svg" alt="Text" width="20" height="20"> Strings</h3>
-                            <div class="code-example">
-                                <pre><code># Different string formats
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Strings</h3>
+                        <div class="bg-gray-900 rounded-md p-4 overflow-x-auto">
+                            <pre class="text-sm text-gray-100 font-mono"><code># Different string formats
 plain_string: Hello World
 quoted_string: "Hello World"
 single_quoted: 'Hello World'
@@ -737,10 +681,10 @@ multiline: |
                             </div>
                         </div>
                         
-                        <div class="syntax-card">
-                            <h3><img src="assets/images/list.svg" alt="List" width="20" height="20"> Lists</h3>
-                            <div class="code-example">
-                                <pre><code># List formats
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Lists</h3>
+                        <div class="bg-gray-900 rounded-md p-4 overflow-x-auto">
+                            <pre class="text-sm text-gray-100 font-mono"><code># List formats
 fruits:
   - apple
   - banana
@@ -751,10 +695,10 @@ colors: [red, green, blue]</code></pre>
                             </div>
                         </div>
                         
-                        <div class="syntax-card">
-                            <h3><img src="assets/images/folder.svg" alt="Folder" width="20" height="20"> Objects</h3>
-                            <div class="code-example">
-                                <pre><code># Nested objects
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Objects</h3>
+                        <div class="bg-gray-900 rounded-md p-4 overflow-x-auto">
+                            <pre class="text-sm text-gray-100 font-mono"><code># Nested objects
 person:
   name: John Doe
   age: 30
@@ -769,94 +713,84 @@ person:
         </section>
 
         <!-- Best Practices Section -->
-        <section class="resource-section" id="best-practices">
-            <div class="container">
-                <h2>YAML Best Practices</h2>
-                <div class="resource-content">
-                    <div class="practices-grid">
-                        <div class="practice-card">
-                            <div class="practice-icon">
-                                <img src="assets/images/check.svg" alt="Check" width="48" height="48">
-                            </div>
-                            <h3>Use Consistent Indentation</h3>
-                            <p>Always use spaces (not tabs) for indentation. Stick to 2 or 4 spaces consistently throughout your file.</p>
-                            <div class="example">
-                                <strong>Good:</strong>
-                                <pre><code>parent:
+        <section id="best-practices" class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-10 text-center">YAML Best Practices</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Use Consistent Indentation</h3>
+                        <p class="text-gray-600 mb-4">Always use spaces (not tabs) for indentation. Stick to 2 or 4 spaces consistently throughout your file.</p>
+                        <div class="mt-4">
+                            <strong class="text-gray-900">Good:</strong>
+                            <div class="bg-gray-900 rounded-md p-3 mt-2 overflow-x-auto">
+                                <pre class="text-xs text-gray-100 font-mono"><code>parent:
   child: value
   another_child: value</code></pre>
                             </div>
                         </div>
-                        
-                        <div class="practice-card">
-                            <div class="practice-icon">
-                                <img src="assets/images/comment.svg" alt="Comment" width="48" height="48">
-                            </div>
-                            <h3>Add Meaningful Comments</h3>
-                            <p>Use comments to explain complex configurations and provide context for future maintainers.</p>
-                            <div class="example">
-                                <strong>Good:</strong>
-                                <pre><code># Database configuration
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Add Meaningful Comments</h3>
+                        <p class="text-gray-600 mb-4">Use comments to explain complex configurations and provide context for future maintainers.</p>
+                        <div class="mt-4">
+                            <strong class="text-gray-900">Good:</strong>
+                            <div class="bg-gray-900 rounded-md p-3 mt-2 overflow-x-auto">
+                                <pre class="text-xs text-gray-100 font-mono"><code># Database configuration
 database:
   host: localhost  # Development server
   port: 5432</code></pre>
                             </div>
                         </div>
-                        
-                        <div class="practice-card">
-                            <div class="practice-icon">
-                                <img src="assets/images/search.svg" alt="Search" width="48" height="48">
-                            </div>
-                            <h3>Quote Special Values</h3>
-                            <p>Quote strings that might be interpreted as other data types to avoid confusion.</p>
-                            <div class="example">
-                                <strong>Good:</strong>
-                                <pre><code>version: "1.0"
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Quote Special Values</h3>
+                        <p class="text-gray-600 mb-4">Quote strings that might be interpreted as other data types to avoid confusion.</p>
+                        <div class="mt-4">
+                            <strong class="text-gray-900">Good:</strong>
+                            <div class="bg-gray-900 rounded-md p-3 mt-2 overflow-x-auto">
+                                <pre class="text-xs text-gray-100 font-mono"><code>version: "1.0"
 status: "true"
 phone: "123-456-7890"</code></pre>
                             </div>
                         </div>
-                        
-                        <div class="practice-card">
-                            <div class="practice-icon">
-                                <img src="assets/images/ruler.svg" alt="Ruler" width="48" height="48">
-                            </div>
-                            <h3>Keep Lines Readable</h3>
-                            <p>Limit line length to 80-120 characters. Use folded or literal scalars for long text.</p>
-                            <div class="example">
-                                <strong>Good:</strong>
-                                <pre><code>description: >
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Keep Lines Readable</h3>
+                        <p class="text-gray-600 mb-4">Limit line length to 80-120 characters. Use folded or literal scalars for long text.</p>
+                        <div class="mt-4">
+                            <strong class="text-gray-900">Good:</strong>
+                            <div class="bg-gray-900 rounded-md p-3 mt-2 overflow-x-auto">
+                                <pre class="text-xs text-gray-100 font-mono"><code>description: >
   This is a long description
   that spans multiple lines
   but will be folded into one</code></pre>
                             </div>
                         </div>
-                        
-                        <div class="practice-card">
-                            <div class="practice-icon">
-                                <img src="assets/images/target.svg" alt="Target" width="48" height="48">
-                            </div>
-                            <h3>Validate Your YAML</h3>
-                            <p>Always validate your YAML files before deployment to catch syntax errors early.</p>
-                            <div class="example">
-                                <strong>Tools:</strong>
-                                <ul>
-                                    <li>Use our online YAML validator</li>
-                                    <li>IDE extensions with YAML support</li>
-                                    <li>CI/CD pipeline validation</li>
-                                </ul>
-                            </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Validate Your YAML</h3>
+                        <p class="text-gray-600 mb-4">Always validate your YAML files before deployment to catch syntax errors early.</p>
+                        <div class="mt-4">
+                            <strong class="text-gray-900">Tools:</strong>
+                            <ul class="list-disc list-inside mt-2 text-gray-600 space-y-1">
+                                <li>Use our online YAML validator</li>
+                                <li>IDE extensions with YAML support</li>
+                                <li>CI/CD pipeline validation</li>
+                            </ul>
                         </div>
-                        
-                        <div class="practice-card">
-                            <div class="practice-icon">
-                                <img src="assets/images/shield.svg" alt="Shield" width="48" height="48">
-                            </div>
-                            <h3>Handle Sensitive Data</h3>
-                            <p>Never store passwords or secrets directly in YAML files. Use environment variables or secret management tools.</p>
-                            <div class="example">
-                                <strong>Good:</strong>
-                                <pre><code>database:
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Handle Sensitive Data</h3>
+                        <p class="text-gray-600 mb-4">Never store passwords or secrets directly in YAML files. Use environment variables or secret management tools.</p>
+                        <div class="mt-4">
+                            <strong class="text-gray-900">Good:</strong>
+                            <div class="bg-gray-900 rounded-md p-3 mt-2 overflow-x-auto">
+                                <pre class="text-xs text-gray-100 font-mono"><code>database:
   password: ${DB_PASSWORD}
   # Or use secret references
   secret_ref: !vault |
@@ -869,43 +803,46 @@ phone: "123-456-7890"</code></pre>
         </section>
     </main>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>YAML.cc</h3>
-                    <p>Professional YAML validation, formatting, and conversion tools for developers. The most trusted YAML tools platform.</p>
+    <footer class="bg-gray-900 text-gray-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-white font-bold text-lg mb-3">YAML.cc</h3>
+                    <p class="text-gray-400 text-sm">Professional YAML validation, formatting, and conversion tools for developers. The most trusted YAML tools platform.</p>
                 </div>
-                <div class="footer-section">
-                    <h4>Tools</h4>
-                    <ul>
-                        <li><a href="#tools" data-tool="validate">YAML Validator</a></li>
-                        <li><a href="#tools" data-tool="format">YAML Linter</a></li>
-                        <li><a href="#tools" data-tool="convert">YAML to JSON</a></li>
+                <div>
+                    <h4 class="text-white font-semibold mb-3">Tools</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#tools" data-tool="validate" class="text-gray-400 hover:text-white transition">YAML Validator</a></li>
+                        <li><a href="#tools" data-tool="format" class="text-gray-400 hover:text-white transition">YAML Linter</a></li>
+                        <li><a href="#tools" data-tool="convert" class="text-gray-400 hover:text-white transition">YAML to JSON</a></li>
                     </ul>
                 </div>
-                <div class="footer-section">
-                    <h4>Resources</h4>
-                    <ul>
-                        <li><a href="#info-section">What is YAML?</a></li>
-                        <li><a href="#yaml-examples">YAML Examples</a></li>
-                        <li><a href="#yaml-syntax">YAML Syntax Guide</a></li>
-                        <li><a href="#best-practices">Best Practices</a></li>
+                <div>
+                    <h4 class="text-white font-semibold mb-3">Resources</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#info-section" class="text-gray-400 hover:text-white transition">What is YAML?</a></li>
+                        <li><a href="#yaml-examples" class="text-gray-400 hover:text-white transition">YAML Examples</a></li>
+                        <li><a href="#yaml-syntax" class="text-gray-400 hover:text-white transition">YAML Syntax Guide</a></li>
+                        <li><a href="#best-practices" class="text-gray-400 hover:text-white transition">Best Practices</a></li>
                     </ul>
                 </div>
-                <div class="footer-section">
-                    <h4>Partner Websites:</h4>
-                    <ul>
-                        <li><a href="https://enum.cc" target="_blank" rel="noopener noreferrer">Enum.cc</a></li>
+                <div>
+                    <h4 class="text-white font-semibold mb-3">Partner Websites</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://enum.cc" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition">Enum.cc</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="footer-bottom">
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
                 <p>&copy; 2024 YAML.cc. All rights reserved.</p>
             </div>
         </div>
     </footer>
-
+    <script async src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/ace.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/mode-yaml.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/theme-monokai.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="script.js"></script>
 </body>
 </html>

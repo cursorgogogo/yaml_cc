@@ -990,17 +990,41 @@ address:
                 const targetTab = button.getAttribute('data-tab');
                 const targetPanel = document.getElementById(targetTab);
                 
-                if (!targetPanel || button.classList.contains('active')) return;
+                if (!targetPanel) return;
                 
-                // Remove active class from all buttons and panels
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                tabPanels.forEach(panel => panel.classList.remove('active'));
+                // Remove active styling from all buttons
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('border-blue-600', 'text-gray-900');
+                    btn.classList.add('border-transparent', 'text-gray-700');
+                });
                 
-                // Add active class to clicked button and target panel
-                button.classList.add('active');
-                targetPanel.classList.add('active');
+                // Hide all panels
+                tabPanels.forEach(panel => {
+                    panel.classList.add('hidden');
+                    panel.style.display = 'none';
+                });
+                
+                // Add active styling to clicked button
+                button.classList.remove('border-transparent', 'text-gray-700');
+                button.classList.add('border-blue-600', 'text-gray-900');
+                
+                // Show target panel
+                targetPanel.classList.remove('hidden');
+                targetPanel.style.display = 'block';
             });
         });
+
+        // Set initial active state
+        if (tabButtons.length > 0 && tabPanels.length > 0) {
+            const firstButton = tabButtons[0];
+            const firstPanel = document.getElementById(firstButton.getAttribute('data-tab'));
+            if (firstPanel) {
+                firstButton.classList.remove('border-transparent', 'text-gray-700');
+                firstButton.classList.add('border-blue-600', 'text-gray-900');
+                firstPanel.classList.remove('hidden');
+                firstPanel.style.display = 'block';
+            }
+        }
 
         // Add copy functionality to example code blocks
         this.addExampleCopyButtons();
@@ -1008,53 +1032,42 @@ address:
 
     addExampleCopyButtons() {
         // Add copy buttons to example code blocks
-        const codeBlocks = document.querySelectorAll('.example-card-single .code-example pre code');
+        const codeBlocks = document.querySelectorAll('.tab-panel pre code');
         
         codeBlocks.forEach(codeBlock => {
-            const wrapper = codeBlock.closest('.code-example');
+            const wrapper = codeBlock.closest('.bg-gray-900');
             if (wrapper && !wrapper.querySelector('.copy-btn')) {
                 const copyBtn = document.createElement('button');
-                copyBtn.className = 'copy-btn';
-                copyBtn.textContent = '📋 Copy';
-                copyBtn.style.cssText = `
-                    position: absolute;
-                    top: 10px;
-                    right: 10px;
-                    padding: 0.5rem 1rem;
-                    background: #3b82f6;
-                    color: white;
-                    border: none;
-                    border-radius: 6px;
-                    cursor: pointer;
-                    font-size: 0.875rem;
-                    font-weight: 500;
-                    transition: all 0.2s ease;
-                    z-index: 10;
-                `;
+                copyBtn.className = 'copy-btn absolute top-2 right-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-sm font-medium cursor-pointer z-10';
+                copyBtn.textContent = 'Copy';
                 
                 copyBtn.addEventListener('click', async () => {
                     try {
                         await navigator.clipboard.writeText(codeBlock.textContent);
-                        copyBtn.textContent = '✅ Copied!';
-                        copyBtn.style.background = '#10b981';
+                        copyBtn.textContent = 'Copied!';
+                        copyBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                        copyBtn.classList.add('bg-green-600');
                         
                         setTimeout(() => {
-                            copyBtn.textContent = '📋 Copy';
-                            copyBtn.style.background = '#3b82f6';
+                            copyBtn.textContent = 'Copy';
+                            copyBtn.classList.remove('bg-green-600');
+                            copyBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
                         }, 2000);
                     } catch (err) {
                         console.error('Copy failed:', err);
-                        copyBtn.textContent = '❌ Failed';
-                        copyBtn.style.background = '#ef4444';
+                        copyBtn.textContent = 'Failed';
+                        copyBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                        copyBtn.classList.add('bg-red-600');
                         
                         setTimeout(() => {
-                            copyBtn.textContent = '📋 Copy';
-                            copyBtn.style.background = '#3b82f6';
+                            copyBtn.textContent = 'Copy';
+                            copyBtn.classList.remove('bg-red-600');
+                            copyBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
                         }, 2000);
                     }
                 });
                 
-                wrapper.style.position = 'relative';
+                wrapper.classList.add('relative');
                 wrapper.appendChild(copyBtn);
             }
         });
