@@ -1,0 +1,433 @@
+#result-output {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#result-output pre {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.result-success, .result-error {
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.result-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    flex-shrink: 0;
+}
+
+.result-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    color: #1f2937;
+}
+
+.result-icon {
+    margin-right: 0.5rem;
+    font-size: 20px;
+}
+
+.result-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    background: #f9fafb;
+    border-radius: 0.375rem;
+    flex-shrink: 0;
+}
+
+.stat-item {
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.stat-label {
+    color: #6b7280;
+}
+
+.stat-value {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.formatted-code {
+    margin-bottom: 0.5rem;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.formatted-code pre {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.formatted-code code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+}
+
+.error-message, .error-suggestion, .conversion-tip {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    flex-shrink: 0;
+}
+
+.error-message {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+}
+
+.error-suggestion, .conversion-tip {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e40af;
+}
+
+.ace_editor {
+    font-size: 14px !important;
+}
+
+.ace_content {
+    font-size: 14px !important;
+}
+
+/* Button interactions - refined and subtle */
+button {
+    position: relative;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+button:focus-visible {
+    outline: 2px solid rgba(59, 130, 246, 0.5);
+    outline-offset: 2px;
+}
+
+/* Card hover effects */
+.bg-white.rounded-lg.shadow-lg,
+.bg-gray-50.rounded-lg,
+.bg-white.rounded-lg {
+    transition: all 0.3s ease;
+}
+
+.bg-white.rounded-lg.shadow-lg:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Link hover effects */
+a {
+    transition: all 0.2s ease;
+}
+
+a:hover {
+    transform: translateX(2px);
+}
+
+header a:hover {
+    transform: translateX(0);
+}
+
+/* Input and textarea focus effects */
+input:focus, textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    border-color: #3b82f6;
+    transition: all 0.2s ease;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Selection color */
+::selection {
+    background-color: #3b82f6;
+    color: white;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 5px;
+    transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Loading animation for buttons */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+button.loading {
+    pointer-events: none;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Code block hover effect */
+pre {
+    transition: all 0.2s ease;
+}
+
+pre:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Badge hover effect */
+span.bg-gray-100 {
+    transition: all 0.2s ease;
+    cursor: default;
+}
+
+span.bg-gray-100:hover {
+    background: #e5e7eb;
+    transform: scale(1.05);
+}
+
+/* Result output animation */
+#result-output {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Tab button active state enhancement */
+.border-b-2 {
+    position: relative;
+}
+
+.border-b-2::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: currentColor;
+    transform: scaleX(1);
+    transition: transform 0.3s ease;
+}
+
+/* Ripple effect class for dynamic use */
+.ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 1;
+    }
+    20% {
+        transform: scale(25, 25);
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(40, 40);
+    }
+}
+
+.ripple:focus:not(:active)::after {
+    animation: ripple 1s ease-out;
+}
+
+/* Enhance border transitions */
+.border {
+    transition: border-color 0.2s ease;
+}
+
+.border:hover {
+    border-color: #9ca3af;
+}
+
+/* Viewport height and width adaptation - maximize screen usage */
+#tools {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 64px);
+    overflow: hidden;
+}
+
+/* Force full height for grid layout */
+.grid.flex-1 {
+    display: grid;
+    min-height: 0;
+}
+
+/* Ensure columns fill available height */
+.grid > div {
+    min-height: 0;
+}
+
+/* Refined spacing for compact design */
+button {
+    letter-spacing: 0.01em;
+}
+
+/* Optimize scrollbar for result output */
+#result-output::-webkit-scrollbar {
+    width: 6px;
+}
+
+#result-output::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#result-output::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+#result-output::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Full width optimization */
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Maximize editor and output area */
+#yaml-input, #result-output {
+    height: 100%;
+}
+
+/* Remove max-width constraints for full screen */
+@media (min-width: 1024px) {
+    #tools > div {
+        max-width: none !important;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1023px) {
+    .grid.lg\\:grid-cols-2 {
+        grid-template-rows: 1fr 1fr;
+        height: 100%;
+    }
+    
+    .grid.lg\\:grid-cols-2 > div {
+        min-height: 300px;
+    }
+}
+
+/* Copy button refinements */
+.copy-btn {
+    opacity: 0.85;
+    transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background 0.2s ease;
+}
+
+.copy-btn:hover {
+    opacity: 1;
+}
+
+.copy-btn svg {
+    flex-shrink: 0;
+}
+
+/* Subtle animation for copy button appearance */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+    to {
+        opacity: 0.85;
+        transform: translateX(0);
+    }
+}
+
+.copy-btn {
+    animation: slideInRight 0.3s ease-out;
+}

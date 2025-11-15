@@ -55,9 +55,6 @@ class YAMLTools {
         document.getElementById('format-btn').addEventListener('click', () => this.formatYAML());
         document.getElementById('convert-btn').addEventListener('click', () => this.convertYAML());
         document.getElementById('clear-btn').addEventListener('click', () => this.clearAll());
-
-        // Add copy functionality to result boxes
-        this.addCopyButtons();
     }
 
     setupExampleData() {
@@ -700,44 +697,64 @@ address:
     }
 
     addCopyButtonToResult(resultDiv, textToCopy) {
+        // Remove any existing copy button first
+        const existingCopyBtn = resultDiv.querySelector('.copy-btn');
+        if (existingCopyBtn) {
+            existingCopyBtn.remove();
+        }
+        
         const copyBtn = document.createElement('button');
         copyBtn.className = 'copy-btn';
-        copyBtn.textContent = '📋 Copy';
+        copyBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy</span>';
+        copyBtn.title = 'Copy to clipboard';
         copyBtn.style.cssText = `
             position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 0.5rem 1rem;
-            background: #3b82f6;
+            top: 6px;
+            right: 6px;
+            padding: 4px 8px;
+            background: rgba(59, 130, 246, 0.9);
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 0.875rem;
+            font-size: 0.75rem;
             font-weight: 500;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            backdrop-filter: blur(4px);
         `;
         
         copyBtn.addEventListener('mouseover', () => {
             copyBtn.style.background = '#2563eb';
-            copyBtn.style.transform = 'translateY(-2px)';
+            copyBtn.style.transform = 'translateY(-1px)';
+            copyBtn.style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.15)';
         });
         
         copyBtn.addEventListener('mouseout', () => {
-            copyBtn.style.background = '#3b82f6';
-            copyBtn.style.transform = 'translateY(0)';
+            if (!copyBtn.classList.contains('copied')) {
+                copyBtn.style.background = 'rgba(59, 130, 246, 0.9)';
+                copyBtn.style.transform = 'translateY(0)';
+                copyBtn.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.12)';
+            }
         });
         
         copyBtn.addEventListener('click', async () => {
             try {
                 await navigator.clipboard.writeText(textToCopy);
-                copyBtn.textContent = '✅ Copied!';
+                copyBtn.classList.add('copied');
+                copyBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg><span>Copied!</span>';
                 copyBtn.style.background = '#10b981';
+                copyBtn.style.transform = 'scale(0.95)';
                 
                 setTimeout(() => {
-                    copyBtn.textContent = '📋 Copy';
-                    copyBtn.style.background = '#3b82f6';
+                    copyBtn.classList.remove('copied');
+                    copyBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy</span>';
+                    copyBtn.style.background = 'rgba(59, 130, 246, 0.9)';
+                    copyBtn.style.transform = 'translateY(0)';
                 }, 2000);
             } catch (err) {
                 console.error('Copy failed:', err);
@@ -750,14 +767,14 @@ address:
                 textArea.select();
                 try {
                     document.execCommand('copy');
-                    copyBtn.textContent = '✅ Copied!';
+                    copyBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg><span>Copied!</span>';
                     copyBtn.style.background = '#10b981';
                     setTimeout(() => {
-                        copyBtn.textContent = '📋 Copy';
-                        copyBtn.style.background = '#3b82f6';
+                        copyBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy</span>';
+                        copyBtn.style.background = 'rgba(59, 130, 246, 0.9)';
                     }, 2000);
                 } catch (err2) {
-                    copyBtn.textContent = '❌ Failed';
+                    copyBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg><span>Failed</span>';
                     copyBtn.style.background = '#ef4444';
                 }
                 document.body.removeChild(textArea);
@@ -916,9 +933,10 @@ address:
         element.textContent = message;
         element.className = `result-box ${type}`;
         
-        // Add copy button if result is successful
-        if (type === 'success' && !element.querySelector('.copy-btn')) {
-            this.addCopyButtonToElement(element);
+        // Remove any existing copy button (info messages don't need copy button)
+        const existingCopyBtn = element.querySelector('.copy-btn');
+        if (existingCopyBtn) {
+            existingCopyBtn.remove();
         }
         
         // Smooth scroll to result
@@ -1038,31 +1056,62 @@ address:
             const wrapper = codeBlock.closest('.bg-gray-900');
             if (wrapper && !wrapper.querySelector('.copy-btn')) {
                 const copyBtn = document.createElement('button');
-                copyBtn.className = 'copy-btn absolute top-2 right-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-sm font-medium cursor-pointer z-10';
-                copyBtn.textContent = 'Copy';
+                copyBtn.className = 'copy-btn';
+                copyBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy</span>';
+                copyBtn.title = 'Copy code';
+                copyBtn.style.cssText = `
+                    position: absolute;
+                    top: 8px;
+                    right: 8px;
+                    padding: 4px 8px;
+                    background: rgba(59, 130, 246, 0.9);
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 0.75rem;
+                    transition: all 0.2s ease;
+                    z-index: 10;
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+                `;
+                
+                copyBtn.addEventListener('mouseover', () => {
+                    copyBtn.style.background = '#2563eb';
+                    copyBtn.style.transform = 'translateY(-1px)';
+                });
+                
+                copyBtn.addEventListener('mouseout', () => {
+                    if (!copyBtn.classList.contains('copied')) {
+                        copyBtn.style.background = 'rgba(59, 130, 246, 0.9)';
+                        copyBtn.style.transform = 'translateY(0)';
+                    }
+                });
                 
                 copyBtn.addEventListener('click', async () => {
                     try {
                         await navigator.clipboard.writeText(codeBlock.textContent);
-                        copyBtn.textContent = 'Copied!';
-                        copyBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
-                        copyBtn.classList.add('bg-green-600');
+                        copyBtn.classList.add('copied');
+                        copyBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg><span>Copied!</span>';
+                        copyBtn.style.background = '#10b981';
+                        copyBtn.style.transform = 'scale(0.95)';
                         
                         setTimeout(() => {
-                            copyBtn.textContent = 'Copy';
-                            copyBtn.classList.remove('bg-green-600');
-                            copyBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                            copyBtn.classList.remove('copied');
+                            copyBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy</span>';
+                            copyBtn.style.background = 'rgba(59, 130, 246, 0.9)';
+                            copyBtn.style.transform = 'translateY(0)';
                         }, 2000);
                     } catch (err) {
                         console.error('Copy failed:', err);
-                        copyBtn.textContent = 'Failed';
-                        copyBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
-                        copyBtn.classList.add('bg-red-600');
+                        copyBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg><span>Failed</span>';
+                        copyBtn.style.background = '#ef4444';
                         
                         setTimeout(() => {
-                            copyBtn.textContent = 'Copy';
-                            copyBtn.classList.remove('bg-red-600');
-                            copyBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                            copyBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>Copy</span>';
+                            copyBtn.style.background = 'rgba(59, 130, 246, 0.9)';
                         }, 2000);
                     }
                 });
