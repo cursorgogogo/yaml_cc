@@ -32,7 +32,8 @@
                 <ul class="hidden md:flex space-x-8">
                     <li><a href="../#tools" class="text-gray-600 hover:text-gray-900 transition">YAML Tools</a></li>
                     <li><a href="../#info-section" class="text-gray-600 hover:text-gray-900 transition">What is YAML?</a></li>
-                    <li><a href="../tutorial/" class="text-gray-600 hover:text-gray-900 transition">Tutorial</a></li>
+                    <li><a href="../tutorial/" class="text-gray-900 font-medium">Tutorial</a></li>
+                    <li><a href="../qa/" class="text-gray-600 hover:text-gray-900 transition">Q&A</a></li>
                 </ul>
             </div>
         </nav>
@@ -406,31 +407,37 @@ const doc2 = yaml.load(fs.readFileSync('config.yaml', 'utf8'));</code></pre>
         </article>
     </main>
 
-    <footer class="bg-gray-900 text-gray-300 mt-16">
+    <footer class="bg-white border-t border-gray-200 mt-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div>
-                    <h3 class="text-white font-bold text-lg mb-3">YAML.cc</h3>
-                    <p class="text-gray-400 text-sm">Professional YAML tools and resources for developers.</p>
+                    <h3 class="text-gray-900 font-bold text-lg mb-3">YAML.cc</h3>
+                    <p class="text-gray-600 text-sm">Professional YAML validation, formatting, and conversion tools for developers.</p>
                 </div>
                 <div>
-                    <h4 class="text-white font-semibold mb-3">Tools</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="../#tools" class="text-gray-400 hover:text-white transition">YAML Validator</a></li>
-                        <li><a href="../#tools" class="text-gray-400 hover:text-white transition">YAML Formatter</a></li>
-                        <li><a href="../#tools" class="text-gray-400 hover:text-white transition">YAML to JSON</a></li>
+                    <h4 class="text-gray-900 font-semibold mb-3">Tools</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML Validator</a></li>
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML Formatter</a></li>
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML to JSON</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-white font-semibold mb-3">Articles</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="../qa/modulenotfounderror-no-module-named-yaml.html" class="text-gray-400 hover:text-white transition">Fix YAML Module Error</a></li>
-                        <li><a href="./yaml-comment.html" class="text-gray-400 hover:text-white transition">YAML Comments</a></li>
-                        <li><a href="./yaml-multiline-string.html" class="text-gray-400 hover:text-white transition">Multiline Strings</a></li>
+                    <h4 class="text-gray-900 font-semibold mb-3">Resources</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="../#info-section" class="hover:text-gray-900 transition">What is YAML?</a></li>
+                        <li><a href="../tutorial/" class="hover:text-gray-900 transition">Tutorial</a></li>
+                        <li><a href="../qa/" class="hover:text-gray-900 transition">Q&A</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-gray-900 font-semibold mb-3">Partner Websites</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="https://enum.cc" target="_blank" rel="noopener noreferrer" class="hover:text-gray-900 transition">Enum.cc</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+            <div class="border-t border-gray-200 mt-8 pt-8 text-center text-sm text-gray-500">
                 <p>&copy; 2024 YAML.cc. All rights reserved.</p>
             </div>
         </div>
