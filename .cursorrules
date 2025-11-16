@@ -30,7 +30,7 @@ yaml-tools/
 ### 2. UI/UX 设计规范
 
 #### 配色方案
-- 主色调：使用深色主题（slate-950 背景）
+- 主色调：使用白色主题（white 背景）
 - 强调色：根据语言特性选择（Python用emerald、Java用amber、C++用indigo等）
 - 避免过度使用高饱和度颜色
 - 文字对比度必须符合 WCAG AA 标准
@@ -38,7 +38,7 @@ yaml-tools/
 #### 排版规范
 - 标题层级清晰：h1 (text-4xl) → h2 (text-3xl) → h3 (text-xl)
 - 正文使用 text-sm 或 text-base，行高 1.6-1.8
-- 代码块使用等宽字体，背景色为 slate-900/80
+- 代码块使用等宽字体，背景色为 white
 - 列表项使用简单的 bullet points，不使用图标
 
 #### 布局规范

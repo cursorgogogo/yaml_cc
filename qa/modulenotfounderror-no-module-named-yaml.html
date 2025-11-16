@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModuleNotFoundError: No module named 'yaml' - Solution Guide | YAML.cc</title>
+    <meta name="description" content="Complete guide to fix ModuleNotFoundError: No module named 'yaml' in Python. Learn how to install PyYAML and resolve common YAML module import errors.">
+    <meta name="keywords" content="modulenotfounderror no module named yaml, pyyaml install, yaml module python, import yaml error, python yaml">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yaml.cc/modulenotfounderror-no-module-named-yaml">
+    <link rel="icon" type="image/x-icon" href="/assets/images/yamllint.svg">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://yaml.cc/modulenotfounderror-no-module-named-yaml">
+    <meta property="og:title" content="Fix ModuleNotFoundError: No module named 'yaml' | YAML.cc">
+    <meta property="og:description" content="Complete solution guide for Python YAML module import errors.">
+    <meta property="og:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../index.css" type="text/css">
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <a href="../" class="text-xl font-bold text-gray-900 hover:text-gray-700">
+                        YAML.cc
+                    </a>
+                </div>
+                <ul class="hidden md:flex space-x-8">
+                    <li><a href="../#tools" class="text-gray-600 hover:text-gray-900 transition">YAML Tools</a></li>
+                    <li><a href="../#info-section" class="text-gray-600 hover:text-gray-900 transition">What is YAML?</a></li>
+                    <li><a href="../tutorial/" class="text-gray-600 hover:text-gray-900 transition">Tutorial</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="py-12 bg-gray-50">
+        <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Breadcrumb -->
+            <nav class="mb-8 text-sm">
+                <a href="../" class="text-blue-600 hover:text-blue-700">Home</a>
+                <span class="mx-2 text-gray-400">/</span>
+                <a href="../qa/" class="text-blue-600 hover:text-blue-700">QA</a>
+                <span class="mx-2 text-gray-400">/</span>
+                <span class="text-gray-600">ModuleNotFoundError</span>
+            </nav>
+
+            <!-- Article Header -->
+            <header class="mb-12">
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">ModuleNotFoundError: No module named 'yaml'</h1>
+                <p class="text-xl text-gray-600">Complete solution guide for fixing Python YAML module import errors</p>
+                <div class="mt-6 flex items-center gap-4 text-sm text-gray-500">
+                    <span>Last updated: November 16, 2024</span>
+                    <span>•</span>
+                    <span>5 min read</span>
+                </div>
+            </header>
+
+            <!-- Error Description -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Understanding the Error</h2>
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+                    <pre class="text-sm text-red-800 overflow-x-auto"><code>ModuleNotFoundError: No module named 'yaml'</code></pre>
+                </div>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    This error occurs when you try to import the YAML module in Python, but it hasn't been installed in your environment. The error typically appears when you run code like:
+                </p>
+                <div class="bg-gray-900 rounded-lg p-4 mb-4">
+                    <pre class="text-sm text-gray-200 overflow-x-auto"><code>import yaml</code></pre>
+                </div>
+            </section>
+
+            <!-- Quick Solution -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Quick Solution</h2>
+                <div class="bg-green-50 border-l-4 border-green-500 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-green-900 mb-3">Install PyYAML</h3>
+                    <p class="text-green-800 mb-4">The YAML functionality in Python is provided by the PyYAML package. Install it using pip:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>pip install pyyaml</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Detailed Solutions -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Installation Methods</h2>
+                
+                <!-- Method 1 -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Method 1: Using pip</h3>
+                    <p class="text-gray-700 mb-4">Standard installation using pip package manager:</p>
+                    <div class="bg-gray-900 rounded-lg p-4 mb-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>pip install pyyaml</code></pre>
+                    </div>
+                    <p class="text-sm text-gray-600">For Python 3 specifically:</p>
+                    <div class="bg-gray-900 rounded-lg p-4 mt-2">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>pip3 install pyyaml</code></pre>
+                    </div>
+                </div>
+
+                <!-- Method 2 -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Method 2: Using conda</h3>
+                    <p class="text-gray-700 mb-4">If you're using Anaconda or Miniconda:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>conda install pyyaml</code></pre>
+                    </div>
+                </div>
+
+                <!-- Method 3 -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Method 3: Install for specific Python version</h3>
+                    <p class="text-gray-700 mb-4">If you have multiple Python versions installed:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>python3.9 -m pip install pyyaml</code></pre>
+                    </div>
+                </div>
+
+                <!-- Method 4 -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Method 4: Install in virtual environment</h3>
+                    <p class="text-gray-700 mb-4">Best practice: install in a virtual environment:</p>
+                    <div class="bg-gray-900 rounded-lg p-4 mb-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Create virtual environment
+python -m venv myenv
+
+# Activate (Windows)
+myenv\Scripts\activate
+
+# Activate (macOS/Linux)
+source myenv/bin/activate
+
+# Install PyYAML
+pip install pyyaml</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Verification -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Verify Installation</h2>
+                <p class="text-gray-700 mb-4">After installation, verify that PyYAML is correctly installed:</p>
+                <div class="bg-gray-900 rounded-lg p-4 mb-4">
+                    <pre class="text-sm text-gray-200 overflow-x-auto"><code>python -c "import yaml; print(yaml.__version__)"</code></pre>
+                </div>
+                <p class="text-gray-700 mb-4">You should see the version number printed, for example:</p>
+                <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                    <pre class="text-sm text-gray-700"><code>6.0.1</code></pre>
+                </div>
+            </section>
+
+            <!-- Common Issues -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Troubleshooting Common Issues</h2>
+                
+                <div class="space-y-6">
+                    <!-- Issue 1 -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Issue: Permission Denied</h3>
+                        <p class="text-gray-700 mb-3">If you get a permission error, try installing with user flag:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>pip install --user pyyaml</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Issue 2 -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Issue: Multiple Python Versions</h3>
+                        <p class="text-gray-700 mb-3">Make sure you're installing to the correct Python version:</p>
+                        <div class="bg-gray-900 rounded-lg p-4 mb-3">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code># Check which Python you're using
+which python
+python --version
+
+# Install for that specific version
+python -m pip install pyyaml</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Issue 3 -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Issue: IDE Not Recognizing Module</h3>
+                        <p class="text-gray-700 mb-3">If your IDE still shows the error after installation:</p>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                            <li>Restart your IDE</li>
+                            <li>Check that your IDE is using the correct Python interpreter</li>
+                            <li>Rebuild your project index (if applicable)</li>
+                            <li>Verify installation in the correct environment</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Usage Example -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Basic Usage Example</h2>
+                <p class="text-gray-700 mb-4">Once installed, you can use PyYAML to work with YAML files:</p>
+                <div class="bg-gray-900 rounded-lg p-4">
+                    <pre class="text-sm text-gray-200 overflow-x-auto"><code>import yaml
+
+# Load YAML from string
+yaml_string = """
+name: John Doe
+age: 30
+skills:
+  - Python
+  - JavaScript
+  - YAML
+"""
+
+data = yaml.safe_load(yaml_string)
+print(data)
+
+# Write YAML to file
+with open('output.yaml', 'w') as file:
+    yaml.dump(data, file)</code></pre>
+                </div>
+            </section>
+
+            <!-- Related Articles -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Related Articles</h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <a href="../tutorial/yaml-comment.html" class="block bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:border-blue-500 transition">
+                        <h3 class="font-semibold text-gray-900 mb-2">YAML Comments Guide</h3>
+                        <p class="text-sm text-gray-600">Learn how to add comments in YAML files</p>
+                    </a>
+                    <a href="../tutorial/yaml-multiline-string.html" class="block bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:border-blue-500 transition">
+                        <h3 class="font-semibold text-gray-900 mb-2">YAML Multiline Strings</h3>
+                        <p class="text-sm text-gray-600">Master multiline string syntax in YAML</p>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Back to Home -->
+            <div class="text-center mt-12">
+                <a href="../" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Back to YAML Tools
+                </a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="bg-gray-900 text-gray-300 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-white font-bold text-lg mb-3">YAML.cc</h3>
+                    <p class="text-gray-400 text-sm">Professional YAML tools and resources for developers.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-3">Tools</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../#tools" class="text-gray-400 hover:text-white transition">YAML Validator</a></li>
+                        <li><a href="../#tools" class="text-gray-400 hover:text-white transition">YAML Formatter</a></li>
+                        <li><a href="../#tools" class="text-gray-400 hover:text-white transition">YAML to JSON</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-3">Resources</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../#info-section" class="text-gray-400 hover:text-white transition">What is YAML?</a></li>
+                        <li><a href="../tutorial/" class="text-gray-400 hover:text-white transition">Tutorial</a></li>
+                        <li><a href="../qa/" class="text-gray-400 hover:text-white transition">Q&A</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-3">Guides</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../tutorial/yaml-comment.html" class="text-gray-400 hover:text-white transition">YAML Comments</a></li>
+                        <li><a href="../tutorial/yaml-multiline-string.html" class="text-gray-400 hover:text-white transition">Multiline Strings</a></li>
+                        <li><a href="../tutorial/yml-vs-yaml.html" class="text-gray-400 hover:text-white transition">YML vs YAML</a></li>
+                        <li><a href="modulenotfounderror-no-module-named-yaml.html" class="text-gray-400 hover:text-white transition">Fix Module Error</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+                <p>&copy; 2024 YAML.cc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

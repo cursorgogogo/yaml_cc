@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAML Multiline String - Complete Guide with Examples | YAML.cc</title>
+    <meta name="description" content="Master YAML multiline strings with literal (|), folded (>), and other syntax options. Learn when to use each style with practical examples and best practices.">
+    <meta name="keywords" content="yaml multiline string, yaml literal block, yaml folded block, yaml string, yaml multi line">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yaml.cc/yaml-multiline-string">
+    <link rel="icon" type="image/x-icon" href="/assets/images/yamllint.svg">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://yaml.cc/yaml-multiline-string">
+    <meta property="og:title" content="YAML Multiline String - Complete Guide">
+    <meta property="og:description" content="Master YAML multiline strings with literal and folded block syntax.">
+    <meta property="og:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../index.css" type="text/css">
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <a href="../" class="text-xl font-bold text-gray-900 hover:text-gray-700">
+                        YAML.cc
+                    </a>
+                </div>
+                <ul class="hidden md:flex space-x-8">
+                    <li><a href="../#tools" class="text-gray-600 hover:text-gray-900 transition">YAML Tools</a></li>
+                    <li><a href="../#info-section" class="text-gray-600 hover:text-gray-900 transition">What is YAML?</a></li>
+                    <li><a href="../tutorial/" class="text-gray-600 hover:text-gray-900 transition">Tutorial</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="py-12 bg-gray-50">
+        <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Breadcrumb -->
+            <nav class="mb-8 text-sm">
+                <a href="../" class="text-blue-600 hover:text-blue-700">Home</a>
+                <span class="mx-2 text-gray-400">/</span>
+                <a href="./" class="text-blue-600 hover:text-blue-700">Tutorial</a>
+                <span class="mx-2 text-gray-400">/</span>
+                <span class="text-gray-600">Multiline String</span>
+            </nav>
+
+            <!-- Article Header -->
+            <header class="mb-12">
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">YAML Multiline String Guide</h1>
+                <p class="text-xl text-gray-600">Master different ways to handle multiline strings in YAML</p>
+                <div class="mt-6 flex items-center gap-4 text-sm text-gray-500">
+                    <span>Last updated: November 16, 2024</span>
+                    <span>•</span>
+                    <span>6 min read</span>
+                </div>
+            </header>
+
+            <!-- Introduction -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Overview</h2>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    YAML provides multiple ways to write multiline strings, each with different behaviors for line breaks and whitespace. Choosing the right style depends on your specific needs.
+                </p>
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+                    <p class="text-blue-900 font-semibold">Two Main Styles</p>
+                    <ul class="text-blue-800 text-sm mt-2 space-y-1 ml-4">
+                        <li>• Literal Block (|) - Preserves line breaks</li>
+                        <li>• Folded Block (>) - Converts line breaks to spaces</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Literal Block -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Literal Block Scalar (|)</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Basic Usage</h3>
+                    <p class="text-gray-700 mb-4">Use the pipe symbol (|) to preserve line breaks exactly as written:</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm font-semibold text-gray-700 mb-2">YAML:</p>
+                            <div class="bg-gray-900 rounded-lg p-4">
+                                <pre class="text-sm text-gray-200 overflow-x-auto"><code>description: |
+  This is line one.
+  This is line two.
+  This is line three.</code></pre>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-700 mb-2">Result:</p>
+                            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                                <pre class="text-sm text-gray-700"><code>This is line one.
+This is line two.
+This is line three.</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- With Indentation -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Preserving Indentation</h3>
+                    <p class="text-gray-700 mb-4">Indentation within the block is preserved:</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm font-semibold text-gray-700 mb-2">YAML:</p>
+                            <div class="bg-gray-900 rounded-lg p-4">
+                                <pre class="text-sm text-gray-200 overflow-x-auto"><code>code: |
+  def hello():
+      print("Hello")
+      return True</code></pre>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-700 mb-2">Result:</p>
+                            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                                <pre class="text-sm text-gray-700"><code>def hello():
+    print("Hello")
+    return True</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trailing Newlines -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Controlling Trailing Newlines</h3>
+                    <p class="text-gray-700 mb-4">Use chomping indicators to control final line breaks:</p>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-sm font-semibold text-gray-700 mb-2">|- (Strip final newlines):</p>
+                            <div class="bg-gray-900 rounded-lg p-4">
+                                <pre class="text-sm text-gray-200 overflow-x-auto"><code>text: |-
+  Line one
+  Line two</code></pre>
+                            </div>
+                            <p class="text-xs text-gray-600 mt-2">Result: "Line one\nLine two" (no trailing newline)</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-700 mb-2">|+ (Keep all newlines):</p>
+                            <div class="bg-gray-900 rounded-lg p-4">
+                                <pre class="text-sm text-gray-200 overflow-x-auto"><code>text: |+
+  Line one
+  Line two
+
+
+</code></pre>
+                            </div>
+                            <p class="text-xs text-gray-600 mt-2">Result: "Line one\nLine two\n\n\n" (all newlines preserved)</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Folded Block -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Folded Block Scalar (>)</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Basic Usage</h3>
+                    <p class="text-gray-700 mb-4">Use the greater-than symbol (>) to fold line breaks into spaces:</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm font-semibold text-gray-700 mb-2">YAML:</p>
+                            <div class="bg-gray-900 rounded-lg p-4">
+                                <pre class="text-sm text-gray-200 overflow-x-auto"><code>description: >
+  This is a long
+  paragraph that will
+  be folded into a
+  single line.</code></pre>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-700 mb-2">Result:</p>
+                            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                                <pre class="text-sm text-gray-700 whitespace-pre-wrap"><code>This is a long paragraph that will be folded into a single line.</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blank Lines -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Blank Lines Create Paragraphs</h3>
+                    <p class="text-gray-700 mb-4">Empty lines are preserved as paragraph breaks:</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm font-semibold text-gray-700 mb-2">YAML:</p>
+                            <div class="bg-gray-900 rounded-lg p-4">
+                                <pre class="text-sm text-gray-200 overflow-x-auto"><code>text: >
+  First paragraph
+  continues here.
+
+  Second paragraph
+  starts here.</code></pre>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-700 mb-2">Result:</p>
+                            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                                <pre class="text-sm text-gray-700 whitespace-pre-wrap"><code>First paragraph continues here.
+
+Second paragraph starts here.</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chomping -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Chomping with Folded Style</h3>
+                    <p class="text-gray-700 mb-4">Similar to literal blocks, you can control trailing newlines:</p>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-sm font-semibold text-gray-700 mb-2">>- (Strip):</p>
+                            <div class="bg-gray-900 rounded-lg p-4">
+                                <pre class="text-sm text-gray-200 overflow-x-auto"><code>text: >-
+  Line one
+  Line two</code></pre>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-gray-700 mb-2">>+ (Keep):</p>
+                            <div class="bg-gray-900 rounded-lg p-4">
+                                <pre class="text-sm text-gray-200 overflow-x-auto"><code>text: >+
+  Line one
+  Line two</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quoted Strings -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Quoted Multiline Strings</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Double-Quoted Strings</h3>
+                    <p class="text-gray-700 mb-4">Use double quotes for strings with escape sequences:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>message: "Line one\n\
+  Line two\n\
+  Line three"</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Single-Quoted Strings</h3>
+                    <p class="text-gray-700 mb-4">Single quotes don't support escape sequences:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>message: 'Line one
+  Line two
+  Line three'</code></pre>
+                    </div>
+                    <p class="text-xs text-gray-600 mt-2">Note: Line breaks are converted to spaces in single-quoted strings</p>
+                </div>
+            </section>
+
+            <!-- Comparison Table -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Quick Reference Table</h2>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full bg-white rounded-lg shadow-sm border border-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Style</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Syntax</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Line Breaks</th>
+                                <th class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Use Case</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 text-sm text-gray-900">Literal</td>
+                                <td class="px-6 py-4 text-sm font-mono text-gray-600">|</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">Preserved</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">Code, logs, preformatted text</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 text-sm text-gray-900">Folded</td>
+                                <td class="px-6 py-4 text-sm font-mono text-gray-600">></td>
+                                <td class="px-6 py-4 text-sm text-gray-600">To spaces</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">Long descriptions, paragraphs</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 text-sm text-gray-900">Double-quoted</td>
+                                <td class="px-6 py-4 text-sm font-mono text-gray-600">"..."</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">Escape sequences</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">Strings with special characters</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 text-sm text-gray-900">Single-quoted</td>
+                                <td class="px-6 py-4 text-sm font-mono text-gray-600">'...'</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">To spaces</td>
+                                <td class="px-6 py-4 text-sm text-gray-600">Literal strings, no escaping</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Real-World Examples -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Real-World Examples</h2>
+                
+                <div class="space-y-6">
+                    <!-- SQL -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">SQL Queries</h3>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>queries:
+  get_users: |
+    SELECT id, name, email
+    FROM users
+    WHERE active = true
+    ORDER BY created_at DESC
+    LIMIT 100;</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Shell Scripts -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Shell Scripts</h3>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>scripts:
+  deploy: |
+    #!/bin/bash
+    echo "Starting deployment..."
+    npm run build
+    npm run test
+    pm2 restart app</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Long Descriptions -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Long Descriptions</h3>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>product:
+  name: "Premium Widget"
+  description: >
+    This is our premium widget product
+    that offers advanced features and
+    exceptional performance for enterprise
+    customers. Available in multiple colors
+    and configurations.</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- HTML Templates -->
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">HTML Templates</h3>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>email_template: |
+  &lt;html&gt;
+    &lt;body&gt;
+      &lt;h1&gt;Welcome!&lt;/h1&gt;
+      &lt;p&gt;Thank you for joining us.&lt;/p&gt;
+    &lt;/body&gt;
+  &lt;/html&gt;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Best Practices -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Best Practices</h2>
+                
+                <div class="space-y-4">
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4">
+                        <h3 class="font-semibold text-green-900 mb-2">✓ Use Literal (|) for:</h3>
+                        <ul class="text-green-800 text-sm space-y-1 ml-4">
+                            <li>• Code snippets</li>
+                            <li>• Log messages</li>
+                            <li>• Preformatted text</li>
+                            <li>• Content where line breaks matter</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4">
+                        <h3 class="font-semibold text-green-900 mb-2">✓ Use Folded (>) for:</h3>
+                        <ul class="text-green-800 text-sm space-y-1 ml-4">
+                            <li>• Long descriptions</li>
+                            <li>• Paragraphs of text</li>
+                            <li>• Documentation</li>
+                            <li>• Content where readability in YAML matters</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+                        <h3 class="font-semibold text-blue-900 mb-2">Tip: Consistent Indentation</h3>
+                        <p class="text-blue-800 text-sm">Always use consistent indentation (2 or 4 spaces) throughout your YAML file for better readability.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Related Articles -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Related Articles</h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <a href="./yaml-comment.html" class="block bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:border-blue-500 transition">
+                        <h3 class="font-semibold text-gray-900 mb-2">YAML Comments Guide</h3>
+                        <p class="text-sm text-gray-600">Learn how to add comments in YAML files</p>
+                    </a>
+                    <a href="./yml-vs-yaml.html" class="block bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:border-blue-500 transition">
+                        <h3 class="font-semibold text-gray-900 mb-2">YML vs YAML</h3>
+                        <p class="text-sm text-gray-600">Understanding file extension differences</p>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Back to Home -->
+            <div class="text-center mt-12">
+                <a href="../" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Back to YAML Tools
+                </a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="bg-gray-900 text-gray-300 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-white font-bold text-lg mb-3">YAML.cc</h3>
+                    <p class="text-gray-400 text-sm">Professional YAML tools and resources for developers.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-3">Tools</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../#tools" class="text-gray-400 hover:text-white transition">YAML Validator</a></li>
+                        <li><a href="../#tools" class="text-gray-400 hover:text-white transition">YAML Formatter</a></li>
+                        <li><a href="../#tools" class="text-gray-400 hover:text-white transition">YAML to JSON</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-3">Articles</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="../qa/modulenotfounderror-no-module-named-yaml.html" class="text-gray-400 hover:text-white transition">Fix YAML Module Error</a></li>
+                        <li><a href="./yaml-comment.html" class="text-gray-400 hover:text-white transition">YAML Comments</a></li>
+                        <li><a href="./yml-vs-yaml.html" class="text-gray-400 hover:text-white transition">YML vs YAML</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+                <p>&copy; 2024 YAML.cc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
