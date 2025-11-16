@@ -43,8 +43,31 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  
-  <!-- Main Page Sections -->
+  <url>
+    <loc>https://yaml.cc/tutorial/yaml-comment.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yaml.cc/tutorial/yaml-multiline-string.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yaml.cc/tutorial/yml-vs-yaml.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yaml.cc/qa/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yaml.cc/qa/modulenotfounderror-no-module-named-yaml.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://yaml.cc/#tools</loc>
     <changefreq>weekly</changefreq>
