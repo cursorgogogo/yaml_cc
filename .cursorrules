@@ -1,0 +1,242 @@
+# YAML.cc Project Cursor Rules
+
+## 项目概述
+这是一个关于YAML的技术文档网站，域名为 yaml.cc。网站使用静态 HTML + Tailwind CSS 构建，内容按编程语言分类。
+
+## 网站结构
+
+```
+yaml-tools/
+├── index.html          # 首页
+├── styles.css          # CSS styles
+├── script.js           # JavaScript functionality
+├── robots.txt          # SEO robots file
+├── sitemap.xml         # SEO sitemap
+├── site.webmanifest    # PWA manifest
+└── README.md           # This file
+```
+
+## 核心设计原则
+
+### 1. 去除 AI 生成感
+- ❌ 禁止使用表情符号（emoji）作为视觉元素
+- ❌ 禁止使用 📘 📋 ⚠️ 🧪 🔄 等装饰性图标
+- ❌ 避免过度使用渐变色和霓虹效果
+- ❌ 避免使用"AI味"浓重的用语和排版
+- ✅ 使用简洁、专业的技术文档风格
+- ✅ 使用纯文字标题和清晰的层级结构
+- ✅ 采用克制的配色方案
+
+### 2. UI/UX 设计规范
+
+#### 配色方案
+- 主色调：使用深色主题（slate-950 背景）
+- 强调色：根据语言特性选择（Python用emerald、Java用amber、C++用indigo等）
+- 避免过度使用高饱和度颜色
+- 文字对比度必须符合 WCAG AA 标准
+
+#### 排版规范
+- 标题层级清晰：h1 (text-4xl) → h2 (text-3xl) → h3 (text-xl)
+- 正文使用 text-sm 或 text-base，行高 1.6-1.8
+- 代码块使用等宽字体，背景色为 slate-900/80
+- 列表项使用简单的 bullet points，不使用图标
+
+#### 布局规范
+- 使用一致的间距系统：space-y-6, gap-6, p-6, p-8
+- 卡片使用 rounded-3xl 和 border，避免过度阴影
+- 最大宽度限制：max-w-5xl（主要内容）、max-w-4xl（阅读内容）
+- 响应式设计：移动优先，使用 md: lg: 断点
+
+### 3. Tailwind CSS 使用规范
+
+#### 必须使用 Tailwind CSS
+- 所有样式必须使用 Tailwind utility classes
+- 禁止内联 style 属性（除非动态值）
+- 禁止自定义 CSS 类（除了特殊需求如背景图案）
+
+#### 常用组件模式
+```html
+<!-- 卡片 -->
+<div class="rounded-3xl border border-{color}-400/30 bg-slate-950/80 p-8">
+  <h3 class="text-xl font-semibold text-white">标题</h3>
+  <p class="mt-3 text-sm text-slate-300">内容</p>
+</div>
+
+<!-- 代码块 -->
+<pre class="overflow-x-auto rounded-2xl bg-slate-900/80 p-4 text-xs text-slate-200">
+代码内容
+</pre>
+
+<!-- 列表 -->
+<ul class="space-y-3 text-sm text-slate-300">
+  <li>• 列表项（使用 • 而非图标）</li>
+</ul>
+```
+
+#### 反例与正例对比卡片
+```html
+<!-- 反例（红色） -->
+<div class="rounded-lg bg-red-950/30 border border-red-500/30 p-4">
+  <p class="font-semibold text-red-300">反例：标题</p>
+  <pre class="mt-2 text-xs text-slate-300">代码</pre>
+  <p class="mt-2 text-xs text-slate-400">说明问题</p>
+</div>
+
+<!-- 正例（绿色） -->
+<div class="rounded-lg bg-green-950/30 border border-green-500/30 p-4">
+  <p class="font-semibold text-green-300">正例：标题</p>
+  <pre class="mt-2 text-xs text-slate-300">代码</pre>
+</div>
+```
+
+### 4. 内容编写规范
+
+#### 文案风格
+- 使用专业、简洁的技术文档语言
+- 避免过度营销化的表达
+- 不使用"强化搜索意图覆盖"等SEO术语
+- 直接提供有价值的技术信息
+
+#### 禁止使用的词汇
+- ❌ "搜索意图"、"关键词覆盖"、"SEO优化"
+- ❌ "30年经验"、"内容运营"、"流量"
+- ❌ 过度使用感叹号和夸张表达
+- ❌ "一键解决"、"秒懂"等营销用语
+
+#### 推荐的表达方式
+- ✅ "本指南将帮助你..."
+- ✅ "实用的技术参考"
+- ✅ "完整的实现示例"
+- ✅ "常见问题解答"
+
+### 5. 代码示例规范
+
+#### 代码块要求
+- 必须是真实可运行的代码
+- 包含必要的上下文（import、类型声明等）
+- 添加注释说明关键部分
+- 使用一致的缩进（2或4空格）
+- 避免过长的单行代码
+
+#### 语言特定约定
+- Python: 使用 type hints，遵循 PEP 8
+- Java: 使用现代 Java 特性（Java 17+），遵循驼峰命名
+- C/C++: 明确标注 C 或 C++ 版本
+- TypeScript: 使用严格类型，避免 any
+- C#: 使用现代 C# 语法（C# 10+）
+
+### 6. Playbook 工具箱规范
+
+每个语言页面的 Playbook 应包含：
+
+1. **Cheat Sheet** - 快速参考要点
+2. **团队代码审查清单** - 分类清晰的检查项
+3. **反例与正例集合** - 使用对比色卡片
+4. **框架集成示例** - 完整的配置代码
+5. **测试模板** - 可直接使用的测试代码
+6. **最佳实践** - 实用建议和技巧
+
+#### Playbook 标题规范
+- ❌ 不使用图标：📋 团队代码审查清单
+- ✅ 使用纯文字：团队代码审查清单
+- 或使用简洁符号：✓ 类型安全、✗ 常见错误
+
+### 7. 响应式设计
+
+#### 移动端优先
+- 默认布局适配手机屏幕
+- 代码块必须可横向滚动
+- 表格在小屏幕上优雅降级
+- 导航菜单在移动端可折叠
+
+#### 断点使用
+- sm: 640px - 小屏手机横屏
+- md: 768px - 平板
+- lg: 1024px - 桌面
+- xl: 1280px - 大屏桌面
+
+### 8. 性能优化
+
+- 使用 Tailwind CDN（开发阶段）
+- 生产环境建议编译并压缩 CSS
+- 图片使用现代格式（WebP）
+- 避免过多的嵌套 div
+- 代码块使用语法高亮库（如需要）
+
+### 9. 可访问性（a11y）
+
+- 所有交互元素必须可键盘访问
+- 使用语义化 HTML 标签
+- 颜色对比度符合 WCAG AA 标准
+- 代码块提供语言标识
+- 链接使用描述性文字
+
+### 10. 文件组织
+
+```
+yaml-cc/
+├── index.html              # 首页
+├── languages/              # 语言专题页
+│   ├── c.html
+│   ├── python.html
+│   ├── java.html
+│   ├── csharp.html
+│   ├── javascript-typescript.html
+│   ├── rust-go.html
+│   ├── sql-database.html
+│   ├── frameworks.html
+│   └── glossary.html
+├── keywords.md             # 关键词参考
+├── quesitions.md          # 问题参考
+└── .cursorrules           # 本文件
+```
+
+## 实施清单
+
+在编写或修改代码时，请检查：
+
+- [ ] 是否移除了所有 emoji 图标
+- [ ] 是否使用了 Tailwind CSS 而非自定义 CSS
+- [ ] 是否避免了"AI味"的表达
+- [ ] 配色是否克制且专业
+- [ ] 代码示例是否真实可用
+- [ ] 文案是否直接提供价值而非营销
+- [ ] 移动端是否可用
+- [ ] 是否符合可访问性标准
+
+## 错误示例 vs 正确示例
+
+### ❌ 错误示例（AI 味重）
+```html
+<h2>🚀 Python Enum 完全攻略 🎯</h2>
+<p>💡 基于30年SEO经验，为你揭秘枚举的奥秘！</p>
+<div class="bg-gradient-to-r from-purple-600 to-pink-600 rounded-full">
+  <button class="✨ 一键生成枚举 ✨">点击</button>
+</div>
+```
+
+### ✅ 正确示例（专业简洁）
+```html
+<h2 class="text-3xl font-semibold text-white">Python 枚举完全指南</h2>
+<p class="mt-3 text-sm text-slate-300">本指南涵盖 Python 枚举的定义、使用和最佳实践。</p>
+<div class="rounded-lg border border-emerald-500/30 bg-slate-900/80 p-4">
+  <h3 class="font-semibold text-emerald-200">快速开始</h3>
+  <pre class="mt-2 text-xs text-slate-200">from enum import Enum
+
+class Status(Enum):
+    PENDING = "pending"
+    COMPLETED = "completed"</pre>
+</div>
+```
+
+## 更新日志
+
+- 2024: 初始规则创建
+- 重点：去除 AI 生成感，使用专业技术文档风格
+- 强制使用 Tailwind CSS
+- 禁止使用装饰性图标和表情符号
+
+---
+
+遵循这些规则，确保 yaml.cc 成为一个专业、实用、美观的技术文档网站。
+
