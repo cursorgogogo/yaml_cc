@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is .pre-commit-config.yaml - Complete Guide | YAML.cc</title>
+    <meta name="description" content="Learn about .pre-commit-config.yaml file used by pre-commit framework. Understand its structure, hooks, and how to configure code quality checks.">
+    <meta name="keywords" content="pre-commit config yaml, pre-commit hooks, .pre-commit-config.yaml, git hooks, code quality">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yaml.cc/qa/what-is-pre-commit-config-yaml">
+    <link rel="icon" type="image/x-icon" href="/assets/images/yamllint.svg">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://yaml.cc/qa/what-is-pre-commit-config-yaml">
+    <meta property="og:title" content="What is .pre-commit-config.yaml | YAML.cc">
+    <meta property="og:description" content="Complete guide to understanding and configuring .pre-commit-config.yaml files.">
+    <meta property="og:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../index.css" type="text/css">
+</head>
+<body class="bg-white text-gray-900">
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <a href="../" class="text-xl font-bold text-gray-900 hover:text-gray-700">
+                        YAML.cc
+                    </a>
+                </div>
+                <ul class="hidden md:flex space-x-8">
+                    <li><a href="../#tools" class="text-gray-600 hover:text-gray-900 transition">YAML Tools</a></li>
+                    <li><a href="../#info-section" class="text-gray-600 hover:text-gray-900 transition">What is YAML?</a></li>
+                    <li><a href="../tutorial/" class="text-gray-600 hover:text-gray-900 transition">Tutorial</a></li>
+                    <li><a href="./" class="text-gray-600 hover:text-gray-900 transition">Q&A</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="py-12 bg-white">
+        <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Breadcrumb -->
+            <nav class="mb-8 text-sm">
+                <a href="../" class="text-blue-600 hover:text-blue-700">Home</a>
+                <span class="mx-2 text-gray-400">/</span>
+                <a href="./" class="text-blue-600 hover:text-blue-700">Q&A</a>
+                <span class="mx-2 text-gray-400">/</span>
+                <span class="text-gray-600">pre-commit-config.yaml</span>
+            </nav>
+
+            <!-- Article Header -->
+            <header class="mb-12">
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">What is .pre-commit-config.yaml</h1>
+                <p class="text-xl text-gray-600">Complete guide to pre-commit configuration files and Git hooks</p>
+                <div class="mt-6 flex items-center gap-4 text-sm text-gray-500">
+                    <span>Last updated: November 2024</span>
+                    <span>•</span>
+                    <span>9 min read</span>
+                </div>
+            </header>
+
+            <!-- Introduction -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Introduction</h2>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    The <code class="bg-gray-100 px-2 py-1 rounded text-sm">.pre-commit-config.yaml</code> file is a configuration file used by the pre-commit framework. It defines a set of hooks that run automatically before each Git commit, helping maintain code quality, consistency, and preventing common mistakes.
+                </p>
+            </section>
+
+            <!-- What is Pre-commit -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">What is Pre-commit?</h2>
+                <p class="text-gray-700 mb-4">
+                    Pre-commit is a framework for managing and maintaining multi-language pre-commit hooks. It allows you to run checks and formatters on your code before it's committed to your repository, ensuring code quality and consistency across your project.
+                </p>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Key Benefits</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                        <li>Automatically runs code quality checks before commits</li>
+                        <li>Enforces coding standards and formatting</li>
+                        <li>Catches errors early in the development process</li>
+                        <li>Maintains consistency across team members</li>
+                        <li>Supports multiple programming languages</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- File Structure -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">File Structure</h2>
+                <p class="text-gray-700 mb-4">A basic <code class="bg-gray-100 px-2 py-1 rounded text-sm">.pre-commit-config.yaml</code> file structure:</p>
+                
+                <div class="bg-gray-900 rounded-lg p-4 mb-6">
+                    <pre class="text-sm text-gray-200 overflow-x-auto"><code>repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files</code></pre>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Key Components</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                        <li><code class="bg-gray-100 px-2 py-1 rounded text-sm">repos</code> - List of repositories containing hooks</li>
+                        <li><code class="bg-gray-100 px-2 py-1 rounded text-sm">repo</code> - URL or local path to the hook repository</li>
+                        <li><code class="bg-gray-100 px-2 py-1 rounded text-sm">rev</code> - Version/tag of the repository to use</li>
+                        <li><code class="bg-gray-100 px-2 py-1 rounded text-sm">hooks</code> - List of hooks to run from the repository</li>
+                        <li><code class="bg-gray-100 px-2 py-1 rounded text-sm">id</code> - Identifier of the specific hook</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Common Hooks -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Common Pre-commit Hooks</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Basic Hooks</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace      # Remove trailing whitespace
+      - id: end-of-file-fixer        # Ensure files end with newline
+      - id: check-yaml               # Validate YAML files
+      - id: check-json               # Validate JSON files
+      - id: check-added-large-files  # Prevent large files
+      - id: check-merge-conflict     # Detect merge conflict markers
+      - id: check-case-conflict      # Check for case conflicts
+      - id: debug-statements         # Remove debug statements</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Language-Specific Hooks</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Python hooks
+  - repo: https://github.com/psf/black
+    rev: 23.3.0
+    hooks:
+      - id: black
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+
+# JavaScript/TypeScript hooks
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v8.44.0
+    hooks:
+      - id: eslint</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Complete Example -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Complete Configuration Example</h2>
+                <p class="text-gray-700 mb-4">A comprehensive <code class="bg-gray-100 px-2 py-1 rounded text-sm">.pre-commit-config.yaml</code> example:</p>
+                
+                <div class="bg-gray-900 rounded-lg p-4">
+                    <pre class="text-sm text-gray-200 overflow-x-auto"><code># See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  # General file checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: mixed-line-ending
+      - id: check-docstring-first
+
+  # Python formatting and linting
+  - repo: https://github.com/psf/black
+    rev: 23.3.0
+    hooks:
+      - id: black
+        language_version: python3
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        args: ['--max-line-length=88', '--extend-ignore=E203']
+
+  # YAML linting
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.32.0
+    hooks:
+      - id: yamllint
+        args: ['-d', '{extends: default, rules: {line-length: {max: 120}}}']
+
+  # Markdown linting
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.35.0
+    hooks:
+      - id: markdownlint</code></pre>
+                </div>
+            </section>
+
+            <!-- Installation and Setup -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Installation and Setup</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Step 1: Install pre-commit</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Using pip
+pip install pre-commit
+
+# Using conda
+conda install -c conda-forge pre-commit
+
+# Using homebrew (macOS)
+brew install pre-commit</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Step 2: Create .pre-commit-config.yaml</h3>
+                    <p class="text-gray-700 mb-3">Create the configuration file in your repository root:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Create file in repository root
+touch .pre-commit-config.yaml
+
+# Add your hooks configuration (see examples above)</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Step 3: Install Git hooks</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Install hooks into .git/hooks/
+pre-commit install
+
+# Install hooks for commit-msg
+pre-commit install --hook-type commit-msg
+
+# Install hooks for pre-push
+pre-commit install --hook-type pre-push</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Step 4: Test the hooks</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Run hooks on all files
+pre-commit run --all-files
+
+# Run a specific hook
+pre-commit run trailing-whitespace --all-files</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Advanced Configuration -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Advanced Configuration</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Hook Arguments</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-added-large-files
+        args: ['--maxkb=500']  # Custom arguments
+      - id: trailing-whitespace
+        args: ['--markdown-linebreak-ext=md']</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">File Filtering</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>repos:
+  - repo: https://github.com/psf/black
+    rev: 23.3.0
+    hooks:
+      - id: black
+        files: ^src/  # Only run on files in src/
+        exclude: ^tests/  # Exclude tests directory</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Local Hooks</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>repos:
+  - repo: local
+    hooks:
+      - id: custom-script
+        name: Run custom script
+        entry: bash scripts/check.sh
+        language: system
+        files: \.(py|js)$</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Best Practices -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Best Practices</h2>
+                <ul class="space-y-4 text-gray-700">
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Pin hook versions</strong> - Use specific version tags (rev) instead of branches
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Start simple</strong> - Begin with basic hooks and add more as needed
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Run on all files initially</strong> - Use <code class="bg-gray-100 px-2 py-1 rounded text-sm">pre-commit run --all-files</code> to fix existing issues
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Document custom hooks</strong> - Add comments explaining why specific hooks are used
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Keep hooks fast</strong> - Avoid slow hooks that delay commits significantly
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Troubleshooting -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Troubleshooting</h2>
+                
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6">
+                    <h3 class="text-lg font-semibold text-yellow-900 mb-2">Issue: Hooks not running</h3>
+                    <p class="text-yellow-800 mb-2">Ensure hooks are installed:</p>
+                    <div class="bg-gray-900 rounded-lg p-4 mt-2">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Reinstall hooks
+pre-commit install
+
+# Verify installation
+ls .git/hooks/pre-commit</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4">
+                    <h3 class="text-lg font-semibold text-yellow-900 mb-2">Issue: Skip hooks temporarily</h3>
+                    <p class="text-yellow-800 mb-2">Use --no-verify flag (use sparingly):</p>
+                    <div class="bg-gray-900 rounded-lg p-4 mt-2">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Skip pre-commit hooks
+git commit --no-verify -m "message"
+
+# Note: This bypasses all hooks, use only when necessary</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Related Articles -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Related Articles</h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <a href="how-to-create-a-yaml-file.html" class="block bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:border-blue-500 transition">
+                        <h3 class="font-semibold text-gray-900 mb-2">How to Create a YAML File</h3>
+                        <p class="text-sm text-gray-600">Learn the basics of YAML file creation</p>
+                    </a>
+                    <a href="../tutorial/" class="block bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:border-blue-500 transition">
+                        <h3 class="font-semibold text-gray-900 mb-2">YAML Tutorial</h3>
+                        <p class="text-sm text-gray-600">Comprehensive YAML syntax guide</p>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Back to Home -->
+            <div class="text-center mt-12">
+                <a href="../" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Back to YAML Tools
+                </a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-gray-900 font-bold text-lg mb-3">YAML.cc</h3>
+                    <p class="text-gray-600 text-sm">Professional YAML tools and resources for developers.</p>
+                </div>
+                <div>
+                    <h4 class="text-gray-900 font-semibold mb-3">Tools</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML Validator</a></li>
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML Formatter</a></li>
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML to JSON</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-gray-900 font-semibold mb-3">Resources</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="../#info-section" class="hover:text-gray-900 transition">What is YAML?</a></li>
+                        <li><a href="../tutorial/" class="hover:text-gray-900 transition">Tutorial</a></li>
+                        <li><a href="./" class="hover:text-gray-900 transition">Q&A</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 mt-8 pt-8 text-center text-sm text-gray-500">
+                <p>&copy; 2024 YAML.cc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+

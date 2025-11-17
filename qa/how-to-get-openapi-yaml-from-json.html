@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Get OpenAPI YAML from JSON - Conversion Guide | YAML.cc</title>
+    <meta name="description" content="Learn how to convert OpenAPI JSON files to YAML format. Step-by-step guide with tools and methods for OpenAPI specification conversion.">
+    <meta name="keywords" content="openapi yaml, openapi json to yaml, swagger yaml, convert openapi json, openapi specification">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yaml.cc/qa/how-to-get-openapi-yaml-from-json">
+    <link rel="icon" type="image/x-icon" href="/assets/images/yamllint.svg">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://yaml.cc/qa/how-to-get-openapi-yaml-from-json">
+    <meta property="og:title" content="How to Get OpenAPI YAML from JSON | YAML.cc">
+    <meta property="og:description" content="Complete guide to converting OpenAPI JSON specifications to YAML format.">
+    <meta property="og:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../index.css" type="text/css">
+</head>
+<body class="bg-white text-gray-900">
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <a href="../" class="text-xl font-bold text-gray-900 hover:text-gray-700">
+                        YAML.cc
+                    </a>
+                </div>
+                <ul class="hidden md:flex space-x-8">
+                    <li><a href="../#tools" class="text-gray-600 hover:text-gray-900 transition">YAML Tools</a></li>
+                    <li><a href="../#info-section" class="text-gray-600 hover:text-gray-900 transition">What is YAML?</a></li>
+                    <li><a href="../tutorial/" class="text-gray-600 hover:text-gray-900 transition">Tutorial</a></li>
+                    <li><a href="./" class="text-gray-600 hover:text-gray-900 transition">Q&A</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="py-12 bg-white">
+        <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Breadcrumb -->
+            <nav class="mb-8 text-sm">
+                <a href="../" class="text-blue-600 hover:text-blue-700">Home</a>
+                <span class="mx-2 text-gray-400">/</span>
+                <a href="./" class="text-blue-600 hover:text-blue-700">Q&A</a>
+                <span class="mx-2 text-gray-400">/</span>
+                <span class="text-gray-600">OpenAPI YAML from JSON</span>
+            </nav>
+
+            <!-- Article Header -->
+            <header class="mb-12">
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">How to Get OpenAPI YAML from JSON</h1>
+                <p class="text-xl text-gray-600">Complete guide to converting OpenAPI JSON specifications to YAML format</p>
+                <div class="mt-6 flex items-center gap-4 text-sm text-gray-500">
+                    <span>Last updated: November 2024</span>
+                    <span>•</span>
+                    <span>8 min read</span>
+                </div>
+            </header>
+
+            <!-- Introduction -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Introduction</h2>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    OpenAPI (formerly Swagger) specifications can be written in either JSON or YAML format. While JSON is machine-friendly, YAML is often preferred for its human-readable syntax. This guide covers various methods to convert OpenAPI JSON files to YAML format.
+                </p>
+            </section>
+
+            <!-- Using Online Tools -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Using Online Conversion Tools</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Swagger Editor</h3>
+                    <p class="text-gray-700 mb-3">Swagger Editor provides built-in format conversion:</p>
+                    <ol class="list-decimal list-inside text-gray-700 space-y-2 ml-4">
+                        <li>Open <a href="https://editor.swagger.io" class="text-blue-600 hover:text-blue-700">editor.swagger.io</a></li>
+                        <li>Paste your OpenAPI JSON content</li>
+                        <li>Click "Edit" > "Convert to YAML" or use the format toggle</li>
+                        <li>Copy the converted YAML output</li>
+                    </ol>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Online JSON to YAML Converters</h3>
+                    <p class="text-gray-700 mb-3">Various online tools can convert JSON to YAML:</p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                        <li>JSON2YAML.com - Simple JSON to YAML converter</li>
+                        <li>ConvertJSON.com - Supports OpenAPI format conversion</li>
+                        <li>Online YAML Tools - Multiple conversion utilities</li>
+                    </ul>
+                    <p class="text-gray-700 mt-4 text-sm">Note: Be cautious when uploading sensitive API specifications to online tools.</p>
+                </div>
+            </section>
+
+            <!-- Using Command Line Tools -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Using Command Line Tools</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">yq (YAML Processor)</h3>
+                    <p class="text-gray-700 mb-3">yq can convert JSON to YAML format:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Install yq
+# macOS: brew install yq
+# Linux: sudo apt install yq
+# Windows: choco install yq
+
+# Convert JSON to YAML
+yq eval -P . openapi.json > openapi.yaml
+
+# Or using eval with input
+yq eval -P -o yaml openapi.json > openapi.yaml</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">jq + yq Combination</h3>
+                    <p class="text-gray-700 mb-3">Using jq to process JSON and yq to output YAML:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Process JSON with jq and convert to YAML
+jq . openapi.json | yq eval -P . - > openapi.yaml</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Python Script</h3>
+                    <p class="text-gray-700 mb-3">Using Python with PyYAML library:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Install PyYAML
+pip install pyyaml
+
+# Python script
+import json
+import yaml
+
+with open('openapi.json', 'r') as json_file:
+    json_data = json.load(json_file)
+
+with open('openapi.yaml', 'w') as yaml_file:
+    yaml.dump(json_data, yaml_file, default_flow_style=False, sort_keys=False)</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Using Node.js -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Using Node.js</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">js-yaml Package</h3>
+                    <p class="text-gray-700 mb-3">Convert using Node.js and js-yaml:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Install js-yaml
+npm install js-yaml
+
+# Node.js script
+const fs = require('fs');
+const yaml = require('js-yaml');
+
+const jsonData = JSON.parse(fs.readFileSync('openapi.json', 'utf8'));
+const yamlData = yaml.dump(jsonData, {
+  indent: 2,
+  lineWidth: -1,
+  noRefs: true
+});
+
+fs.writeFileSync('openapi.yaml', yamlData);</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">swagger-jsdoc + yaml</h3>
+                    <p class="text-gray-700 mb-3">For OpenAPI-specific conversion:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Install packages
+npm install swagger-jsdoc yaml
+
+# Convert OpenAPI JSON to YAML
+const fs = require('fs');
+const YAML = require('yaml');
+
+const jsonData = JSON.parse(fs.readFileSync('openapi.json', 'utf8'));
+const yamlString = YAML.stringify(jsonData);
+
+fs.writeFileSync('openapi.yaml', yamlString);</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Using OpenAPI Tools -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Using OpenAPI-Specific Tools</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">swagger-codegen</h3>
+                    <p class="text-gray-700 mb-3">swagger-codegen can convert between formats:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Install swagger-codegen
+# Download from: https://github.com/swagger-api/swagger-codegen
+
+# Convert JSON to YAML (via validation)
+java -jar swagger-codegen-cli.jar validate -i openapi.json
+
+# Note: swagger-codegen primarily generates code,
+# but can validate and work with both formats</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">openapi-generator</h3>
+                    <p class="text-gray-700 mb-3">OpenAPI Generator supports format conversion:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Install openapi-generator
+# macOS: brew install openapi-generator
+# Or download JAR from GitHub
+
+# Validate and convert (indirectly)
+openapi-generator validate -i openapi.json
+
+# Use with YAML output format
+openapi-generator generate -i openapi.json -g openapi-yaml -o output/</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Complete Example -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Complete Conversion Example</h2>
+                <p class="text-gray-700 mb-4">Example OpenAPI JSON and its YAML equivalent:</p>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">JSON Format (Input)</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Sample API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/users": {
+      "get": {
+        "summary": "Get users",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">YAML Format (Output)</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>openapi: 3.0.0
+info:
+  title: Sample API
+  version: 1.0.0
+paths:
+  /users:
+    get:
+      summary: Get users
+      responses:
+        '200':
+          description: Success</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Best Practices -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Best Practices</h2>
+                <ul class="space-y-4 text-gray-700">
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Validate after conversion</strong> - Ensure the YAML file is valid OpenAPI specification
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Preserve formatting</strong> - Use tools that maintain proper YAML indentation
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Check references</strong> - Verify that $ref references are preserved correctly
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Test the specification</strong> - Validate with OpenAPI validators after conversion
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Common Issues -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Common Issues and Solutions</h2>
+                
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6">
+                    <h3 class="text-lg font-semibold text-yellow-900 mb-2">Issue: Numeric keys converted to strings</h3>
+                    <p class="text-yellow-800 mb-2">YAML may quote numeric keys. This is usually fine for OpenAPI:</p>
+                    <div class="bg-gray-900 rounded-lg p-4 mt-2">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># YAML automatically quotes numeric keys
+responses:
+  '200':  # This is correct
+    description: Success</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4">
+                    <h3 class="text-lg font-semibold text-yellow-900 mb-2">Issue: Reference paths not preserved</h3>
+                    <p class="text-yellow-800 mb-2">Ensure $ref paths remain valid after conversion:</p>
+                    <div class="bg-gray-900 rounded-lg p-4 mt-2">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Verify references are intact
+components:
+  schemas:
+    User:
+      $ref: '#/components/schemas/User'  # Should remain valid</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Related Articles -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Related Articles</h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <a href="how-to-create-a-yaml-file.html" class="block bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:border-blue-500 transition">
+                        <h3 class="font-semibold text-gray-900 mb-2">How to Create a YAML File</h3>
+                        <p class="text-sm text-gray-600">Learn the basics of creating YAML files</p>
+                    </a>
+                    <a href="../tutorial/" class="block bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:border-blue-500 transition">
+                        <h3 class="font-semibold text-gray-900 mb-2">YAML Tutorial</h3>
+                        <p class="text-sm text-gray-600">Comprehensive YAML syntax guide</p>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Back to Home -->
+            <div class="text-center mt-12">
+                <a href="../" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Back to YAML Tools
+                </a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-gray-900 font-bold text-lg mb-3">YAML.cc</h3>
+                    <p class="text-gray-600 text-sm">Professional YAML tools and resources for developers.</p>
+                </div>
+                <div>
+                    <h4 class="text-gray-900 font-semibold mb-3">Tools</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML Validator</a></li>
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML Formatter</a></li>
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML to JSON</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-gray-900 font-semibold mb-3">Resources</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="../#info-section" class="hover:text-gray-900 transition">What is YAML?</a></li>
+                        <li><a href="../tutorial/" class="hover:text-gray-900 transition">Tutorial</a></li>
+                        <li><a href="./" class="hover:text-gray-900 transition">Q&A</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 mt-8 pt-8 text-center text-sm text-gray-500">
+                <p>&copy; 2024 YAML.cc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+

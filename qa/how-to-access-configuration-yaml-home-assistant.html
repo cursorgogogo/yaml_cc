@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Access Configuration.yaml in Home Assistant - Complete Guide | YAML.cc</title>
+    <meta name="description" content="Learn how to access and locate configuration.yaml file in Home Assistant. Multiple methods including File Editor, SSH, Samba, and direct file access.">
+    <meta name="keywords" content="home assistant configuration.yaml location, access home assistant config, ha config file, home assistant file editor">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yaml.cc/qa/how-to-access-configuration-yaml-home-assistant">
+    <link rel="icon" type="image/x-icon" href="/assets/images/yamllint.svg">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://yaml.cc/qa/how-to-access-configuration-yaml-home-assistant">
+    <meta property="og:title" content="How to Access Configuration.yaml in Home Assistant | YAML.cc">
+    <meta property="og:description" content="Complete guide to accessing Home Assistant configuration files.">
+    <meta property="og:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../index.css" type="text/css">
+</head>
+<body class="bg-white text-gray-900">
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <a href="../" class="text-xl font-bold text-gray-900 hover:text-gray-700">
+                        YAML.cc
+                    </a>
+                </div>
+                <ul class="hidden md:flex space-x-8">
+                    <li><a href="../#tools" class="text-gray-600 hover:text-gray-900 transition">YAML Tools</a></li>
+                    <li><a href="../#info-section" class="text-gray-600 hover:text-gray-900 transition">What is YAML?</a></li>
+                    <li><a href="../tutorial/" class="text-gray-600 hover:text-gray-900 transition">Tutorial</a></li>
+                    <li><a href="./" class="text-gray-600 hover:text-gray-900 transition">Q&A</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="py-12 bg-white">
+        <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Breadcrumb -->
+            <nav class="mb-8 text-sm">
+                <a href="../" class="text-blue-600 hover:text-blue-700">Home</a>
+                <span class="mx-2 text-gray-400">/</span>
+                <a href="./" class="text-blue-600 hover:text-blue-700">Q&A</a>
+                <span class="mx-2 text-gray-400">/</span>
+                <span class="text-gray-600">Home Assistant Access</span>
+            </nav>
+
+            <!-- Article Header -->
+            <header class="mb-12">
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">How to Access Configuration.yaml in Home Assistant</h1>
+                <p class="text-xl text-gray-600">Complete guide to accessing and locating Home Assistant configuration files</p>
+                <div class="mt-6 flex items-center gap-4 text-sm text-gray-500">
+                    <span>Last updated: November 2024</span>
+                    <span>•</span>
+                    <span>7 min read</span>
+                </div>
+            </header>
+
+            <!-- Introduction -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Introduction</h2>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    The <code class="bg-gray-100 px-2 py-1 rounded text-sm">configuration.yaml</code> file is the main configuration file for Home Assistant. Accessing this file depends on your installation method. This guide covers all common methods to access and edit the configuration file.
+                </p>
+            </section>
+
+            <!-- File Location -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Default File Location</h2>
+                <p class="text-gray-700 mb-4">The configuration file location varies by installation type:</p>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Home Assistant OS / Supervised</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>/config/configuration.yaml</code></pre>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">Accessible via File Editor add-on, SSH, or Samba share</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Docker Installation</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>~/homeassistant/configuration.yaml
+# or
+/path/to/config/configuration.yaml</code></pre>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">Location depends on where you mounted the config volume</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Python Virtual Environment</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>~/.homeassistant/configuration.yaml
+# or
+/home/username/.homeassistant/configuration.yaml</code></pre>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">Standard location for Python venv installations</p>
+                </div>
+            </section>
+
+            <!-- Method 1: File Editor -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Method 1: File Editor Add-on (Easiest)</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Installation Steps</h3>
+                    <ol class="list-decimal list-inside space-y-2 text-gray-700 ml-4">
+                        <li>Go to Settings → Add-ons → Add-on Store</li>
+                        <li>Search for "File editor"</li>
+                        <li>Click on "File editor" by Home Assistant</li>
+                        <li>Click "Install" and wait for installation to complete</li>
+                        <li>Click "Start" to launch the add-on</li>
+                        <li>Optionally, enable "Show in sidebar" for quick access</li>
+                    </ol>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Using File Editor</h3>
+                    <ol class="list-decimal list-inside space-y-2 text-gray-700 ml-4">
+                        <li>Open File Editor from the sidebar or Settings → Add-ons</li>
+                        <li>Navigate to <code class="bg-gray-100 px-2 py-1 rounded text-sm">configuration.yaml</code></li>
+                        <li>Click on the file to open it</li>
+                        <li>Make your edits</li>
+                        <li>Click "Save" (or Ctrl+S / Cmd+S)</li>
+                        <li>Validate configuration in Developer Tools → YAML</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- Method 2: SSH -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Method 2: SSH Access</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Enable SSH Add-on</h3>
+                    <ol class="list-decimal list-inside space-y-2 text-gray-700 ml-4">
+                        <li>Go to Settings → Add-ons → Add-on Store</li>
+                        <li>Search for "SSH & Web Terminal"</li>
+                        <li>Install and start the add-on</li>
+                        <li>Configure a password in the add-on settings</li>
+                        <li>Save and restart the add-on</li>
+                    </ol>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Connect via SSH</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Connect to Home Assistant
+ssh root@homeassistant.local
+# or
+ssh root@&lt;your-ha-ip&gt;
+
+# Navigate to config directory
+cd /config
+
+# Edit configuration.yaml
+nano configuration.yaml
+# or
+vi configuration.yaml</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Using SCP (Secure Copy)</h3>
+                    <p class="text-gray-700 mb-3">Copy file to your local machine for editing:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Copy from Home Assistant to local
+scp root@homeassistant.local:/config/configuration.yaml ./
+
+# Edit locally, then copy back
+scp ./configuration.yaml root@homeassistant.local:/config/</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Method 3: Samba -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Method 3: Samba Network Share</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Enable Samba Add-on</h3>
+                    <ol class="list-decimal list-inside space-y-2 text-gray-700 ml-4">
+                        <li>Go to Settings → Add-ons → Add-on Store</li>
+                        <li>Search for "Samba share"</li>
+                        <li>Install and start the add-on</li>
+                        <li>Configure username and password</li>
+                        <li>Set workgroup name (optional)</li>
+                        <li>Save and restart the add-on</li>
+                    </ol>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Access from Windows</h3>
+                    <ol class="list-decimal list-inside space-y-2 text-gray-700 ml-4">
+                        <li>Open File Explorer</li>
+                        <li>In the address bar, type: <code class="bg-gray-100 px-2 py-1 rounded text-sm">\\homeassistant.local</code> or <code class="bg-gray-100 px-2 py-1 rounded text-sm">\\&lt;your-ha-ip&gt;</code></li>
+                        <li>Enter your Samba credentials when prompted</li>
+                        <li>Navigate to the <code class="bg-gray-100 px-2 py-1 rounded text-sm">config</code> folder</li>
+                        <li>Open <code class="bg-gray-100 px-2 py-1 rounded text-sm">configuration.yaml</code> with any text editor</li>
+                    </ol>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Access from macOS/Linux</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Mount Samba share
+mkdir ~/homeassistant
+mount_smbfs //username@homeassistant.local/config ~/homeassistant
+
+# Or use Finder (macOS)
+# Go → Connect to Server
+# smb://homeassistant.local/config
+
+# Edit file
+nano ~/homeassistant/configuration.yaml</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Method 4: Direct File Access -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Method 4: Direct File System Access</h2>
+                <p class="text-gray-700 mb-4">For Docker and local installations, access files directly:</p>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Docker Container Access</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># List running containers
+docker ps
+
+# Access container shell
+docker exec -it homeassistant bash
+
+# Navigate to config
+cd /config
+ls -la configuration.yaml
+
+# Edit with nano or vi
+nano configuration.yaml</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Verification -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Verifying File Access</h2>
+                <p class="text-gray-700 mb-4">After accessing the file, verify it's the correct configuration:</p>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Check File Contents</h3>
+                    <p class="text-gray-700 mb-3">A valid configuration.yaml should start with:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>homeassistant:
+  name: Home
+  latitude: !secret latitude
+  longitude: !secret longitude
+  elevation: 0
+  unit_system: metric
+  time_zone: UTC</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Best Practices -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Best Practices</h2>
+                <ul class="space-y-3 text-gray-700">
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Use File Editor for beginners</strong> - Easiest method with built-in validation
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Backup before editing</strong> - Always create a backup of configuration.yaml before making changes
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Validate after changes</strong> - Use Developer Tools → YAML → Check Configuration
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Use version control</strong> - Consider using Git to track configuration changes
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Related Articles -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Related Articles</h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <a href="how-to-edit-configuration-yaml-home-assistant.html" class="block bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:border-blue-500 transition">
+                        <h3 class="font-semibold text-gray-900 mb-2">How to Edit Configuration YAML in Home Assistant</h3>
+                        <p class="text-sm text-gray-600">Learn how to safely edit configuration files</p>
+                    </a>
+                    <a href="../tutorial/" class="block bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:border-blue-500 transition">
+                        <h3 class="font-semibold text-gray-900 mb-2">YAML Tutorial</h3>
+                        <p class="text-sm text-gray-600">Learn YAML syntax fundamentals</p>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Back to Home -->
+            <div class="text-center mt-12">
+                <a href="../" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Back to YAML Tools
+                </a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-gray-900 font-bold text-lg mb-3">YAML.cc</h3>
+                    <p class="text-gray-600 text-sm">Professional YAML tools and resources for developers.</p>
+                </div>
+                <div>
+                    <h4 class="text-gray-900 font-semibold mb-3">Tools</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML Validator</a></li>
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML Formatter</a></li>
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML to JSON</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-gray-900 font-semibold mb-3">Resources</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="../#info-section" class="hover:text-gray-900 transition">What is YAML?</a></li>
+                        <li><a href="../tutorial/" class="hover:text-gray-900 transition">Tutorial</a></li>
+                        <li><a href="./" class="hover:text-gray-900 transition">Q&A</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 mt-8 pt-8 text-center text-sm text-gray-500">
+                <p>&copy; 2024 YAML.cc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+

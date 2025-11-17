@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Can't Import Glide Using gopkg.in/yaml.v2 - Troubleshooting Guide | YAML.cc</title>
+    <meta name="description" content="Troubleshoot import issues with gopkg.in/yaml.v2 in Go projects using Glide. Learn common solutions and fixes for dependency management problems.">
+    <meta name="keywords" content="gopkg.in yaml.v2, glide import error, go yaml import, glide dependency, go package import">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yaml.cc/qa/cant-import-glide-using-gopkg-in-yaml-v2">
+    <link rel="icon" type="image/x-icon" href="/assets/images/yamllint.svg">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://yaml.cc/qa/cant-import-glide-using-gopkg-in-yaml-v2">
+    <meta property="og:title" content="Can't Import Glide Using gopkg.in/yaml.v2 | YAML.cc">
+    <meta property="og:description" content="Complete troubleshooting guide for gopkg.in/yaml.v2 import issues with Glide.">
+    <meta property="og:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../index.css" type="text/css">
+</head>
+<body class="bg-white text-gray-900">
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <a href="../" class="text-xl font-bold text-gray-900 hover:text-gray-700">
+                        YAML.cc
+                    </a>
+                </div>
+                <ul class="hidden md:flex space-x-8">
+                    <li><a href="../#tools" class="text-gray-600 hover:text-gray-900 transition">YAML Tools</a></li>
+                    <li><a href="../#info-section" class="text-gray-600 hover:text-gray-900 transition">What is YAML?</a></li>
+                    <li><a href="../tutorial/" class="text-gray-600 hover:text-gray-900 transition">Tutorial</a></li>
+                    <li><a href="./" class="text-gray-600 hover:text-gray-900 transition">Q&A</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="py-12 bg-white">
+        <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Breadcrumb -->
+            <nav class="mb-8 text-sm">
+                <a href="../" class="text-blue-600 hover:text-blue-700">Home</a>
+                <span class="mx-2 text-gray-400">/</span>
+                <a href="./" class="text-blue-600 hover:text-blue-700">Q&A</a>
+                <span class="mx-2 text-gray-400">/</span>
+                <span class="text-gray-600">Glide Import Error</span>
+            </nav>
+
+            <!-- Article Header -->
+            <header class="mb-12">
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">Can't Import Glide Using gopkg.in/yaml.v2</h1>
+                <p class="text-xl text-gray-600">Troubleshooting guide for Go YAML import issues with Glide dependency manager</p>
+                <div class="mt-6 flex items-center gap-4 text-sm text-gray-500">
+                    <span>Last updated: November 2024</span>
+                    <span>•</span>
+                    <span>7 min read</span>
+                </div>
+            </header>
+
+            <!-- Introduction -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Introduction</h2>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    When using Glide for Go dependency management, you may encounter issues importing <code class="bg-gray-100 px-2 py-1 rounded text-sm">gopkg.in/yaml.v2</code>. This guide covers common causes and solutions for these import problems.
+                </p>
+            </section>
+
+            <!-- Common Error Messages -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Common Error Messages</h2>
+                
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+                    <h3 class="text-lg font-semibold text-red-900 mb-2">Error: Cannot find package</h3>
+                    <div class="bg-gray-900 rounded-lg p-4 mt-2">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>package gopkg.in/yaml.v2: cannot find package "gopkg.in/yaml.v2"</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+                    <h3 class="text-lg font-semibold text-red-900 mb-2">Error: Import path mismatch</h3>
+                    <div class="bg-gray-900 rounded-lg p-4 mt-2">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>import "gopkg.in/yaml.v2": cannot find package</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-red-50 border-l-4 border-red-500 p-4">
+                    <h3 class="text-lg font-semibold text-red-900 mb-2">Error: Glide dependency not found</h3>
+                    <div class="bg-gray-900 rounded-lg p-4 mt-2">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>[ERROR] Failed to retrieve gopkg.in/yaml.v2</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Solutions -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Solutions</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Solution 1: Add to glide.yaml</h3>
+                    <p class="text-gray-700 mb-3">Ensure <code class="bg-gray-100 px-2 py-1 rounded text-sm">gopkg.in/yaml.v2</code> is properly listed in your <code class="bg-gray-100 px-2 py-1 rounded text-sm">glide.yaml</code>:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>package: your-package-name
+import:
+  - package: gopkg.in/yaml.v2
+    version: ^2.4.0</code></pre>
+                    </div>
+                    <p class="text-gray-700 mt-3">Then run:</p>
+                    <div class="bg-gray-900 rounded-lg p-4 mt-2">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>glide install
+glide update</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Solution 2: Use glide get</h3>
+                    <p class="text-gray-700 mb-3">Add the dependency using Glide's get command:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Add the package
+glide get gopkg.in/yaml.v2
+
+# This will update glide.yaml and glide.lock
+# Then install dependencies
+glide install</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Solution 3: Specify version explicitly</h3>
+                    <p class="text-gray-700 mb-3">In <code class="bg-gray-100 px-2 py-1 rounded text-sm">glide.yaml</code>, specify the exact version:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>import:
+  - package: gopkg.in/yaml.v2
+    version: v2.4.0  # Use specific version tag</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Solution 4: Clean and reinstall</h3>
+                    <p class="text-gray-700 mb-3">Remove vendor directory and reinstall:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Remove vendor directory
+rm -rf vendor/
+
+# Clear Glide cache (if needed)
+glide cache-clear
+
+# Reinstall all dependencies
+glide install</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Solution 5: Check Go module compatibility</h3>
+                    <p class="text-gray-700 mb-3">If using Go modules, ensure compatibility:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># If using Go modules (go.mod)
+go get gopkg.in/yaml.v2@v2.4.0
+
+# Or in go.mod
+require gopkg.in/yaml.v2 v2.4.0</code></pre>
+                    </div>
+                    <p class="text-gray-700 mt-3 text-sm">Note: If your project uses Go modules, consider migrating from Glide to Go modules.</p>
+                </div>
+            </section>
+
+            <!-- Complete glide.yaml Example -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Complete glide.yaml Example</h2>
+                <p class="text-gray-700 mb-4">A properly configured <code class="bg-gray-100 px-2 py-1 rounded text-sm">glide.yaml</code> with yaml.v2:</p>
+                
+                <div class="bg-gray-900 rounded-lg p-4">
+                    <pre class="text-sm text-gray-200 overflow-x-auto"><code>package: github.com/yourusername/yourproject
+import:
+  - package: gopkg.in/yaml.v2
+    version: ^2.4.0
+  - package: github.com/some/other-package
+    version: ^1.0.0
+testImport:
+  - package: github.com/stretchr/testify
+    version: ^1.7.0</code></pre>
+                </div>
+            </section>
+
+            <!-- Alternative: Using Go Modules -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Alternative: Migrating to Go Modules</h2>
+                <p class="text-gray-700 mb-4">
+                    If you're experiencing persistent issues with Glide, consider migrating to Go modules (the official Go dependency management system):
+                </p>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Step 1: Initialize Go modules</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Initialize go.mod
+go mod init github.com/yourusername/yourproject
+
+# This will read glide.yaml and create go.mod</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Step 2: Add yaml.v2 dependency</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Add yaml.v2
+go get gopkg.in/yaml.v2@v2.4.0
+
+# Or edit go.mod directly
+require gopkg.in/yaml.v2 v2.4.0</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Step 3: Update imports (if needed)</h3>
+                    <p class="text-gray-700 mb-3">Go modules handle the import path automatically:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>import "gopkg.in/yaml.v2"
+
+// Usage remains the same
+var data map[string]interface{}
+err := yaml.Unmarshal([]byte(yamlData), &data)</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Verification -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Verifying the Installation</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Check Glide dependencies</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># List installed packages
+glide list
+
+# Check specific package
+glide tree | grep yaml</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Test the import</h3>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Create a test file
+package main
+
+import (
+    "fmt"
+    "gopkg.in/yaml.v2"
+)
+
+func main() {
+    fmt.Println("yaml.v2 imported successfully")
+}
+
+# Build to verify
+go build</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Common Issues -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Common Issues</h2>
+                
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6">
+                    <h3 class="text-lg font-semibold text-yellow-900 mb-2">Issue: Network connectivity</h3>
+                    <p class="text-yellow-800 mb-2">Ensure you can access gopkg.in:</p>
+                    <div class="bg-gray-900 rounded-lg p-4 mt-2">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Test connectivity
+curl -I https://gopkg.in/yaml.v2
+
+# Check DNS resolution
+nslookup gopkg.in</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6">
+                    <h3 class="text-lg font-semibold text-yellow-900 mb-2">Issue: GOPATH not set</h3>
+                    <p class="text-yellow-800 mb-2">Ensure GOPATH is properly configured:</p>
+                    <div class="bg-gray-900 rounded-lg p-4 mt-2">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Check GOPATH
+echo $GOPATH
+
+# Set GOPATH if needed (Linux/macOS)
+export GOPATH=$HOME/go
+
+# Windows
+set GOPATH=C:\Users\YourName\go</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4">
+                    <h3 class="text-lg font-semibold text-yellow-900 mb-2">Issue: Version conflicts</h3>
+                    <p class="text-yellow-800 mb-2">Check for version conflicts in glide.lock:</p>
+                    <div class="bg-gray-900 rounded-lg p-4 mt-2">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Review glide.lock
+cat glide.lock | grep yaml
+
+# Update to resolve conflicts
+glide update</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Best Practices -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Best Practices</h2>
+                <ul class="space-y-4 text-gray-700">
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Pin versions</strong> - Use specific version tags in glide.yaml for reproducibility
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Commit glide.lock</strong> - Include glide.lock in version control for consistent builds
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Consider Go modules</strong> - For new projects, use Go modules instead of Glide
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Regular updates</strong> - Run <code class="bg-gray-100 px-2 py-1 rounded text-sm">glide update</code> periodically to get security fixes
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Related Articles -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Related Articles</h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <a href="how-to-create-a-yaml-file.html" class="block bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:border-blue-500 transition">
+                        <h3 class="font-semibold text-gray-900 mb-2">How to Create a YAML File</h3>
+                        <p class="text-sm text-gray-600">Learn the basics of YAML file creation</p>
+                    </a>
+                    <a href="../tutorial/" class="block bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:border-blue-500 transition">
+                        <h3 class="font-semibold text-gray-900 mb-2">YAML Tutorial</h3>
+                        <p class="text-sm text-gray-600">Comprehensive YAML syntax guide</p>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Back to Home -->
+            <div class="text-center mt-12">
+                <a href="../" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Back to YAML Tools
+                </a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-gray-900 font-bold text-lg mb-3">YAML.cc</h3>
+                    <p class="text-gray-600 text-sm">Professional YAML tools and resources for developers.</p>
+                </div>
+                <div>
+                    <h4 class="text-gray-900 font-semibold mb-3">Tools</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML Validator</a></li>
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML Formatter</a></li>
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML to JSON</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-gray-900 font-semibold mb-3">Resources</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="../#info-section" class="hover:text-gray-900 transition">What is YAML?</a></li>
+                        <li><a href="../tutorial/" class="hover:text-gray-900 transition">Tutorial</a></li>
+                        <li><a href="./" class="hover:text-gray-900 transition">Q&A</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 mt-8 pt-8 text-center text-sm text-gray-500">
+                <p>&copy; 2024 YAML.cc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+

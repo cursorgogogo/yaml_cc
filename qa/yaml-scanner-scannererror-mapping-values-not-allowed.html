@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAML Scanner Error: Mapping Values Are Not Allowed Here - Fix Guide | YAML.cc</title>
+    <meta name="description" content="Complete solution for 'yaml.scanner.ScannerError: mapping values are not allowed here' error. Learn how to fix YAML syntax issues and prevent scanner errors.">
+    <meta name="keywords" content="yaml scanner error, mapping values not allowed, yaml.scanner.scannererror, yaml syntax error, yaml parsing error">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yaml.cc/qa/yaml-scanner-scannererror-mapping-values-not-allowed">
+    <link rel="icon" type="image/x-icon" href="/assets/images/yamllint.svg">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://yaml.cc/qa/yaml-scanner-scannererror-mapping-values-not-allowed">
+    <meta property="og:title" content="Fix YAML Scanner Error: Mapping Values Not Allowed | YAML.cc">
+    <meta property="og:description" content="Solutions for YAML scanner errors and mapping value issues.">
+    <meta property="og:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../index.css" type="text/css">
+</head>
+<body class="bg-white text-gray-900">
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <a href="../" class="text-xl font-bold text-gray-900 hover:text-gray-700">
+                        YAML.cc
+                    </a>
+                </div>
+                <ul class="hidden md:flex space-x-8">
+                    <li><a href="../#tools" class="text-gray-600 hover:text-gray-900 transition">YAML Tools</a></li>
+                    <li><a href="../#info-section" class="text-gray-600 hover:text-gray-900 transition">What is YAML?</a></li>
+                    <li><a href="../tutorial/" class="text-gray-600 hover:text-gray-900 transition">Tutorial</a></li>
+                    <li><a href="./" class="text-gray-600 hover:text-gray-900 transition">Q&A</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="py-12 bg-white">
+        <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Breadcrumb -->
+            <nav class="mb-8 text-sm">
+                <a href="../" class="text-blue-600 hover:text-blue-700">Home</a>
+                <span class="mx-2 text-gray-400">/</span>
+                <a href="./" class="text-blue-600 hover:text-blue-700">Q&A</a>
+                <span class="mx-2 text-gray-400">/</span>
+                <span class="text-gray-600">YAML Scanner Error</span>
+            </nav>
+
+            <!-- Article Header -->
+            <header class="mb-12">
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">YAML Scanner Error: Mapping Values Are Not Allowed Here</h1>
+                <p class="text-xl text-gray-600">Complete guide to fixing YAML scanner errors and mapping value issues</p>
+                <div class="mt-6 flex items-center gap-4 text-sm text-gray-500">
+                    <span>Last updated: November 2024</span>
+                    <span>•</span>
+                    <span>7 min read</span>
+                </div>
+            </header>
+
+            <!-- Error Description -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Understanding the Error</h2>
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+                    <pre class="text-sm text-red-800 overflow-x-auto"><code>yaml.scanner.ScannerError: mapping values are not allowed here
+  in "&lt;file&gt;", line X, column Y</code></pre>
+                </div>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    This error occurs when the YAML parser encounters a colon (:) in a context where it's not expected. The parser interprets the colon as the start of a mapping (key-value pair), but the surrounding syntax doesn't allow it. Common causes include unquoted strings containing colons, incorrect list syntax, or misplaced colons.
+                </p>
+            </section>
+
+            <!-- Common Causes -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Common Causes and Solutions</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">1. Unquoted Strings with Colons</h3>
+                    <p class="text-gray-700 mb-3">Values containing colons must be quoted to prevent the parser from treating them as mappings.</p>
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-3">
+                        <p class="text-sm font-semibold text-red-900 mb-2">Incorrect:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>time: 12:30:45
+url: https://example.com
+version: 1.0:beta</code></pre>
+                        </div>
+                    </div>
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4">
+                        <p class="text-sm font-semibold text-green-900 mb-2">Correct:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>time: "12:30:45"
+url: "https://example.com"
+version: "1.0:beta"</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">2. Incorrect List Syntax</h3>
+                    <p class="text-gray-700 mb-3">Lists with inline syntax cannot contain unquoted values with colons.</p>
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-3">
+                        <p class="text-sm font-semibold text-red-900 mb-2">Incorrect:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>items: [key1: value1, key2: value2]</code></pre>
+                        </div>
+                    </div>
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4">
+                        <p class="text-sm font-semibold text-green-900 mb-2">Correct:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>items:
+  - key1: value1
+  - key2: value2</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">3. Multiple Colons in a Line</h3>
+                    <p class="text-gray-700 mb-3">Multiple colons on the same line without proper quoting cause parsing errors.</p>
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-3">
+                        <p class="text-sm font-semibold text-red-900 mb-2">Incorrect:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>description: Time: 12:30, Date: 2024-01-01</code></pre>
+                        </div>
+                    </div>
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4">
+                        <p class="text-sm font-semibold text-green-900 mb-2">Correct:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>description: "Time: 12:30, Date: 2024-01-01"</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">4. Colons in Flow Collections</h3>
+                    <p class="text-gray-700 mb-3">Inline maps and lists require proper quoting when values contain colons.</p>
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-3">
+                        <p class="text-sm font-semibold text-red-900 mb-2">Incorrect:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>config: {time: 12:30, url: https://example.com}</code></pre>
+                        </div>
+                    </div>
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4">
+                        <p class="text-sm font-semibold text-green-900 mb-2">Correct:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>config:
+  time: "12:30"
+  url: "https://example.com"</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step-by-Step Fix -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Step-by-Step Fix</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Step 1: Locate the Error</h3>
+                    <p class="text-gray-700 mb-3">The error message indicates the exact line and column. Check that location:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Error message shows:
+# in "file.yaml", line 5, column 15
+# Check line 5, character position 15</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Step 2: Identify the Colon</h3>
+                    <p class="text-gray-700 mb-3">Find the colon causing the issue and determine if it's part of a value that needs quoting:</p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                        <li>Is the colon part of a time string (e.g., "12:30:45")?</li>
+                        <li>Is it part of a URL (e.g., "https://example.com")?</li>
+                        <li>Is it part of a version string (e.g., "1.0:beta")?</li>
+                        <li>Is it incorrectly placed in a list or map?</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Step 3: Apply the Fix</h3>
+                    <p class="text-gray-700 mb-3">Quote the value containing the colon or restructure the YAML:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Quote values with colons
+time: "12:30:45"
+url: "https://example.com"
+
+# Or use block scalar for multi-line
+description: |
+  Time: 12:30
+  Date: 2024-01-01</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Real-World Examples -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Real-World Examples</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Example 1: Kubernetes ConfigMap</h3>
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-3">
+                        <p class="text-sm font-semibold text-red-900 mb-2">Problematic:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>apiVersion: v1
+kind: ConfigMap
+data:
+  endpoint: https://api.example.com:8080/v1
+  timeout: 30:00</code></pre>
+                        </div>
+                    </div>
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4">
+                        <p class="text-sm font-semibold text-green-900 mb-2">Fixed:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>apiVersion: v1
+kind: ConfigMap
+data:
+  endpoint: "https://api.example.com:8080/v1"
+  timeout: "30:00"</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Example 2: Docker Compose</h3>
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-3">
+                        <p class="text-sm font-semibold text-red-900 mb-2">Problematic:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>services:
+  app:
+    environment:
+      - DATABASE_URL=postgresql://user:pass@host:5432/db
+      - REDIS_URL=redis://localhost:6379</code></pre>
+                        </div>
+                    </div>
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4">
+                        <p class="text-sm font-semibold text-green-900 mb-2">Fixed:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>services:
+  app:
+    environment:
+      - "DATABASE_URL=postgresql://user:pass@host:5432/db"
+      - "REDIS_URL=redis://localhost:6379"</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Prevention Tips -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Prevention Tips</h2>
+                <ul class="space-y-3 text-gray-700">
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Quote values with colons</strong> - Always quote strings containing colons, especially URLs, times, and version strings
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Use block syntax for complex values</strong> - For multi-line or complex strings, use block scalars (| or >)
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Validate before use</strong> - Always validate YAML files before deploying or committing
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Use YAML linters</strong> - Configure yamllint or similar tools in your development workflow
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Related Articles -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Related Articles</h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <a href="yaml-line-5-did-not-find-expected-key.html" class="block bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:border-blue-500 transition">
+                        <h3 class="font-semibold text-gray-900 mb-2">YAML Line 5 Did Not Find Expected Key</h3>
+                        <p class="text-sm text-gray-600">Fix YAML syntax errors and parsing issues</p>
+                    </a>
+                    <a href="../tutorial/" class="block bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:border-blue-500 transition">
+                        <h3 class="font-semibold text-gray-900 mb-2">YAML Tutorial</h3>
+                        <p class="text-sm text-gray-600">Learn YAML syntax and best practices</p>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Back to Home -->
+            <div class="text-center mt-12">
+                <a href="../" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Back to YAML Tools
+                </a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-gray-900 font-bold text-lg mb-3">YAML.cc</h3>
+                    <p class="text-gray-600 text-sm">Professional YAML tools and resources for developers.</p>
+                </div>
+                <div>
+                    <h4 class="text-gray-900 font-semibold mb-3">Tools</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML Validator</a></li>
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML Formatter</a></li>
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML to JSON</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-gray-900 font-semibold mb-3">Resources</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="../#info-section" class="hover:text-gray-900 transition">What is YAML?</a></li>
+                        <li><a href="../tutorial/" class="hover:text-gray-900 transition">Tutorial</a></li>
+                        <li><a href="./" class="hover:text-gray-900 transition">Q&A</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 mt-8 pt-8 text-center text-sm text-gray-500">
+                <p>&copy; 2024 YAML.cc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+

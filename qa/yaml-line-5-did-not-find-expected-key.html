@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAML Line 5 Did Not Find Expected Key - Error Fix Guide | YAML.cc</title>
+    <meta name="description" content="Complete guide to fix 'YAML line 5 did not find expected key' error. Learn common causes, solutions, and how to validate YAML syntax correctly.">
+    <meta name="keywords" content="yaml line 5 error, yaml did not find expected key, yaml syntax error, yaml parsing error, yaml validation">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yaml.cc/qa/yaml-line-5-did-not-find-expected-key">
+    <link rel="icon" type="image/x-icon" href="/assets/images/yamllint.svg">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://yaml.cc/qa/yaml-line-5-did-not-find-expected-key">
+    <meta property="og:title" content="Fix YAML Line 5 Did Not Find Expected Key Error | YAML.cc">
+    <meta property="og:description" content="Solutions for YAML syntax errors and parsing issues.">
+    <meta property="og:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../index.css" type="text/css">
+</head>
+<body class="bg-white text-gray-900">
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <a href="../" class="text-xl font-bold text-gray-900 hover:text-gray-700">
+                        YAML.cc
+                    </a>
+                </div>
+                <ul class="hidden md:flex space-x-8">
+                    <li><a href="../#tools" class="text-gray-600 hover:text-gray-900 transition">YAML Tools</a></li>
+                    <li><a href="../#info-section" class="text-gray-600 hover:text-gray-900 transition">What is YAML?</a></li>
+                    <li><a href="../tutorial/" class="text-gray-600 hover:text-gray-900 transition">Tutorial</a></li>
+                    <li><a href="./" class="text-gray-600 hover:text-gray-900 transition">Q&A</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="py-12 bg-white">
+        <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Breadcrumb -->
+            <nav class="mb-8 text-sm">
+                <a href="../" class="text-blue-600 hover:text-blue-700">Home</a>
+                <span class="mx-2 text-gray-400">/</span>
+                <a href="./" class="text-blue-600 hover:text-blue-700">Q&A</a>
+                <span class="mx-2 text-gray-400">/</span>
+                <span class="text-gray-600">YAML Syntax Error</span>
+            </nav>
+
+            <!-- Article Header -->
+            <header class="mb-12">
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">YAML Line 5 Did Not Find Expected Key</h1>
+                <p class="text-xl text-gray-600">Complete guide to fixing YAML syntax and parsing errors</p>
+                <div class="mt-6 flex items-center gap-4 text-sm text-gray-500">
+                    <span>Last updated: November 2024</span>
+                    <span>•</span>
+                    <span>6 min read</span>
+                </div>
+            </header>
+
+            <!-- Error Description -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Understanding the Error</h2>
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+                    <pre class="text-sm text-red-800 overflow-x-auto"><code>YAML: line 5: did not find expected key</code></pre>
+                </div>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    This error indicates that the YAML parser encountered a syntax issue at line 5. The parser expected to find a key-value pair but found something else instead. Common causes include incorrect indentation, missing colons, or invalid characters.
+                </p>
+            </section>
+
+            <!-- Common Causes -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Common Causes</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">1. Incorrect Indentation</h3>
+                    <p class="text-gray-700 mb-3">YAML is indentation-sensitive. Mixing tabs and spaces or inconsistent indentation causes errors.</p>
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-3">
+                        <p class="text-sm font-semibold text-red-900 mb-2">Incorrect:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>name: John
+  age: 30
+  city: New York
+address: 123 Main St</code></pre>
+                        </div>
+                    </div>
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4">
+                        <p class="text-sm font-semibold text-green-900 mb-2">Correct:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>name: John
+age: 30
+city: New York
+address: 123 Main St</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">2. Missing Colon</h3>
+                    <p class="text-gray-700 mb-3">Keys must be followed by a colon and space before the value.</p>
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-3">
+                        <p class="text-sm font-semibold text-red-900 mb-2">Incorrect:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>name John
+age 30</code></pre>
+                        </div>
+                    </div>
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4">
+                        <p class="text-sm font-semibold text-green-900 mb-2">Correct:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>name: John
+age: 30</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">3. Invalid Characters in Keys</h3>
+                    <p class="text-gray-700 mb-3">Keys containing special characters must be quoted.</p>
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-3">
+                        <p class="text-sm font-semibold text-red-900 mb-2">Incorrect:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>user-name: John
+email@domain: test@example.com</code></pre>
+                        </div>
+                    </div>
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4">
+                        <p class="text-sm font-semibold text-green-900 mb-2">Correct:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>"user-name": John
+"email@domain": test@example.com</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">4. Nested Structure Issues</h3>
+                    <p class="text-gray-700 mb-3">Incorrect nesting of maps and lists causes parsing errors.</p>
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-3">
+                        <p class="text-sm font-semibold text-red-900 mb-2">Incorrect:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>person:
+name: John
+  age: 30</code></pre>
+                        </div>
+                    </div>
+                    <div class="bg-green-50 border-l-4 border-green-500 p-4">
+                        <p class="text-sm font-semibold text-green-900 mb-2">Correct:</p>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-sm text-gray-200 overflow-x-auto"><code>person:
+  name: John
+  age: 30</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step-by-Step Fix -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Step-by-Step Fix</h2>
+                
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Step 1: Check Line 5</h3>
+                    <p class="text-gray-700 mb-3">Examine line 5 and the surrounding lines for syntax issues:</p>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2 ml-4">
+                        <li>Verify indentation matches the parent level</li>
+                        <li>Ensure there's a colon after the key</li>
+                        <li>Check for tabs mixed with spaces</li>
+                        <li>Look for special characters that need quoting</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Step 2: Validate Indentation</h3>
+                    <p class="text-gray-700 mb-3">YAML requires consistent indentation (typically 2 spaces):</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Use 2 spaces for each level
+level1:
+  level2:
+    level3: value</code></pre>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Step 3: Use a YAML Validator</h3>
+                    <p class="text-gray-700 mb-3">Validate your YAML file using online tools or command-line validators:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code># Using Python
+python -c "import yaml; yaml.safe_load(open('file.yaml'))"
+
+# Using yamllint
+yamllint file.yaml
+
+# Online validator
+# Use YAML.cc validator tool</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Example Fix -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Example: Fixing a Common Error</h2>
+                
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+                    <p class="text-sm font-semibold text-red-900 mb-2">Problematic YAML (causes error at line 5):</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-config
+data
+  key1: value1
+  key2: value2</code></pre>
+                    </div>
+                    <p class="text-sm text-red-800 mt-2">Error: Missing colon after "data" on line 4, causing parser to fail at line 5</p>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-green-500 p-4">
+                    <p class="text-sm font-semibold text-green-900 mb-2">Fixed YAML:</p>
+                    <div class="bg-gray-900 rounded-lg p-4">
+                        <pre class="text-sm text-gray-200 overflow-x-auto"><code>apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-config
+data:
+  key1: value1
+  key2: value2</code></pre>
+                    </div>
+                    <p class="text-sm text-green-800 mt-2">Solution: Added colon after "data" to properly define the key</p>
+                </div>
+            </section>
+
+            <!-- Prevention Tips -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Prevention Tips</h2>
+                <ul class="space-y-3 text-gray-700">
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Use spaces, not tabs</strong> - Configure your editor to show whitespace and convert tabs to spaces
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Consistent indentation</strong> - Use 2 spaces per indentation level consistently
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Validate before use</strong> - Run YAML through a validator before deploying or committing
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Use YAML-aware editors</strong> - Editors like VS Code with YAML extensions provide real-time validation
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="mr-3 text-blue-600">•</span>
+                        <div>
+                            <strong class="text-gray-900">Quote special keys</strong> - When in doubt, quote keys containing special characters
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Related Articles -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Related Articles</h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <a href="yaml-scanner-scannererror-mapping-values-not-allowed.html" class="block bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:border-blue-500 transition">
+                        <h3 class="font-semibold text-gray-900 mb-2">YAML Scanner Error: Mapping Values Not Allowed</h3>
+                        <p class="text-sm text-gray-600">Fix scanner errors and mapping value issues</p>
+                    </a>
+                    <a href="../tutorial/" class="block bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:border-blue-500 transition">
+                        <h3 class="font-semibold text-gray-900 mb-2">YAML Tutorial</h3>
+                        <p class="text-sm text-gray-600">Learn YAML syntax and best practices</p>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Back to Home -->
+            <div class="text-center mt-12">
+                <a href="../" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Back to YAML Tools
+                </a>
+            </div>
+        </article>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-gray-900 font-bold text-lg mb-3">YAML.cc</h3>
+                    <p class="text-gray-600 text-sm">Professional YAML tools and resources for developers.</p>
+                </div>
+                <div>
+                    <h4 class="text-gray-900 font-semibold mb-3">Tools</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML Validator</a></li>
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML Formatter</a></li>
+                        <li><a href="../#tools" class="hover:text-gray-900 transition">YAML to JSON</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-gray-900 font-semibold mb-3">Resources</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="../#info-section" class="hover:text-gray-900 transition">What is YAML?</a></li>
+                        <li><a href="../tutorial/" class="hover:text-gray-900 transition">Tutorial</a></li>
+                        <li><a href="./" class="hover:text-gray-900 transition">Q&A</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 mt-8 pt-8 text-center text-sm text-gray-500">
+                <p>&copy; 2024 YAML.cc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+
