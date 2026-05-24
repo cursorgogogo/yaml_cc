@@ -44,7 +44,8 @@
         "featureList": [
             "YAML Validator",
             "YAML Linter",
-            "YAML to JSON Converter"
+            "YAML to JSON Converter",
+            "JSON to YAML Converter"
         ],
         "author": {
             "@type": "Organization",
@@ -80,21 +81,39 @@
         <!-- Quick Tools Section - First Screen -->
         <section id="tools" class="px-3 py-2" style="height: calc(100vh - 64px); display: flex; flex-direction: column;">
             <div class="mx-auto w-full h-full flex flex-col" style="max-width: 100%;">
-                <div class="text-center mb-1.5 flex-shrink-0">
-                    <h1 class="text-lg font-bold text-gray-900 mb-0.5">YAML Tools - Validate, format, and convert YAML to JSON</h1>
-                    <div class="inline-flex items-center bg-emerald-50 text-emerald-800 text-xs font-semibold rounded px-2 py-1">
-                      <svg class="mr-1 w-4 h-4 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <div class="tools-header text-center mb-1.5 flex-shrink-0">
+                    <h1 class="tools-page-title text-lg font-bold text-gray-900 mb-0.5">
+                        <span class="hidden sm:inline">YAML Tools - Validate, format, and convert YAML to JSON</span>
+                        <span class="sm:hidden">YAML Tools</span>
+                    </h1>
+                    <div class="tools-privacy inline-flex items-center bg-emerald-50 text-emerald-800 text-xs font-semibold rounded px-2 py-1 max-w-full">
+                      <svg class="mr-1 w-4 h-4 flex-shrink-0 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                         <circle cx="12" cy="12" r="10" stroke-width="2"/>
                         <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 12.5l2.5 2.5 5-5"/>
                       </svg>
-                      <span>
-                        <span class="font-bold">Privacy:</span> All processing is done offline in your browser. Your YAML file is never uploaded or shared.
+                      <span class="text-left">
+                        <span class="font-bold">Privacy:</span>
+                        <span class="hidden sm:inline"> All processing is done offline in your browser. Your YAML file is never uploaded or shared.</span>
+                        <span class="sm:hidden"> Offline in your browser. Nothing is uploaded.</span>
                       </span>
                     </div>
                 </div>
                 
+                <!-- Tool layout: sidebar + main -->
+                <div class="tool-layout flex flex-1 gap-3 overflow-hidden min-h-0">
+                    <aside class="tool-sidebar flex-shrink-0 bg-white rounded shadow-lg border border-gray-200">
+                        <nav class="tool-nav" aria-label="Tool navigation">
+                            <a href="/" class="tool-nav-item tool-nav-item-active">
+                                YAML Tools
+                            </a>
+                            <a href="json-to-yaml.html" class="tool-nav-item">
+                                JSON to YAML
+                            </a>
+                        </nav>
+                    </aside>
+
                 <!-- Unified YAML Tool - Two Column Layout -->
-                <div class="bg-white rounded shadow-lg border border-gray-200 flex-1 flex flex-col overflow-hidden">
+                <div class="tool-main bg-white rounded shadow-lg border border-gray-200 flex-1 flex flex-col overflow-hidden min-w-0">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 p-3 flex-1 overflow-hidden">
                         <!-- Left Column: Input -->
                         <div class="flex flex-col h-full overflow-hidden">
@@ -132,6 +151,7 @@
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         </section>
@@ -904,6 +924,7 @@ phone: "123-456-7890"</code></pre>
                         <li><a href="#tools" data-tool="validate" class="text-gray-400 hover:text-white transition">YAML Validator</a></li>
                         <li><a href="#tools" data-tool="format" class="text-gray-400 hover:text-white transition">YAML Linter</a></li>
                         <li><a href="#tools" data-tool="convert" class="text-gray-400 hover:text-white transition">YAML to JSON</a></li>
+                        <li><a href="json-to-yaml.html" class="text-gray-400 hover:text-white transition">JSON to YAML</a></li>
                     </ul>
                 </div>
                 <div>

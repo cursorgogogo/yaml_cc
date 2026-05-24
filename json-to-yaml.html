@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON to YAML Converter - YAML.cc</title>
+    <meta name="description" content="Free online JSON to YAML converter. Paste JSON and convert to YAML instantly in your browser. Private, fast, no upload.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://yaml.cc/json-to-yaml.html">
+    <link rel="icon" type="image/x-icon" href="/assets/images/yamllint.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/yamllint.svg">
+    <link rel="icon" type="image/svg" sizes="32x32" href="/assets/images/yamllint.svg">
+    <link rel="icon" type="image/svg" sizes="16x16" href="/assets/images/yamllint.svg">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yaml.cc/json-to-yaml.html">
+    <meta property="og:title" content="JSON to YAML Converter - YAML.cc">
+    <meta property="og:description" content="Convert JSON to YAML online. All processing runs locally in your browser.">
+    <meta property="og:image" content="https://yaml.cc/assets/images/yamllint.svg">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="index.css" type="text/css">
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <a href="/" class="text-xl font-bold text-gray-900 hover:text-gray-700">
+                        YAML.cc
+                    </a>
+                </div>
+                <ul class="hidden md:flex space-x-8">
+                    <li><a href="/#tools" class="text-gray-600 hover:text-gray-900 transition">YAML Tools</a></li>
+                    <li><a href="json-to-yaml.html" class="text-gray-900 font-medium">JSON to YAML</a></li>
+                    <li><a href="/#info-section" class="text-gray-600 hover:text-gray-900 transition">What is YAML?</a></li>
+                    <li><a href="https://yaml.cc/tutorial/" class="text-gray-600 hover:text-gray-900 transition">Tutorial</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="tools" class="px-3 py-2" style="height: calc(100vh - 64px); display: flex; flex-direction: column;">
+            <div class="mx-auto w-full h-full flex flex-col" style="max-width: 100%;">
+                <div class="tools-header text-center mb-1.5 flex-shrink-0">
+                    <h1 class="tools-page-title text-lg font-bold text-gray-900 mb-0.5">JSON to YAML Converter</h1>
+                    <div class="tools-privacy inline-flex items-center bg-emerald-50 text-emerald-800 text-xs font-semibold rounded px-2 py-1 max-w-full">
+                      <svg class="mr-1 w-4 h-4 flex-shrink-0 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <circle cx="12" cy="12" r="10" stroke-width="2"/>
+                        <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8 12.5l2.5 2.5 5-5"/>
+                      </svg>
+                      <span class="text-left">
+                        <span class="font-bold">Privacy:</span>
+                        <span class="hidden sm:inline"> All processing is done offline in your browser. Your JSON is never uploaded.</span>
+                        <span class="sm:hidden"> Offline in your browser. Nothing is uploaded.</span>
+                      </span>
+                    </div>
+                </div>
+
+                <div class="tool-layout flex flex-1 gap-3 overflow-hidden min-h-0">
+                    <aside class="tool-sidebar flex-shrink-0 bg-white rounded shadow-lg border border-gray-200">
+                        <nav class="tool-nav" aria-label="Tool navigation">
+                            <a href="/" class="tool-nav-item">
+                                YAML Tools
+                            </a>
+                            <a href="json-to-yaml.html" class="tool-nav-item tool-nav-item-active">
+                                JSON to YAML
+                            </a>
+                        </nav>
+                    </aside>
+
+                    <div class="tool-main bg-white rounded shadow-lg border border-gray-200 flex-1 flex flex-col overflow-hidden min-w-0">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 p-3 flex-1 overflow-hidden">
+                            <div class="flex flex-col h-full overflow-hidden">
+                                <div class="flex items-center justify-between mb-1.5 flex-shrink-0">
+                                    <h3 class="text-sm font-semibold text-gray-900">Input JSON</h3>
+                                    <span class="px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-700 rounded">Editor</span>
+                                </div>
+                                <div class="flex-1 border border-gray-300 rounded overflow-hidden" style="min-height: 0;">
+                                    <div id="json-input" style="width: 100%; height: 100%;"></div>
+                                </div>
+                                <div class="flex flex-wrap gap-1.5 mt-1.5 flex-shrink-0">
+                                    <button id="validate-json-btn" class="px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 transition font-medium text-xs">
+                                        Validate JSON
+                                    </button>
+                                    <button id="format-json-btn" class="px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 transition font-medium text-xs">
+                                        Format JSON
+                                    </button>
+                                    <button id="convert-btn" class="px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 transition font-medium text-xs">
+                                        Convert to YAML
+                                    </button>
+                                    <button id="clear-btn" class="px-3 py-1.5 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition font-medium text-xs">
+                                        Clear All
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col h-full overflow-hidden">
+                                <div class="flex items-center justify-between mb-1.5 flex-shrink-0">
+                                    <h3 class="text-sm font-semibold text-gray-900">YAML Output</h3>
+                                    <span class="px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-700 rounded">Output</span>
+                                </div>
+                                <div class="flex-1 border border-gray-300 rounded bg-gray-50 p-2 overflow-y-auto" style="min-height: 0;">
+                                    <div id="result-output" class="font-mono text-gray-800"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-900 text-gray-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-white font-bold text-lg mb-3">YAML.cc</h3>
+                    <p class="text-gray-400 text-sm">Professional YAML validation, formatting, and conversion tools for developers.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-3">Tools</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/" class="text-gray-400 hover:text-white transition">YAML Tools</a></li>
+                        <li><a href="json-to-yaml.html" class="text-gray-400 hover:text-white transition">JSON to YAML</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-6 pt-6 text-center text-sm text-gray-400">
+                <p>&copy; 2024 YAML.cc. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script async src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/ace.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/mode-json.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/theme-monokai.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="json-to-yaml.js"></script>
+</body>
+</html>
