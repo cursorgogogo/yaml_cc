@@ -346,6 +346,7 @@ function waitForJsYaml(timeout = 10000) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    if (window.ToolShared) ToolShared.mountToolNav('json-to-yaml');
     await new Promise(resolve => setTimeout(resolve, 100));
 
     try {

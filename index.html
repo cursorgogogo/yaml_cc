@@ -102,14 +102,7 @@
                 <!-- Tool layout: sidebar + main -->
                 <div class="tool-layout flex flex-1 gap-3 overflow-hidden min-h-0">
                     <aside class="tool-sidebar flex-shrink-0 bg-white rounded shadow-lg border border-gray-200">
-                        <nav class="tool-nav" aria-label="Tool navigation">
-                            <a href="/" class="tool-nav-item tool-nav-item-active">
-                                YAML Tools
-                            </a>
-                            <a href="json-to-yaml.html" class="tool-nav-item">
-                                JSON to YAML
-                            </a>
-                        </nav>
+                        <nav class="tool-nav" aria-label="Tool navigation"></nav>
                     </aside>
 
                 <!-- Unified YAML Tool - Two Column Layout -->
@@ -925,6 +918,10 @@ phone: "123-456-7890"</code></pre>
                         <li><a href="#tools" data-tool="format" class="text-gray-400 hover:text-white transition">YAML Linter</a></li>
                         <li><a href="#tools" data-tool="convert" class="text-gray-400 hover:text-white transition">YAML to JSON</a></li>
                         <li><a href="json-to-yaml.html" class="text-gray-400 hover:text-white transition">JSON to YAML</a></li>
+                        <li><a href="toml-to-yaml.html" class="text-gray-400 hover:text-white transition">TOML to YAML</a></li>
+                        <li><a href="yaml-to-toml.html" class="text-gray-400 hover:text-white transition">YAML to TOML</a></li>
+                        <li><a href="json-to-toml.html" class="text-gray-400 hover:text-white transition">JSON to TOML</a></li>
+                        <li><a href="toml-to-json.html" class="text-gray-400 hover:text-white transition">TOML to JSON</a></li>
                     </ul>
                 </div>
                 <div>
@@ -948,6 +945,12 @@ phone: "123-456-7890"</code></pre>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/ace.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/mode-yaml.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.23.4/theme-monokai.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="tool-shared.js"></script>
     <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (window.ToolShared) ToolShared.mountToolNav('yaml-tools');
+        });
+    </script>
 </body>
 </html>
