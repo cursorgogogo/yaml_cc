@@ -4,8 +4,122 @@ const TOOL_PAGES = [
     { href: 'toml-to-yaml.html', label: 'TOML → YAML', id: 'toml-to-yaml' },
     { href: 'yaml-to-toml.html', label: 'YAML → TOML', id: 'yaml-to-toml' },
     { href: 'json-to-toml.html', label: 'JSON → TOML', id: 'json-to-toml' },
-    { href: 'toml-to-json.html', label: 'TOML → JSON', id: 'toml-to-json' }
+    { href: 'toml-to-json.html', label: 'TOML → JSON', id: 'toml-to-json' },
+    { href: 'json-to-jsonl.html', label: 'JSON → JSONL', id: 'json-to-jsonl' },
+    { href: 'jsonl-to-json.html', label: 'JSONL → JSON', id: 'jsonl-to-json' }
 ];
+
+function parseJsonl(text) {
+    const lines = text.split(/\r?\n/);
+    const records = [];
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+        try {
+            records.push({ lineNum: i + 1, value: JSON.parse(line) });
+        } catch (e) {
+            throw new Error(`Line ${i + 1}: ${e.message}`);
+        }
+    }
+    return records;
+}
+
+function stringifyJsonl(records, pretty) {
+    return records
+        .map((r) => (pretty ? JSON.stringify(r.value, null, 2) : JSON.stringify(r.value)))
+        .join('\n');
+}
+
+function jsonToJsonl(text) {
+    const parsed = JSON.parse(text.trim());
+    if (Array.isArray(parsed)) {
+        if (parsed.length === 0) {
+            throw new Error('JSON array is empty. Add at least one object to convert.');
+        }
+        return parsed.map((item) => JSON.stringify(item)).join('\n');
+    }
+    return JSON.stringify(parsed);
+}
+
+function lintJsonl(text) {
+    const lines = text.split(/\r?\n/);
+    const errors = [];
+    const warnings = [];
+    let recordCount = 0;
+    let blankLines = 0;
+
+    for (let i = 0; i < lines.length; i++) {
+        const raw = lines[i];
+        const trimmed = raw.trim();
+        if (!trimmed) {
+            blankLines++;
+            continue;
+        }
+        if (raw !== trimmed) {
+            warnings.push({
+                line: i + 1,
+                message: 'Line has leading or trailing whitespace (may break strict JSONL parsers).'
+            });
+        }
+        try {
+            const value = JSON.parse(trimmed);
+            if (value === null || typeof value !== 'object') {
+                warnings.push({
+                    line: i + 1,
+                    message: `Line is valid JSON but root is ${value === null ? 'null' : typeof value} (usually an object).`
+                });
+            }
+            recordCount++;
+        } catch (e) {
+            errors.push({ line: i + 1, message: e.message });
+        }
+    }
+
+    if (recordCount === 0 && errors.length === 0) {
+        errors.push({ line: null, message: 'No non-empty lines with JSON content found.' });
+    }
+
+    return {
+        valid: errors.length === 0,
+        recordCount,
+        blankLines,
+        totalLines: lines.length,
+        errors,
+        warnings
+    };
+}
+
+function renderLintReport(report) {
+    if (report.valid) {
+        let html = '✅ JSONL lint passed\n\n';
+        html += `Records: ${report.recordCount}\n`;
+        html += `Total lines: ${report.totalLines}\n`;
+        if (report.blankLines > 0) {
+            html += `Blank lines: ${report.blankLines} (ignored)\n`;
+        }
+        if (report.warnings.length > 0) {
+            html += `\nWarnings (${report.warnings.length}):\n`;
+            report.warnings.forEach((w, i) => {
+                html += `${i + 1}. Line ${w.line}: ${w.message}\n`;
+            });
+        } else {
+            html += '\nNo issues found.';
+        }
+        return { ok: true, text: html };
+    }
+
+    let html = `❌ JSONL lint failed — ${report.errors.length} error${report.errors.length !== 1 ? 's' : ''}\n\n`;
+    report.errors.forEach((err, i) => {
+        html += `${i + 1}. ${err.line != null ? `Line ${err.line}: ` : ''}${err.message}\n`;
+    });
+    if (report.warnings.length > 0) {
+        html += `\nWarnings:\n`;
+        report.warnings.forEach((w, i) => {
+            html += `${i + 1}. Line ${w.line}: ${w.message}\n`;
+        });
+    }
+    return { ok: false, text: html };
+}
 
 function mountToolNav(activeId) {
     const nav = document.querySelector('.tool-nav');
@@ -232,6 +346,16 @@ function jsonReplacer(_key, value) {
     return value;
 }
 
+function jsonlToJson(text) {
+    const records = parseJsonl(text);
+    if (records.length === 0) {
+        throw new Error('No JSONL records found. Each non-empty line must be valid JSON.');
+    }
+    const values = records.map((r) => r.value);
+    const output = values.length === 1 ? values[0] : values;
+    return JSON.stringify(output, jsonReplacer, 2);
+}
+
 window.ToolShared = {
     TOOL_PAGES,
     mountToolNav,
@@ -245,5 +369,11 @@ window.ToolShared = {
     waitForJsYaml,
     loadSmolToml,
     prepareForToml,
-    jsonReplacer
+    jsonReplacer,
+    parseJsonl,
+    stringifyJsonl,
+    jsonToJsonl,
+    jsonlToJson,
+    lintJsonl,
+    renderLintReport
 };
